@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memproses Pembayaran - PROSTREAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #f9c74f;
+            --secondary-color: #f94144;
+            --bg-color: #0a0e27;
+            --surface-color: #151932;
+            --text-color: #e0e1dd;
+            --text-muted: #a8a9ad;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .processing-icon {
+            font-size: 80px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .processing-card {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            display: block;
+            width: 60px;
+            height: 60px;
+            margin: 20px auto;
+            border: 5px solid rgba(249, 199, 79, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-message {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #2a2f4a;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .processing-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="processing-icon">⏳</div>
+            <h1>Memproses Pembayaran</h1>
+        </header>
+
+        <main>
+            <div class="processing-card">
+                <div class="loading-spinner"></div>
+                <p class="status-message">Sila tunggu, kami sedang mengesahkan status pembayaran anda...</p>
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <p id="statusText">Menghubungi pembekal pembayaran...</p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PROSTREAM. Hak Cipta Terpelihara.</p>
+    </footer>
+
+    <script>
+        // Progress bar animation
+        let progress = 0;
+        const progressBar = document.getElementById('progressBar');
+        const statusText = document.getElementById('statusText');
+        
+        const statusMessages = [
+            "Menghubungi pembekal pembayaran...",
+            "Mengesahkan maklumat pembayaran...",
+            "Memproses pesanan anda...",
+            "Hampir selesai...",
+            "Menghalakan ke halaman seterusnya..."
+        ];
+        
+        function updateProgress() {
+            progress += 20;
+            progressBar.style.width = progress + '%';
+            
+            const messageIndex = Math.floor(progress / 20) - 1;
+            if (messageIndex >= 0 && messageIndex < statusMessages.length) {
+                statusText.textContent = statusMessages[messageIndex];
+            }
+            
+            if (progress < 100) {
+                setTimeout(updateProgress, 800);
+            } else {
+                // After progress completes, check payment status and redirect
+                checkPaymentStatus();
+            }
+        }
+        
+        function checkPaymentStatus() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const billcode = urlParams.get('billcode');
+            const orderid = urlParams.get('order_id');
+            
+            // In a real implementation, you would verify the payment status with your backend
+            // For this example, we'll assume success if status is 1 or if we have a billcode
+            const isSuccess = status === '1' || billcode;
+            
+            if (isSuccess) {
+                // Redirect to success page
+                setTimeout(() => {
+                    window.location.href = 'payment-successful.html';
+                }, 1000);
+            } else {
+                // Redirect to failed page
+                setTimeout(() => {
+                    window.location.href = 'payment-failed.html';
+                }, 1000);
+            }
+        }
+        
+        // Start progress animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateProgress, 500);
+        });
+    </script>
+</body>
+</html>

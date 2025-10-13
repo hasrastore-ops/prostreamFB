@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROSTREAM: DAPAT APPS NI, AUTO BUANG NETFLIX,DISNEY+,ASTRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '779649628268910');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=779649628268910&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        /* --- CSS Variables & Global Styles --- */
+        :root {
+            --primary-color: #f9c74f; /* Vibrant Yellow */
+            --secondary-color: #f94144; /* Accent Red */
+            --bg-color: #0a0e27; /* Dark Blue-Black */
+            --surface-color: #151932; /* Slightly lighter for cards */
+            --text-color: #e0e1dd;
+            --text-muted: #a8a9ad;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; }
+        h3 { font-size: 1.5rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* --- Section Specific Styles --- */
+
+        /* Hero */
+.hero {
+    text-align: center;
+    padding: 100px 0;
+    background: linear-gradient(rgba(10, 14, 39, 0.8), rgba(10, 14, 39, 1)), url('https://i.imgur.com/NxY8CEA.png') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero h1 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.hero h2 {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.hero .sub-text {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+        /* Problem Section */
+        .problem { background-color: var(--surface-color); }
+        .problem h2 { text-align: center; margin-bottom: 2rem; color: var(--text-color); }
+        .problem table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+        .problem th, .problem td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #2a2f4a; }
+        .problem th { color: var(--primary-color); font-weight: 600; }
+        .problem .total-row td { font-weight: 700; color: var(--secondary-color); font-size: 1.2rem; }
+        .problem .total-row { border-top: 2px solid var(--secondary-color); }
+        .problem .final-thought { text-align: center; font-size: 1.2rem; color: var(--text-color); font-weight: 600; }
+
+        /* Solution Section */
+        .solution { text-align: center; }
+        .solution h2 { margin-bottom: 1rem; }
+
+        /* Apps Grid */
+        .apps-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 3rem; }
+        .app-card { background-color: var(--surface-color); padding: 30px; border-radius: 15px; border-left: 5px solid var(--primary-color); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .app-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .app-card h3 { color: var(--primary-color); margin-bottom: 0.5rem; }
+        .app-card ul { margin-top: 1rem; }
+        .app-card li { margin-bottom: 0.5rem; display: flex; align-items: center; }
+        .app-card li::before { content: '✅'; margin-right: 10px; }
+        .app-card .free-tag { color: var(--secondary-color); font-weight: 700; }
+
+        /* App Preview Section */
+        .app-preview { text-align: center; background-color: var(--surface-color); }
+        .app-preview h2 { margin-bottom: 2rem; }
+        .preview-container { max-width: 800px; margin: 0 auto; }
+        .main-image-container { margin-bottom: 15px; }
+        .main-image-container img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 15px;
+            cursor: zoom-in;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .thumbnail-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--surface-color);
+        }
+        .thumbnail-container::-webkit-scrollbar { height: 8px; }
+        .thumbnail-container::-webkit-scrollbar-track { background: var(--surface-color); }
+        .thumbnail-container::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 10px; }
+        .thumbnail {
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0.6;
+            border: 2px solid transparent;
+            transition: opacity 0.3s, border 0.3s;
+        }
+        .thumbnail.active, .thumbnail:hover {
+            opacity: 1;
+            border-color: var(--primary-color);
+        }
+        
+        /* Fullscreen Modal */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+        .fullscreen-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: var(--text-color);
+            font-size: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: var(--secondary-color); }
+
+        /* Pricing Section */
+        .pricing {
+            background-color: var(--surface-color);
+            text-align: center;
+        }
+        .pricing h2 { margin-bottom: 1rem; }
+        .pricing .price-comparison {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0;
+        }
+        .pricing .price-comparison span {
+            text-decoration: line-through;
+            color: #777;
+        }
+        .pricing .final-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        .pricing .urgency {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        .pricing .btn {
+            margin-top: 1.5rem;
+        }
+
+        /* Checkout Form Section */
+        .checkout-form-section {
+            background-color: var(--bg-color);
+            text-align: center;
+        }
+        .checkout-form-section h2 { margin-bottom: 2rem; }
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: var(--surface-color);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-color); }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #2a2f4a;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary-color); }
+
+        /* Package Selection */
+        .package-selection { margin-bottom: 25px; }
+        .package-option {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 2px solid #2a2f4a;
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .package-option input[type="radio"] { margin-right: 10px; }
+        .package-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(249, 199, 79, 0.1);
+        }
+        .package-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        .package-option strong { color: var(--primary-color); font-size: 1.2rem; }
+        .package-option .stock-info { font-size: 0.9rem; color: var(--secondary-color); }
+
+        /* How it works */
+        .how-it-works { text-align: center; }
+        .how-it-works h2 { margin-bottom: 2rem; }
+        .steps { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-top: 2rem; }
+        .step { flex-basis: 250px; }
+        .step-number {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem auto;
+        }
+
+        /* FAQ - Collapsible */
+        .faq { background-color: var(--surface-color); }
+        .faq h2 { text-align: center; margin-bottom: 2rem; }
+        .faq-item {
+            border-bottom: 1px solid #2a2f4a;
+            margin-bottom: 10px;
+        }
+        .faq-question {
+            background: none;
+            border: none;
+            text-align: left;
+            width: 100%;
+            padding: 15px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Adjust as needed */
+        }
+        .faq-answer p {
+            padding: 0 0 15px 0;
+        }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid #2a2f4a; font-size: 0.9rem; }
+        footer a { margin: 0 10px; }
+        .disclaimer { margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- Social Proof Notification --- */
+        .social-proof-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 18px 22px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 320px;
+            z-index: 999;
+            transform: translateX(400px);
+            transition: transform 0.5s ease-out;
+        }
+
+        .social-proof-notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notification-name {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .notification-time {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .notification-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .notification-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid rgba(249, 199, 79, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Payment Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--text-muted);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--text-color);
+        }
+
+        .modal h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+
+        .modal .btn {
+            margin: 10px;
+        }
+
+        .payment-loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .payment-loading.active {
+            display: flex;
+        }
+
+        .payment-loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(249, 199, 79, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        .payment-loading-text {
+            color: var(--text-color);
+            font-size: 1.2rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (min-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+            .apps-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 1024px) {
+            .apps-grid { grid-template-columns: repeat(4, 1fr); }
+            .app-card { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="container">
+            <h1>JANGAN BAZIR DUIT LAGI!</h1>
+            <h2>Offer Gila: 4 App Power, Dengan 1 Harga. Untuk Seumur Hidup.</h2>
+            <p class="sub-text">Bayar sekali, boleh guna seumur hidup. Dapatkan filem terbaru, drama, anime, dan LIVE TV . Dah boleh delete apps netflix, unsubscribe astro, disney+, Amazon prime buat membazir je lepas ada apps ni.</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- PROBLEM SECTION -->
+        <section id="problem" class="problem">
+            <div class="container">
+                <h2>Masih Bayar Lagi Ke Bulan-Bulan Ni?</h2>
+                <p style="text-align:center;">Jom Kira-Kira sikit, berapa duit kau hangus setiap bulan ni?</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Bayar Bulan</th>
+                            <th>Bayar Setahun</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Netflix</strong></td><td>RM 69.90</td><td>RM 838.80</td></tr>
+                        <tr><td><strong>Disney+</strong></td><td>RM 39.90</td><td>RM 478.80</td></tr>
+                        <tr><td><strong>Prime Video</strong></td><td>RM 25.00</td><td>RM 300.00</td></tr>
+                        <tr><td><strong>Astro</strong></td><td>~RM 50.00+</td><td>~RM 600.00+</td></tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td><td><strong>~RM 184.90 / BULAN</strong></td><td><strong>~RM 2,217.60 / TAHUN</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="final-thought">Gila tak? Lebih dari 2 ribu setahun!</p>
+            </div>
+        </section>
+
+        <!-- SOLUTION SECTION -->
+        <section id="solution" class="solution">
+            <div class="container">
+                <h2>Ni Dia Penyelesaian Dia.</h2>
+                <p>Satu harga, semua masuk. Kami dah bungkus siap-siap semua benda best dalam satu offer gila ni. Tak payah sakit kepala dah nak bayar bulan-bulan.</p>
+            </div>
+        </section>
+
+        <!-- APPS SECTION -->
+        <section id="apps" class="apps">
+            <div class="container">
+                <div class="apps-grid">
+                    <div class="app-card">
+                        <h3>🎬 APLIKASI 1</h3>
+                        <h4>The Ultimate Streamer</h4>
+                        <p>Nak tengok filem yang baru masuk wayang? Boleh. Nak maraton drama terkini? Boleh. Semua ada, quality terbaik. Memang power.</p>
+                        <ul><li>Filem Blockbuster & Pawagam</li><li>Drama & Siri Lengkap</li><li>Kualiti 4K & HD</li><li>Banyak Pilihan Substitle : English, Bahasa Melayu, Indonesia</li><li>Bayar sekali Sahaja</li></ul>
+                    </div>
+                    <div class="app-card">
+                        <h3>☁️ APLIKASI 2</h3>
+                        <h4>Cloud Movie Percuma</h4>
+                        <p>Kami bagi bonus lagi! Dapatkan library filem cloud yang beribu-ribu cerita dan drama. <span class="free-tag">100% FREE.</span></p>
+                        <ul><li>Beribu-ribu Tajuk Filem Lagi</li><li>Klasik & Filem Jarang Jumpa</li><li>Strim Terus: Tinggal search dan play sahaja </li><li>Quality 4k + HD, Subtitle Lengkap </li><li>Memang Free, no tipu.</li></ul>
+                    </div>
+                    <div class="app-card">
+                        <h3>🥷 APLIKASI 3</h3>
+                        <h4>Tempat Layan Anime</h4>
+                        <p>Untuk otaku sekalian! Episod terkini, update ikut release Jepun. Tak ketinggalan, takde spoiler. Best sangat!</p>
+                        <ul><li>Episod Terkini (Update Fast!)</li><li>Semua Jenis Anime Ada</li><li>Siap release calendar lagi untuk check anime keluar hari apa dan set reminder</li><li>Anime China ada sekali</li><li>Ada Sub & Dub</li><li>Stream Tanpa Iklan</li></ul>
+                    </div>
+                    <div class="app-card">
+                        <h3>🎁 APLIKASI 4</h3>
+                        <h4>TV Live & On-Demand <span class="free-tag">(BONUS FREE!)</span></h4>
+                        <p>Serius, kami bagi free lagi! Dapat saluran TV pilihan dan filem on-demand. Gila kan?</p>
+                        <ul><li>Saluran TV BASIC (Live!)</li><li>Saluran Astro Pilihan (Live!)</li><li>Filem On-Demand</li><li>ASTRO SPORT untuk KAKI BOLA</li><li>Drama pukul melayu pukul 7 pun ada </li><li><strong>INI MEMANG FREE!</strong></li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- APP PREVIEW SECTION -->
+        <section id="app-preview" class="app-preview">
+            <div class="container">
+                <h2>Preview Aplikasi Power Anda</h2>
+                <div class="preview-container">
+                    <div class="main-image-container">
+                        <img id="main-preview-image" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="App Screenshot">
+                    </div>
+                    <div class="thumbnail-container">
+                        <img class="thumbnail active" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=1" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="Screenshot 1">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=2" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=App+Screen+2" alt="Screenshot 2">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=3" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=App+Screen+3" alt="Screenshot 3">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=4" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=App+Screen+4" alt="Screenshot 4">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=5" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=App+Screen+5" alt="Screenshot 5">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=6" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=App+Screen+6" alt="Screenshot 6">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=7" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=App+Screen+7" alt="Screenshot 7">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=8" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=App+Screen+8" alt="Screenshot 8">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=9" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=App+Screen+9" alt="Screenshot 9">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=10" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=App+Screen+10" alt="Screenshot 10">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=11" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=App+Screen+11" alt="Screenshot 11">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=12" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=App+Screen+12" alt="Screenshot 12">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=13" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=App+Screen+13" alt="Screenshot 13">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=14" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=App+Screen+14" alt="Screenshot 14">
+                    </div>
+                    <p>*Sila slide ke kanan untuk tengok semua gambar dan tekan untuk zoom</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING SECTION -->
+        <section id="pricing" class="pricing">
+            <div class="container">
+                <h2>Harga Ni Memang Gila!</h2>
+                <p>Jangan terkejut dengan harga sebenar...</p>
+                <p class="price-comparison">Harga Asal: <span>RM 169</span></p>
+                <p class="price-comparison">Harga Promosi: <span>RM 99</span></p>
+                <div class="final-price">RM 19.90</div>
+                <p>SEKALI SAHAJA!</p>
+                <p class="urgency">⚠️ Harga ni akan naik bila-bila masa sahaja.ini harga pengenalan sahaja. Jangan lepaskan peluang keemasan ni!</p>
+                <a href="#package-selection" class="btn" id="pricing-cta">🚀 YES! SAYA NAK SEMUANYA DENGAN RM 19.90! 🚀</a>
+                <p style="margin-top: 1rem;">🔒 Pembayaran Anda 100% Selamat & Dienkripsi</p>
+            </div>
+        </section>
+
+          <!-- HOW IT WORKS -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2>Dapatkan dengan 3 Steps Sahaja</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Klik & Bayar</h4>
+                        <p>Hanya RM 19.90, sekali sahaja.</p>
+                        <p>Harga ni terhad untuk 30 orang terawal</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Check Email & Whatsapp</h4>
+                        <p>Terus dapat emel&whatsapp dengan link dan guide untuk install.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Install & Enjoy</h4>
+                        <p>Pasang je, terus boleh layan!</p>
+                        <p>Semua auto update, tak perlu risau dah.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHECKOUT FORM SECTION -->
+        <section id="checkout" class="checkout-form-section">
+            <div class="container">
+                <h2>Pilih Pakej Anda & Beli Sekarang</h2>
+                <div class="form-container">
+                    <form id="order-form">
+                        <div class="package-selection" id="package-selection">
+                            <label class="package-option selected">
+                                <input type="radio" name="package" value="19.90" checked>
+                                <strong>RM 19.90</strong> - Pakej Terawal
+                                <span class="stock-info">(Tinggal 12 lagi untuk 30 orang terawal!)</span>
+                            </label>
+                            <label class="package-option disabled">
+                                <input type="radio" name="package" value="59.90" disabled>
+                                <strong>RM 59.90</strong> - Harga Promo
+                                <span class="stock-info">(Pakej untuk 50 orang Seterusnya)</span>
+                            </label>
+                            <label class="package-option disabled">
+                                <input type="radio" name="package" value="98.90" disabled>
+                                <strong>RM 169.00</strong> - HARGA ASAL 
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Nama Penuh</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Nombor WhatsApp (Contoh: 0133214321)</label>
+                            <input type="tel" id="phone" name="phone" pattern="^01\d{8,9}$" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Emel</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%; font-size: 1.2rem; padding: 18px;">
+                            🚀 Dapatkan Sekarang & Bayar 🚀
+                        </button>
+                    </form>
+                    
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                    <div id="payment-message" style="margin-top: 20px; display: none;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq" class="faq">
+            <div class="container">
+                <h2>BACA NI SEBELUM BELI(Q&A)</h2>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Ni bayar bulan ke?</button>
+                    <div class="faq-answer">
+                        <p>A: Takde la. Bayar sekali je, untuk seumur hidup.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Boleh pakai dekat phone atau TV sahaja?</button>
+                    <div class="faq-answer">
+                        <p>A: Untuk pakej ni, hanya untuk android TV, Pastikan TV ada playstore baru boleh guna.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Dapat app macam mana lepas bayar?</button>
+                    <div class="faq-answer">
+                        <p>A: Terus dapat emel dan whatsapp. Tak perlu tunggu lama. dalam email tu kita akan bagi link untuk download apps dan video tutorial cara install</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Memang latest ke content dia?</button>
+                    <div class="faq-answer">
+                        <p>A: Memang latest. App selalu update.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Untuk channel TV LIVE, Channel apa je yang ada</button>
+                    <div class="faq-answer">
+                        <p>A: App 4 yang kita bagi percuma ada full chanel tv basic+ astro pilihan, tapi untuk kaki bola jangan risau live stream bola ada dalam tu.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PROSTREAM. Hak Cipta Terpelihara.</p>
+            <a href="#">Dasar Privasi</a> | <a href="#">Terma & Syarat</a> | <a href="#">Hubungi Kami</a>
+            <p class="disclaimer">*Notis: Aplikasi ini adalah pengumpul media dari sumber awam & pihak ketiga. Kami tidak host sebarang media. Pengguna perlu pastikan penggunaan mematuhi undang-undang tempatan. Untuk kegunaan peribadi sahaja.</p>
+        </div>
+    </footer>
+
+    <!-- Fullscreen Modal for Image -->
+    <div id="fullscreen-modal" class="fullscreen-modal">
+        <span class="close-btn">&times;</span>
+        <img class="fullscreen-modal-content" id="fullscreen-img">
+    </div>
+
+    <!-- Social Proof Notification -->
+    <div id="social-proof" class="social-proof-notification">
+        <div class="notification-content">
+            <div class="notification-name">Ahmad Alias</div>
+            <div class="notification-time">telah beli 2 jam 30 minit yang lepas</div>
+        </div>
+        <button class="notification-close">&times;</button>
+    </div>
+
+    <!-- Audio for notification sound -->
+    <audio id="notification-sound" preload="auto">
+        <source src="https://www.freesfx.co.uk/sound/16297_1460570779.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Payment Loading Modal -->
+    <div id="paymentLoading" class="payment-loading">
+        <div class="payment-loading-spinner"></div>
+        <div class="payment-loading-text">Sedang memproses pembayaran anda...</div>
+    </div>
+
+    <!-- Payment Redirect Modal -->
+    <div id="paymentRedirectModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Pembayaran Berjaya Dijana!</h3>
+            <p>Halaman pembayaran telahpun disediakan. Sila klik butang di bawah untuk meneruskan pembayaran.</p>
+            <button id="manualRedirectBtn" class="btn">Teruskan Pembayaran</button>
+            <p style="font-size: 0.9rem; margin-top: 15px;">Jika halaman pembayaran tidak dibuka secara automatik, sila gunakan butang di atas.</p>
+        </div>
+    </div>
+
+    <script>
+        // ====================================
+        //      DISCORD NOTIFICATION
+        // ====================================
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
+
+        // Function to send Discord notification
+        async function sendDiscordNotification(orderData, status = 'pending') {
+            try {
+                const timestamp = new Date().toISOString();
+                
+                // Create embed for Discord message
+                const embed = {
+                    title: status === 'success' ? "✅ PEMBAYARAN BERJAYA - PROSTREAM" : "🎬 PESANAN BARU - PROSTREAM",
+                    description: status === 'success' ? "Pelanggan telah berjaya membuat pembayaran!" : "Pelanggan baru telah membuat pesanan!",
+                    color: status === 'success' ? 0x43b581 : 0xF9C74F, // Green for success, Yellow for pending
+                    fields: [
+                        {
+                            name: "📋 Status Pembayaran",
+                            value: status === 'success' ? "Berjaya" : "Menunggu Pembayaran",
+                            inline: true
+                        },
+                        {
+                            name: "👤 Nama",
+                            value: orderData.customerName,
+                            inline: true
+                        },
+                        {
+                            name: "📱 No Telefon",
+                            value: orderData.customerPhone,
+                            inline: true
+                        },
+                        {
+                            name: "📧 Email",
+                            value: orderData.customerEmail,
+                            inline: false
+                        },
+                        {
+                            name: "📦 Produk",
+                            value: orderData.product,
+                            inline: true
+                        },
+                        {
+                            name: "💰 Jumlah",
+                            value: `RM ${orderData.total.toFixed(2)}`,
+                            inline: true
+                        },
+                        {
+                            name: "🕐 Tarikh & Masa",
+                            value: `<t:${Math.floor(Date.now() / 1000)}:F>`,
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: "PROSTREAM - Streaming Apps Package",
+                        icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
+                    },
+                    timestamp: timestamp
+                };
+
+                const payload = {
+                    username: "PROSTREAM Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+                    embeds: [embed]
+                };
+
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    console.log('Discord notification sent successfully');
+                    return true;
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to send Discord notification:', errorText);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error sending Discord notification:', error);
+                return false;
+            }
+        }
+
+        // ====================================
+        //      TOYYIBPAY CONFIGURATION
+        // ====================================
+        const TOYYIBPAY_CONFIG = {
+            userSecretKey: 'b2kcp05o-b5m0-q000-55i7-w3j57riufv7h',
+            categoryCode: '8f5ynfpt',
+            returnUrl: 'https://prostream-rho.vercel.app/payment-successful.html', // Updated to point to your success page
+            callbackUrl: 'https://prostream-rho.vercel.app/payment-callback.html' // This would handle server-side payment verification
+        };
+
+        // --- App Preview Carousel Logic ---
+        const mainImage = document.getElementById('main-preview-image');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const modal = document.getElementById('fullscreen-modal');
+        const modalImg = document.getElementById('fullscreen-img');
+        const closeBtn = document.querySelector('.close-btn');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const newSrc = this.getAttribute('data-src');
+                mainImage.src = newSrc;
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        mainImage.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            modalImg.src = this.src;
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // --- Form & Package Selection Logic ---
+        const packageOptions = document.querySelectorAll('.package-option');
+        const orderForm = document.getElementById('order-form');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const paymentMessage = document.getElementById('payment-message');
+
+        packageOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.classList.contains('disabled')) return;
+                packageOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Add event listener to the "YES! SAYA NAK SEMUANYA DENGAN RM 19.90!" button
+        document.getElementById('pricing-cta').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Track AddToCart with Meta Pixel
+            fbq('track', 'AddToCart', {
+                content_name: 'PROSTREAM 4 App Power Package',
+                content_category: 'Streaming',
+                content_ids: ['prostream_4app_package'],
+                content_type: 'product',
+                value: 19.90,
+                currency: 'MYR'
+            });
+            
+            // Scroll to package selection
+            document.getElementById('package-selection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // ====================================
+        //      TOYYIBPAY INTEGRATION
+        // ====================================
+        function generateBillNo() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `PS${timestamp}${random}`;
+        }
+        
+        function showPaymentRedirectModal(billCode) {
+            const modal = document.getElementById('paymentRedirectModal');
+            modal.style.display = 'block';
+            
+            // Set up the redirect button
+            document.getElementById('manualRedirectBtn').onclick = function() {
+                window.location.href = `https://toyyibpay.com/${billCode}`;
+            };
+        }
+        
+        function showPaymentLoading() {
+            document.getElementById('paymentLoading').classList.add('active');
+        }
+        
+        function hidePaymentLoading() {
+            document.getElementById('paymentLoading').classList.remove('active');
+        }
+        
+        async function redirectToToyyibPay(orderData) {
+            console.log('Starting ToyyibPay redirect with order data:', orderData);
+            
+            const billNo = generateBillNo();
+            const amount = orderData.total;
+            
+            // Calculate expiry date (3 days from now)
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 3);
+            const formattedExpiryDate = 
+                `${expiryDate.getDate().toString().padStart(2, '0')}-` +
+                `${(expiryDate.getMonth() + 1).toString().padStart(2, '0')}-` +
+                `${expiryDate.getFullYear()} ` +
+                `${expiryDate.getHours().toString().padStart(2, '0')}:` +
+                `${expiryDate.getMinutes().toString().padStart(2, '0')}:` +
+                `${expiryDate.getSeconds().toString().padStart(2, '0')}`;
+                
+            // Prepare data for ToyyibPay API
+            const formData = new FormData();
+            formData.append('userSecretKey', TOYYIBPAY_CONFIG.userSecretKey);
+            formData.append('categoryCode', TOYYIBPAY_CONFIG.categoryCode);
+            formData.append('billName', 'PROSTREAM');
+            formData.append('billDescription', `Pembelian ${orderData.quantity} unit ${orderData.product}`);
+            formData.append('billPriceSetting', 1); // Fixed amount
+            formData.append('billPayorInfo', 1); // Require payer information
+            formData.append('billAmount', amount * 100); // Convert to cents (RM19.90 = 1990)
+            formData.append('billReturnUrl', TOYYIBPAY_CONFIG.returnUrl); // This ensures return to success page
+            formData.append('billCallbackUrl', TOYYIBPAY_CONFIG.callbackUrl);
+            formData.append('billExternalReferenceNo', billNo);
+            formData.append('billTo', orderData.customerName);
+            formData.append('billEmail', orderData.customerEmail);
+            formData.append('billPhone', orderData.customerPhone);
+            formData.append('billSplitPayment', 0); // No split payment
+            formData.append('billSplitPaymentArgs', '');
+            formData.append('billPaymentChannel', 0); // All payment channels
+            formData.append('billContentEmail', `
+                Terima kasih atas pembelian pakej PROSTREAM.
+                Untuk cara-cara install dan download apps sila tekan link dibawah.
+                Kami sediakan full video tutorial, termasuk code apps untuk download.
+                
+                https://shorturl.at/FIpB3
+            `);
+            formData.append('billChargeToCustomer', 1); // Transaction cost deducted from merchant
+            formData.append('billExpiryDate', formattedExpiryDate); // Bill expires in 3 days
+            
+            try {
+                // Send request to ToyyibPay API
+                const response = await fetch('https://toyyibpay.com/index.php/api/createBill', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.text();
+                
+                // Log the response for debugging
+                console.log('ToyyibPay API response status:', response.status);
+                console.log('ToyyibPay API response text:', result);
+                
+                // Parse the JSON response to get the bill code
+                let responseObj;
+                try {
+                    responseObj = JSON.parse(result);
+                } catch (parseError) {
+                    console.error('Error parsing JSON response:', parseError);
+                    console.error('Raw response:', result);
+                    hidePaymentLoading();
+                    showMessage('Ralat: Respon tidak sah dari pembekal pembayaran. Sila cuba lagi.', 'error');
+                    return false;
+                }
+                
+                // Try different ways to get the bill code
+                let billCode = null;
+                
+                if (responseObj.BillCode) {
+                    billCode = responseObj.BillCode;
+                } else if (Array.isArray(responseObj) && responseObj.length > 0 && responseObj[0].BillCode) {
+                    billCode = responseObj[0].BillCode;
+                } else if (responseObj.billCode) {
+                    billCode = responseObj.billCode;
+                } else {
+                    console.error('Unexpected response format:', responseObj);
+                    hidePaymentLoading();
+                    showMessage('Ralat: Format respon tidak dijangka. Sila cuba lagi.', 'error');
+                    return false;
+                }
+                
+                console.log('Bill code extracted:', billCode);
+                console.log('Redirect URL:', `https://toyyibpay.com/${billCode}`);
+                
+                if (billCode) {
+                    // Store order data in localStorage for tracking on return
+                    localStorage.setItem('pendingOrder', JSON.stringify({
+                        orderData: orderData,
+                        billNo: billNo,
+                        totalAmount: amount
+                    }));
+                    
+                    // Hide payment loading modal
+                    hidePaymentLoading();
+                    
+                    // Show payment redirect modal
+                    showPaymentRedirectModal(billCode);
+                    return true;
+                } else {
+                    console.error('Failed to get bill code:', result);
+                    hidePaymentLoading();
+                    showMessage('Ralat: Gagal menjana bil pembayaran. Sila cuba lagi.', 'error');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error creating ToyyibPay bill:', error);
+                hidePaymentLoading();
+                showMessage('Ralat: Tidak dapat menyambung ke pembekal pembayaran. Sila cuba lagi.', 'error');
+                return false;
+            }
+        }
+
+        // --- Form Submission ---
+        orderForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const selectedPackage = document.querySelector('input[name="package"]:checked').value;
+            
+            // Validate form
+            if (!name || !phone || !email) {
+                showMessage('Sila isi semua medan yang diperlukan.', 'error');
+                return;
+            }
+            
+            const phoneRegex = /^01\d{8,9}$/;
+            if (!phoneRegex.test(phone)) {
+                showMessage('Sila masukkan nombor telefon Malaysia yang sah (contoh: 0133214321).', 'error');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Sila masukkan alamat emel yang sah.', 'error');
+                return;
+            }
+            
+            // Track InitiateCheckout with Meta Pixel
+            fbq('track', 'InitiateCheckout', {
+                content_name: 'PROSTREAM 4 App Power Package',
+                content_category: 'Streaming',
+                content_ids: ['prostream_4app_package'],
+                content_type: 'product',
+                value: parseFloat(selectedPackage),
+                currency: 'MYR'
+            });
+            
+            // Show loading spinner
+            showPaymentLoading();
+            
+            // Prepare order data
+            const orderData = {
+                customerName: name,
+                customerPhone: phone,
+                customerEmail: email,
+                product: 'PROSTREAM 4 App Power Package',
+                quantity: 1,
+                total: parseFloat(selectedPackage)
+            };
+            
+            // Send Discord notification first
+            await sendDiscordNotification(orderData);
+            
+            // Process payment
+            redirectToToyyibPay(orderData);
+        });
+        
+        // Function to show messages
+        function showMessage(message, type) {
+            paymentMessage.textContent = message;
+            paymentMessage.style.display = 'block';
+            
+            if (type === 'error') {
+                paymentMessage.style.color = 'var(--secondary-color)';
+            } else if (type === 'success') {
+                paymentMessage.style.color = 'var(--primary-color)';
+            } else {
+                paymentMessage.style.color = 'var(--text-color)';
+            }
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                paymentMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // --- FAQ Collapsible Logic ---
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // --- Social Proof Notification Logic ---
+        const socialProofNotification = document.getElementById('social-proof');
+        const notificationClose = document.querySelector('.notification-close');
+        const notificationName = document.querySelector('.notification-name');
+        const notificationTime = document.querySelector('.notification-time');
+        const notificationSound = document.getElementById('notification-sound');
+
+        // Array of 15 two-word Malay names
+        const malayNames = [
+            'Ahmad Firdaus',
+'Muhammad Hafiz',
+'Abdul Hadi',
+'Mohd Faizal',
+'Nur Aina',
+'Siti Aisyah',
+'Fatimah Nadia',
+'Sarah Azizah',
+'Ainul Sofea',
+'Maya Amira',
+'Sofia Imani',
+'Nadia Farhana',
+'Hana Zulaikha',
+'Amira Natasya',
+'Zara Hani'
+
+        ];
+
+        // Time variations with hours and minutes
+        const timeVariations = [
+            '5 minit yang lepas',
+            '15 minit yang lepas',
+            '30 minit yang lepas',
+            '45 minit yang lepas',
+            '1 jam yang lepas',
+            '1 jam 15 minit yang lepas',
+            '1 jam 30 minit yang lepas',
+            '1 jam 45 minit yang lepas',
+            '2 jam yang lepas',
+            '2 jam 15 minit yang lepas',
+            '2 jam 30 minit yang lepas',
+            '2 jam 45 minit yang lepas',
+            '3 jam yang lepas',
+            '3 jam 30 minit yang lepas',
+            '4 jam yang lepas',
+            '4 jam 30 minit yang lepas',
+            '5 jam yang lepas',
+            '5 jam 30 minit yang lepas',
+            '6 jam yang lepas',
+            '7 jam yang lepas',
+            '8 jam yang lepas',
+            '9 jam yang lepas',
+            '10 jam yang lepas',
+            '11 jam yang lepas',
+            '12 jam yang lepas'
+        ];
+
+        // Function to show a random notification
+        function showRandomNotification() {
+            // Select a random name from the array
+            const name = malayNames[Math.floor(Math.random() * malayNames.length)];
+            
+            // Select a random time variation
+            const time = timeVariations[Math.floor(Math.random() * timeVariations.length)];
+            
+            // Update notification content
+            notificationName.textContent = name;
+            notificationTime.textContent = `telah beli ${time}`;
+            
+            // Show notification
+            socialProofNotification.classList.add('show');
+            
+            // Play notification sound
+            notificationSound.play().catch(e => console.log('Audio play failed:', e));
+            
+            // Auto-hide after 6 seconds
+            setTimeout(() => {
+                socialProofNotification.classList.remove('show');
+            }, 6000);
+        }
+
+        // Close notification when close button is clicked
+        notificationClose.addEventListener('click', () => {
+            socialProofNotification.classList.remove('show');
+        });
+
+        // Show first notification after 5 seconds
+        setTimeout(showRandomNotification, 5000);
+        
+        // Show notifications at random intervals
+        function scheduleNextNotification() {
+            // Random intervals between 20-45 seconds
+            const minInterval = 20000; // 20 seconds
+            const maxInterval = 45000; // 45 seconds
+            const randomInterval = Math.floor(Math.random() * (maxInterval - minInterval + 1)) + minInterval;
+            
+            setTimeout(() => {
+                showRandomNotification();
+                scheduleNextNotification(); // Schedule the next notification
+            }, randomInterval);
+        }
+        
+        // Start scheduling notifications
+        scheduleNextNotification();
+
+        // --- Modal Close Handlers ---
+        document.querySelectorAll('.modal-close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>

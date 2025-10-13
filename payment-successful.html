@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Berjaya - PROSTREAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '779649628268910');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=779649628268910&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        :root {
+            --primary-color: #f9c74f;
+            --secondary-color: #f94144;
+            --bg-color: #0a0e27;
+            --surface-color: #151932;
+            --text-color: #e0e1dd;
+            --text-muted: #a8a9ad;
+            --font-family: 'Poppins', sans-serif;
+            --success-color: #43b581;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+            animation: checkmark 0.5s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--success-color);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+
+        .success-card {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .order-details {
+            background-color: rgba(249, 199, 79, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .order-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .steps {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #2a2f4a;
+            font-size: 0.9rem;
+        }
+
+        .loading-spinner {
+            display: block;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid rgba(249, 199, 79, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .notification.error {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        .highlight-box {
+            background-color: rgba(67, 181, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box h3 {
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .success-card { padding: 30px 20px; }
+            .detail-row { flex-direction: column; }
+            .detail-row span:first-child { margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="success-icon">✓</div>
+            <h1>Pembayaran Berjaya!</h1>
+            <h2>Terima kasih atas pembelian anda</h2>
+        </header>
+
+        <main>
+            <div class="success-card">
+                <p>Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.</p>
+                
+                <div class="highlight-box">
+                    <h3>🎉 PENTING: Panduan Pemasangan</h3>
+                    <p>Sila ikuti panduan pemasangan yang telah kami sediakan untuk memasang semua aplikasi PROSTREAM pada peranti Android TV anda.</p>
+                    <a href="https://shorturl.at/FIpB3" target="_blank" class="btn">Lihat Panduan Pemasangan</a>
+                </div>
+                
+                <div class="order-details" id="orderDetails">
+                    <div class="loading-spinner"></div>
+                    <p style="text-align: center;">Memuatkan butiran pesanan...</p>
+                </div>
+
+                <div class="steps">
+                    <h3>Langkah Seterusnya:</h3>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Semak Emel & WhatsApp</h4>
+                            <p>Anda akan menerima pautan muat turun dan panduan pemasangan dalam masa 15 minit.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Muat Turun Aplikasi</h4>
+                            <p>Ikuti panduan yang disediakan untuk memasang semua 4 aplikasi pada peranti Android TV anda.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Nikmati Kandungan</h4>
+                            <p>Mula menikmati filem terkini, drama, anime dan saluran TV langsung tanpa had!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="https://prostream-rho.vercel.app/" class="btn">Kembali ke Laman Utama</a>
+                    <a href="https://wa.me/601127412402?text=Hai%2C%20saya%20baru%20sahaja%20membeli%20pakej%20PROSTREAM%20dan%20perlu%20bantuan." target="_blank" class="btn whatsapp-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.149-.67.149-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.123-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                        Hubungi WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <h3>Perlu Bantuan?</h3>
+                <p>WhatsApp: +60 11-2741 2402</p>
+                <p>Emel: support@prostream.com</p>
+                <p>Kami sedia membantu 24/7</p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PROSTREAM. Hak Cipta Terpelihara.</p>
+        <a href="#">Dasar Privasi</a> | <a href="#">Terma & Syarat</a> | <a href="#">Hubungi Kami</a>
+    </footer>
+
+    <div id="notification" class="notification">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
+    </div>
+
+    <script>
+        // ====================================
+        //      DISCORD NOTIFICATION
+        // ====================================
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
+
+        // Function to send Discord notification
+        async function sendDiscordNotification(orderData) {
+            console.log('Attempting to send Discord notification for:', orderData);
+            try {
+                const timestamp = new Date().toISOString();
+                
+                const embed = {
+                    title: "✅ PEMBAYARAN BERJAYA - PROSTREAM",
+                    description: "Pelanggan telah berjaya membuat pembayaran!",
+                    color: 0x43b581,
+                    fields: [
+                        { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
+                        { name: "👤 Nama", value: orderData.customerName, inline: true },
+                        { name: "📱 No Telefon", value: orderData.customerPhone, inline: true },
+                        { name: "📧 Email", value: orderData.customerEmail, inline: false },
+                        { name: "📦 Produk", value: orderData.product, inline: true },
+                        { name: "💰 Jumlah", value: `RM ${orderData.total.toFixed(2)}`, inline: true },
+                        { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+                    ],
+                    footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
+                    timestamp: timestamp
+                };
+
+                const payload = {
+                    username: "PROSTREAM Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+                    embeds: [embed]
+                };
+
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Discord notification sent successfully');
+                    return true;
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ Failed to send Discord notification:', errorText);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Error sending Discord notification:', error);
+                return false;
+            }
+        }
+
+        // Function to show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const iconElement = notification.querySelector('.notification-icon');
+            const textElement = notification.querySelector('.notification-text');
+            
+            notification.className = `notification ${type}`;
+            textElement.textContent = message;
+            
+            if (type === 'success') {
+                iconElement.textContent = '✓';
+            } else {
+                iconElement.textContent = '✗';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to load order details
+        async function loadOrderDetails() {
+            console.log('🔄 Loading order details...');
+            try {
+                const pendingOrder = localStorage.getItem('pendingOrder');
+                console.log('Retrieved pendingOrder from localStorage:', pendingOrder);
+
+                if (!pendingOrder) {
+                    console.error('❌ No pending order found in localStorage.');
+                    showOrderDetailsError();
+                    return;
+                }
+
+                const orderData = JSON.parse(pendingOrder);
+                console.log('✅ Parsed order data:', orderData);
+                
+                displayOrderDetails(orderData);
+                
+                // Track Purchase with Meta Pixel
+                console.log('Firing Meta Purchase event...');
+                fbq('track', 'Purchase', {
+                    content_name: 'PROSTREAM 4 App Power Package',
+                    content_category: 'Streaming',
+                    content_ids: ['prostream_4app_package'],
+                    content_type: 'product',
+                    value: orderData.totalAmount,
+                    currency: 'MYR'
+                });
+                
+                // Send Discord notification for successful payment
+                console.log('Sending Discord notification...');
+                await sendDiscordNotification(orderData.orderData);
+                
+                // Clear the pending order from localStorage
+                localStorage.removeItem('pendingOrder');
+                console.log('✅ Cleared pendingOrder from localStorage.');
+            } catch (error) {
+                console.error('❌ Error in loadOrderDetails:', error);
+                showOrderDetailsError();
+            }
+        }
+
+        // Function to display order details
+        function displayOrderDetails(orderData) {
+            const orderDetailsElement = document.getElementById('orderDetails');
+            
+            orderDetailsElement.innerHTML = `
+                <h3>Butiran Pesanan</h3>
+                <div class="detail-row">
+                    <span>No. Pesanan:</span>
+                    <span>${orderData.billNo}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Nama:</span>
+                    <span>${orderData.orderData.customerName}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Emel:</span>
+                    <span>${orderData.orderData.customerEmail}</span>
+                </div>
+                <div class="detail-row">
+                    <span>No. Telefon:</span>
+                    <span>${orderData.orderData.customerPhone}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Produk:</span>
+                    <span>${orderData.orderData.product}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Jumlah:</span>
+                    <span>RM ${orderData.totalAmount.toFixed(2)}</span>
+                </div>
+            `;
+        }
+
+        // Function to show error in order details
+        function showOrderDetailsError() {
+            const orderDetailsElement = document.getElementById('orderDetails');
+            
+            orderDetailsElement.innerHTML = `
+                <h3>Butiran Pesanan</h3>
+                <p style="text-align: center; color: var(--secondary-color);">Maaf, kami tidak dapat memuatkan butiran pesanan anda.</p>
+                <p style="text-align: center;">Sila hubungi sokongan pelanggan kami untuk bantuan.</p>
+            `;
+        }
+
+        // Load order details when page loads
+        document.addEventListener('DOMContentLoaded', loadOrderDetails);
+    </script>
+</body>
+</html>
