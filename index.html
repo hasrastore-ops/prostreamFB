@@ -1730,11 +1730,11 @@
                 console.log('Redirect URL:', `https://toyyibpay.com/${billCode}`);
                 
                 if (billCode) {
-                    // Store order data in localStorage for tracking on success page
+                    // Store order data in localStorage for tracking on return
                     localStorage.setItem('pendingOrder', JSON.stringify({
-                        ...orderData,
-                        billCode: billCode,
-                        billNo: billNo
+                        orderData: orderData,
+                        billNo: billNo,
+                        totalAmount: amount
                     }));
                     
                     // Show redirect modal instead of direct redirect
@@ -1929,4 +1929,5 @@
     </script>
 </body>
 </html>
+
 
