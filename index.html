@@ -1731,7 +1731,7 @@
                 
                 if (billCode) {
                     // Store order data in localStorage for tracking on success page
-                    localStorage.setItem('prostream_order', JSON.stringify({
+                    localStorage.setItem('pendingOrder', JSON.stringify({
                         ...orderData,
                         billCode: billCode,
                         billNo: billNo
@@ -1929,3 +1929,4 @@
     </script>
 </body>
 </html>
+
