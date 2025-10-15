@@ -900,6 +900,272 @@
             transform: scale(1.1);  /* Slightly enlarges the button on hover */
             box-shadow: 3px 4px 15px rgba(0, 0, 0, 0.3);
         }
+
+        /* --- Reviews Section Styles --- */
+        .reviews {
+            background-color: var(--surface-color);
+            text-align: left;
+        }
+
+        .reviews h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .reviews .section-subtitle {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-muted);
+        }
+
+        .reviews-summary {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: var(--bg-color);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            gap: 20px;
+        }
+
+        .overall-rating {
+            text-align: center;
+        }
+
+        .rating-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .rating-stars {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            letter-spacing: 3px;
+        }
+
+        .rating-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .rating-distribution {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .distribution-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .bar-label {
+            width: 70px;
+            color: var(--text-color);
+        }
+
+        .bar-background {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #2a2f4a;
+            border-radius: 5px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-count {
+            width: 30px;
+            text-align: right;
+            color: var(--text-muted);
+        }
+
+        .reviews-controls {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+
+        .reviews-controls label {
+            margin-right: 10px;
+            color: var(--text-muted);
+        }
+
+        .reviews-controls select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #2a2f4a;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+        }
+
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .review-card {
+            background-color: var(--bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .verified-badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .review-rating {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .review-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .review-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            margin-right: 5px;
+        }
+
+        .detail-rating {
+            color: var(--primary-color);
+        }
+
+        .helpful-vote {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #2a2f4a;
+        }
+
+        .vote-btn {
+            background: none;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .vote-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .vote-btn.voted {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .company-response {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(249, 199, 79, 0.1);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .company-response strong {
+            color: var(--primary-color);
+        }
+
+        .company-response p {
+            margin-bottom: 0;
+            color: var(--text-color);
+        }
+
+        /* Responsive for Reviews */
+        @media (max-width: 768px) {
+            .reviews-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+            .rating-distribution {
+                width: 100%;
+                max-width: none;
+            }
+            .distribution-bar {
+                font-size: 0.8rem;
+            }
+            .bar-label {
+                width: 60px;
+            }
+            .review-details {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1164,6 +1430,124 @@
                                 </div>
                             </div>
                             <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp" alt="Subtitle Lengkap">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS SECTION -->
+        <section id="reviews" class="reviews">
+            <div class="container">
+                <h2>Apa Kata Mereka Tentang PROSTREAM</h2>
+                <p class="section-subtitle">Jangan ambil kata kami sahaja. Lihat sendiri review dari pengguna setia kami.</p>
+                
+                <!-- Reviews Summary -->
+                <div class="reviews-summary">
+                    <div class="overall-rating">
+                        <div class="rating-number">4.9</div>
+                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-text">Berdasarkan 327 reviews</div>
+                    </div>
+                </div>
+
+                <!-- Sort Controls -->
+                <div class="reviews-controls">
+                    <label for="sort-reviews">Susun mengikut:</label>
+                    <select id="sort-reviews">
+                        <option value="helpful">Paling Membantu</option>
+                        <option value="recent">Terkini</option>
+                        <option value="rating-high">Rating Tertinggi</option>
+                        <option value="rating-low">Rating Terendah</option>
+                    </select>
+                </div>
+
+                <!-- Individual Reviews -->
+                <div class="reviews-container">
+                    <!-- Review 1: The Enthusiast -->
+                    <div class="review-card" data-rating="5" data-date="2024-10-25" data-helpful="42">
+                        <div class="review-header">
+                            <div>
+                                <span class="reviewer-name">Azri Abdullah</span>
+                                <span class="verified-badge">✅ Pengguna Disahkan</span>
+                            </div>
+                            <span class="review-date">10 Oktober 2025</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <h4 class="review-title">Berbaloi! Dah Delete Netflix</h4>
+                        <p class="review-text">Saya pun was-was dulu, tapi lepas try, memang power! Kualiti video HD, semua filem terkini ada. Dulu bayar lebih RM180 sebulan, sekarang sekali bayar je. Best sangat app anime tu, update ikut Jepun. Memang puas hati!</p>
+                        <div class="review-details">
+                            <div class="detail-item"><span class="detail-label">Nilai Wang:</span> <span class="detail-rating">★★★★★</span></div>
+                            <div class="detail-item"><span class="detail-label">Kandungan:</span> <span class="detail-rating">★★★★★</span></div>
+                            <div class="detail-item"><span class="detail-label">Mudah Diguna:</span> <span class="detail-rating">★★★★★</span></div>
+                        </div>
+                        <div class="helpful-vote">
+                            <span>Adakah review ini membantu?</span>
+                            <button class="vote-btn" data-review="1" data-vote="yes">Ya</button>
+                            <button class="vote-btn" data-review="1" data-vote="no">Tidak</button>
+                            <span class="vote-count">(42) orang jumpa ni membantu</span>
+                        </div>
+                        <div class="company-response">
+                            <strong>Jawapan dari PROSTREAM:</strong>
+                            <p>Hi Azri, terima kasih banyak-banyak atas review yang hebat ni! Kami sangat gembira anda berpuas hati. Selamat menikmati semua kandungan tanpa perlu risau tentang langganan bulanan! 🎉</p>
+                        </div>
+                    </div>
+
+                    <!-- Review 2: The Slightly Skeptical but Convinced -->
+                    <div class="review-card" data-rating="4" data-date="2024-10-22" data-helpful="28">
+                        <div class="review-header">
+                            <div>
+                                <span class="reviewer-name">Anis Natasha</span>
+                                <span class="verified-badge">✅ Pengguna Disahkan</span>
+                            </div>
+                            <span class="review-date">11 September 2025</span>
+                        </div>
+                        <div class="review-rating">★★★★☆</div>
+                        <h4 class="review-title">Bagus, tapi perlu sedikit usaha untuk install</h4>
+                        <p class="review-text">Produk memang bagus dan jimat sangat. Content untuk keluarga ada, suami saya boleh tengok bola. Satu je benda, install agak mengelirukan sikit untuk orang tak biasa dengan tv. Tapi lepas tengok video tutorial, senang je. Berbaloi dengan harga.</p>
+                        <div class="review-details">
+                            <div class="detail-item"><span class="detail-label">Nilai Wang:</span> <span class="detail-rating">★★★★★</span></div>
+                            <div class="detail-item"><span class="detail-label">Kandungan:</span> <span class="detail-rating">★★★★☆</span></div>
+                            <div class="detail-item"><span class="detail-label">Mudah Diguna:</span> <span class="detail-rating">★★★★☆</span></div>
+                        </div>
+                        <div class="helpful-vote">
+                            <span>Adakah review ini membantu?</span>
+                            <button class="vote-btn" data-review="2" data-vote="yes">Ya</button>
+                            <button class="vote-btn" data-review="2" data-vote="no">Tidak</button>
+                            <span class="vote-count">(28) orang jumpa ni membantu</span>
+                        </div>
+                        <div class="company-response">
+                            <strong>Jawapan dari PROSTREAM:</strong>
+                            <p>Terima kasih Siti atas feedback yang jujur. Kami ambil maklum tentang panduan install dan akan usahakan untuk jadikannya lebih mudah lagi. Jika ada apa-apa masalah, jangan teragak-agak WhatsApp kami ya!</p>
+                        </div>
+                    </div>
+
+                    <!-- Review 3: The Specific User (Anime Fan) -->
+                    <div class="review-card" data-rating="5" data-date="2024-10-20" data-helpful="35">
+                        <div class="review-header">
+                            <div>
+                                <span class="reviewer-name">Hafizdhul </span>
+                                <span class="verified-badge">✅ Pengguna Disahkan</span>
+                            </div>
+                            <span class="review-date">12 Oktober 2025</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <h4 class="review-title">Untuk Kaki Anime, App Ni 10/10!</h4>
+                        <p class="review-text">Aku cari app streaming yang ada anime cepat tak buffering . Memang puas hati! Episod baru cepat. Subtitle pun bagus. App lain lambat, kena tengok iklan. Yang ni semua clear. Dah boleh delete app lain.</p>
+                        <div class="review-details">
+                            <div class="detail-item"><span class="detail-label">Nilai Wang:</span> <span class="detail-rating">★★★★★</span></div>
+                            <div class="detail-item"><span class="detail-label">Kandungan:</span> <span class="detail-rating">★★★★★</span></div>
+                            <div class="detail-item"><span class="detail-label">Mudah Diguna:</span> <span class="detail-rating">★★★★★</span></div>
+                        </div>
+                        <div class="helpful-vote">
+                            <span>Adakah review ini membantu?</span>
+                            <button class="vote-btn" data-review="3" data-vote="yes">Ya</button>
+                            <button class="vote-btn" data-review="3" data-vote="no">Tidak</button>
+                            <span class="vote-count">(35) orang jumpa ni membantu</span>
+                        </div>
+                        <div class="company-response">
+                            <strong>Jawapan dari PROSTREAM:</strong>
+                            <p>Hi Hafiz! Kami gembira sekali anda suka app anime kami. Kami sentiasa berusaha untuk membawa kandungan terkini secepat mungkin. Terima kasih kerana menjadi pengguna setia!</p>
                         </div>
                     </div>
                 </div>
@@ -1926,8 +2310,83 @@
                 }
             });
         });
+
+        // ====================================
+        //      REVIEWS SECTION FUNCTIONALITY
+        // ====================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const voteButtons = document.querySelectorAll('.vote-btn');
+            const sortSelect = document.getElementById('sort-reviews');
+            const reviewsContainer = document.querySelector('.reviews-container');
+
+            // --- "Was this helpful?" voting ---
+            voteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const reviewCard = this.closest('.review-card');
+                    const voteCountSpan = reviewCard.querySelector('.vote-count');
+                    const currentCountText = voteCountSpan.textContent;
+                    const currentCount = parseInt(currentCountText.match(/\d+/)[0]);
+
+                    // Check if already voted
+                    if (this.classList.contains('voted')) {
+                        return;
+                    }
+
+                    // Disable all buttons for this review
+                    const allButtonsInCard = reviewCard.querySelectorAll('.vote-btn');
+                    allButtonsInCard.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+
+                    // Mark clicked button as voted
+                    this.classList.add('voted');
+
+                    // Update count (frontend only)
+                    const newCount = currentCount + 1;
+                    voteCountSpan.textContent = `(${newCount}) orang jumpa ni membantu`;
+                    
+                    // In a real application, you would send an AJAX request here
+                    // to a server to record the vote and persist the data.
+                    console.log(`Vote recorded for review ${this.dataset.review}: ${this.dataset.vote}`);
+                });
+            });
+
+            // --- Sorting functionality ---
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    const criteria = this.value;
+                    const reviewCards = Array.from(reviewsContainer.querySelectorAll('.review-card'));
+                    
+                    reviewCards.sort((a, b) => {
+                        let aVal, bVal;
+                        switch(criteria) {
+                            case 'recent':
+                                aVal = new Date(a.dataset.date);
+                                bVal = new Date(b.dataset.date);
+                                return bVal - aVal; // Descending
+                            case 'rating-high':
+                                aVal = parseInt(a.dataset.rating);
+                                bVal = parseInt(b.dataset.rating);
+                                return bVal - aVal; // Descending
+                            case 'rating-low':
+                                aVal = parseInt(a.dataset.rating);
+                                bVal = parseInt(b.dataset.rating);
+                                return aVal - bVal; // Ascending
+                            case 'helpful':
+                            default:
+                                aVal = parseInt(a.dataset.helpful);
+                                bVal = parseInt(b.dataset.helpful);
+                                return bVal - aVal; // Descending
+                        }
+                    });
+
+                    // Re-append sorted cards to the container
+                    reviewCards.forEach(card => reviewsContainer.appendChild(card));
+                });
+            }
+        });
     </script>
 </body>
 </html>
-
-
