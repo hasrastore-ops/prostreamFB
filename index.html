@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 
-
     
     <!-- Meta Pixel Code -->
 <script>
@@ -1168,6 +1167,196 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 gap: 5px;
             }
         }
+        
+        /* WhatsApp Review Section Styles - FIXED */
+        .whatsapp-reviews {
+            padding: 60px 0;
+            background-color: var(--bg-color);
+        }
+
+        .whatsapp-reviews h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .whatsapp-reviews .section-subtitle {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-muted);
+        }
+
+        .whatsapp-reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .whatsapp-review-item {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .whatsapp-review-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .review-image-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .review-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .whatsapp-review-item:hover .review-image {
+            transform: scale(1.05);
+        }
+
+        .review-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .whatsapp-review-item:hover .review-overlay {
+            opacity: 1;
+        }
+
+        .view-fullscreen-btn {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .view-fullscreen-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--secondary-color);
+        }
+
+        .review-info {
+            padding: 20px;
+        }
+
+        .review-info h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-info p {
+            color: var(--text-muted);
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* WhatsApp Review Modal Styles */
+        .whatsapp-review-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .whatsapp-review-modal .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .whatsapp-review-modal .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .whatsapp-review-modal .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        #whatsapp-review-full-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* Responsive Design for WhatsApp Reviews */
+        @media (max-width: 768px) {
+            .whatsapp-reviews-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .review-info {
+                padding: 15px;
+            }
+            
+            .review-info h4 {
+                font-size: 1rem;
+            }
+            
+            .review-info p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .whatsapp-reviews {
+                padding: 40px 0;
+            }
+            
+            .view-fullscreen-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .whatsapp-review-modal .close-modal {
+                top: -30px;
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1201,7 +1390,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         <tr><td><strong>Prime Video</strong></td><td>RM 25.00</td><td>RM 300.00</td></tr>
                         <tr><td><strong>Astro</strong></td><td>~RM 50.00+</td><td>~RM 600.00+</td></tr>
                         <tr class="total-row">
-                            <td><strong>TOTAL</strong></td><td><strong>~RM 184.90 / BULAN</strong></td><td><strong>~RM 2,217.60 / TAHUN</strong></td>
+                            <td><strong>TOTAL</strong></td><td><strong>~RM 184.90 SEBULAN </strong></td><td><strong>~RM 2,217.60 SETAHUN </strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1285,8 +1474,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 <p class="section-subtitle">Lihat sendiri kualiti premium yang kami tawarkan, Dan banyak lagi di dalam APPS</p>
                 
                 <div class="gallery-categories">
-                    <button class="category-btn active" data-category="all">Semua</button>
-                    <button class="category-btn" data-category="movies">Filem</button>
+                    <button class="category-btn active" data-category="movies">Filem</button>
                     <button class="category-btn" data-category="tv">TV Shows</button>
                     <button class="category-btn" data-category="anime">Anime</button>
                     <button class="category-btn" data-category="live">Live TV</button>
@@ -1438,6 +1626,104 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             </div>
         </section>
 
+        <!-- WHATSAPP REVIEW SECTION -->
+        <section id="whatsapp-reviews" class="whatsapp-reviews">
+            <div class="container">
+                <h2>Testimoni Pelanggan Melalui WhatsApp</h2>
+                <p class="section-subtitle">Lihat sendiri apa kata pelanggan kami tentang aplikasi PROSTREAM</p>
+                
+                <div class="whatsapp-reviews-container">
+                    <div class="whatsapp-review-item">
+                        <div class="review-image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws1.webp" alt="WhatsApp Review 1" class="review-image">
+                            <div class="review-overlay">
+                                <button class="view-fullscreen-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws1.webp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-info">
+                            <h4>"Saya guna IPTV Sejak 2015, dah macam-macam guna, tapi pakej PROSTREAM sgt berbaloi tak padan dgn harga mampu milik"</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-review-item">
+                        <div class="review-image-container">
+                            <img src="https://raw.githubusercontent.com/hasrastore-ops/prostreammedia/refs/heads/main/ws2.webp" alt="WhatsApp Review 2" class="review-image">
+                            <div class="review-overlay">
+                                <button class="view-fullscreen-btn" data-src="https://raw.githubusercontent.com/hasrastore-ops/prostreammedia/refs/heads/main/ws2.webp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-info">
+                            <h4>"Sangat Berpuas Hati, Penuh Movie + Siaran TV, Recommend untuk pengguna yang taknak ada komitmen bulanan"</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-review-item">
+                        <div class="review-image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws3.webp" alt="WhatsApp Review 3" class="review-image">
+                            <div class="review-overlay">
+                                <button class="view-fullscreen-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws3.webp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-info">
+                            <h4>"Terbaiklah Tuan, TQ"</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-review-item">
+                        <div class="review-image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws4.webp" alt="WhatsApp Review 4" class="review-image">
+                            <div class="review-overlay">
+                                <button class="view-fullscreen-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws4.webp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-info">
+                            <h4>"Siaran Smooth,Kualiti gambar cun, Team Respon Cepat"</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-review-item">
+                        <div class="review-image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws5.webp" alt="WhatsApp Review 5" class="review-image">
+                            <div class="review-overlay">
+                                <button class="view-fullscreen-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.1/ws5.webp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-info">
+                            <h4>"Best, Banyak Pilihan, Movie Netflix, Kualiti Memang Terbaik"</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WhatsApp Review Fullscreen Modal -->
+        <div id="whatsapp-review-modal" class="whatsapp-review-modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <img id="whatsapp-review-full-image" src="" alt="WhatsApp Review Full Size">
+            </div>
+        </div>
+
         <!-- REVIEWS SECTION -->
         <section id="reviews" class="reviews">
             <div class="container">
@@ -1561,12 +1847,11 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             <div class="container">
                 <h2>Harga Ni Memang Gila!</h2>
                 <p>Jangan terkejut dengan harga sebenar...</p>
-                <p class="price-comparison">Harga Asal: <span>RM 169</span></p>
-                <p class="price-comparison">Harga Promosi: <span>RM 99</span></p>
-                <div class="final-price">RM 19.90</div>
-                <p>SEKALI SAHAJA!</p>
-                <p class="urgency">⚠️ Harga ni akan naik bila-bila masa sahaja.ini harga pengenalan sahaja. Jangan lepaskan peluang keemasan ni!</p>
-                <a href="#package-selection" class="btn" id="pricing-cta">🚀 YES! SAYA NAK SEMUANYA DENGAN RM 19.90! 🚀</a>
+                <p class="price-comparison">Harga Asal: <span>RM 98.90</span></p>
+<p class="price-comparison">Harga Promosi: <span>RM 55.90</span></p>
+<div class="final-price">RM 29.90</div>
+<p class="urgency">⚠️ Harga ni akan naik bila-bila masa sahaja, Ramai dah berpuas hati. Jangan lepaskan peluang keemasan ni!</p>
+                <a href="#package-selection" class="btn" id="pricing-cta">🚀 YES! SAYA NAK SEMUANYA DENGAN RM 29.90! 🚀</a>
                 <p style="margin-top: 1rem;">🔒 Pembayaran Anda 100% Selamat & Dienkripsi</p>
             </div>
         </section>
@@ -1579,13 +1864,15 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     <div class="step">
                         <div class="step-number">1</div>
                         <h4>Klik & Bayar</h4>
-                        <p>Hanya RM 19.90, sekali sahaja.</p>
-                        <p>Harga ni terhad untuk 30 orang terawal</p>
+                        <p>Hanya sekali bayar, Tiada Cas bulanan</p>
+                        <p>Harga, mengikut Promo! dan Boleh naik bila-bila masa</p>
+                        <p>Pembayaran Selamat Guna FPX,Online Banking</p>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <h4>Check Email & Whatsapp</h4>
-                        <p>Terus dapat emel&whatsapp dengan link dan guide untuk install.</p>
+                        <h4>Check Email</h4>
+                        <p>Terus dapat emel dengan link dan guide untuk install.</p>
+                        <p>Email akan terus dapat lepas siap payment, sangat pantas</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
@@ -1598,52 +1885,52 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         </section>
 
         <!-- CHECKOUT FORM SECTION -->
-        <section id="checkout" class="checkout-form-section">
-            <div class="container">
-                <h2>Pilih Pakej Anda & Beli Sekarang</h2>
-                <p class="section-subtitle">Sekali bayar, Guna Seumur hidup</p>
-                <div class="form-container">
-                    <form id="order-form">
-                        <div class="package-selection" id="package-selection">
-                            <label class="package-option selected">
-                                <input type="radio" name="package" value="19.90" checked>
-                                <strong>RM 19.90</strong> - Pakej Terawal
-                                <span class="stock-info">(Tinggal 12 lagi untuk 30 orang terawal!)</span>
-                            </label>
-                            <label class="package-option disabled">
-                                <input type="radio" name="package" value="59.90" disabled>
-                                <strong>RM 59.90</strong> - Harga Promo
-                                <span class="stock-info">(Pakej untuk 50 orang Seterusnya)</span>
-                            </label>
-                            <label class="package-option disabled">
-                                <input type="radio" name="package" value="98.90" disabled>
-                                <strong>RM 169.00</strong> - HARGA ASAL 
-                            </label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="name">Nama Penuh</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Nombor WhatsApp (Contoh: 0133214321)</label>
-                            <input type="tel" id="phone" name="phone" pattern="^01\d{8,9}$" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Emel</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <button type="submit" class="btn" style="width: 100%; font-size: 1.2rem; padding: 18px;">
-                            🚀 Dapatkan Sekarang & Bayar 🚀
-                        </button>
-                    </form>
-                    
-                    <div class="loading-spinner" id="loading-spinner"></div>
-                    <div id="payment-message" style="margin-top: 20px; display: none;"></div>
+<section id="checkout" class="checkout-form-section">
+    <div class="container">
+        <h2>Pilih Pakej Anda & Beli Sekarang</h2>
+        <p class="section-subtitle">Sekali bayar, Guna Seumur hidup</p>
+        <div class="form-container">
+            <form id="order-form">
+                <div class="package-selection" id="package-selection">
+                    <label class="package-option disabled">
+                        <input type="radio" name="package" value="19.90" disabled>
+                        <strong>RM 19.90</strong> - Pakej Terawal
+                        <span class="stock-info">(SOLD OUT - 30 orang terawal dah habis!)</span>
+                    </label>
+                    <label class="package-option selected">
+                        <input type="radio" name="package" value="29.90" checked>
+                        <strong>RM 29.90</strong> - Harga Promo
+                        <span class="stock-info">(Pakej untuk 50 orang sahaja)</span>
+                    </label>
+                    <label class="package-option disabled">
+                        <input type="radio" name="package" value="98.90" disabled>
+                        <strong>RM 98.90</strong> - HARGA ASAL 
+                    </label>
                 </div>
-            </div>
-        </section>
+
+                <div class="form-group">
+                    <label for="name">Nama</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Nombor WhatsApp (Contoh: 0133214321)</label>
+                    <input type="tel" id="phone" name="phone" pattern="^01\d{8,9}$" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Emel</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; font-size: 1.2rem; padding: 18px;">
+                    🚀 Dapatkan Sekarang & Bayar 🚀
+                </button>
+            </form>
+            
+            <div class="loading-spinner" id="loading-spinner"></div>
+            <div id="payment-message" style="margin-top: 20px; display: none;"></div>
+        </div>
+    </div>
+</section>
 
         <!-- FAQ SECTION -->
         <section id="faq" class="faq">
@@ -1656,15 +1943,34 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     </div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">Q: Boleh pakai dekat phone atau TV sahaja?</button>
+                    <button class="faq-question">Q: Boleh pakai dekat Android Phone atau TV sahaja?</button>
                     <div class="faq-answer">
-                        <p>A: Untuk pakej ni, hanya untuk android TV, Pastikan TV ada playstore baru boleh guna.</p>
+                        <p>A: Untuk pakej ni, hanya untuk android TV yang support 4 apps, Pastikan TV ada playstore baru boleh guna. <n> Untuk Phone : Hanya support apps no 2 (Cloud Movie) dan apps no 4 (Live TV) Free </n>
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Boleh Ke pakai untuk Smart TV yang bukan android?</button>
+                    <div class="faq-answer">
+                        <p>A: Maaf tak dapat, Apps ni hanya support system android sahaja.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Saya ada unifi TV Box, Boleh install ke?</button>
+                    <div class="faq-answer">
+                        <p>A: Untuk unifi TV BOX yang beli dari TM, Developer option box telah di lock jadi tak boleh install. nak tahu detail boleh contact team di whatsapp</p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question">Q: Dapat app macam mana lepas bayar?</button>
                     <div class="faq-answer">
-                        <p>A: Terus dapat emel dan whatsapp. Tak perlu tunggu lama. dalam email tu kita akan bagi link untuk download apps dan video tutorial cara install</p>
+                        <p>A: Terus dapat emel, Tak perlu tunggu lama. dalam email tu kita akan bagi link untuk download apps dan video tutorial cara install</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Berapa Device Boleh Guna?</button>
+                    <div class="faq-answer">
+                        <p>A: Maximum 2 device, Yang hebat boleh tengok serentak, Sangat Jimat!</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -1908,7 +2214,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 content_category: 'Streaming',
                 content_ids: ['prostream_4app_package'],
                 content_type: 'product',
-                value: 19.90,
+                value: 29.90,
                 currency: 'MYR'
             });
             
@@ -1923,6 +2229,16 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         const categoryBtns = document.querySelectorAll('.category-btn');
         const galleryItems = document.querySelectorAll('.gallery-item');
         
+        // Initialize gallery to show only movies by default
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all gallery items that are not movies
+            galleryItems.forEach(item => {
+                if (item.getAttribute('data-category') !== 'movies') {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
         categoryBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 // Update active button
@@ -1933,7 +2249,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 
                 // Filter gallery items
                 galleryItems.forEach(item => {
-                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                    if (item.getAttribute('data-category') === category) {
                         item.style.display = 'block';
                     } else {
                         item.style.display = 'none';
@@ -1997,6 +2313,50 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             if (e.target === galleryLightbox) {
                 galleryLightbox.classList.remove('active');
             }
+        });
+        
+        // ====================================
+        //      WHATSAPP REVIEW FUNCTIONALITY
+        // ====================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const viewFullscreenBtns = document.querySelectorAll('.view-fullscreen-btn');
+            const whatsappReviewModal = document.getElementById('whatsapp-review-modal');
+            const whatsappReviewFullImage = document.getElementById('whatsapp-review-full-image');
+            const closeModalBtn = document.querySelector('.close-modal');
+            
+            // Open modal when view fullscreen button is clicked
+            viewFullscreenBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const imageSrc = this.getAttribute('data-src');
+                    whatsappReviewFullImage.src = imageSrc;
+                    whatsappReviewModal.style.display = 'flex';
+                    
+                    // Prevent body scroll when modal is open
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+            
+            // Close modal when close button is clicked
+            closeModalBtn.addEventListener('click', function() {
+                whatsappReviewModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close modal when clicking outside the image
+            whatsappReviewModal.addEventListener('click', function(e) {
+                if (e.target === whatsappReviewModal) {
+                    whatsappReviewModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && whatsappReviewModal.style.display === 'flex') {
+                    whatsappReviewModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
         });
         
         // ====================================
@@ -2392,8 +2752,3 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     </script>
 </body>
 </html>
-
-
-
-
-
