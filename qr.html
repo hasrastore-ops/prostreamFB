@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pembayaran QR - PROSTREAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2276519576162204');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        :root {
+            --primary-color: #f9c74f;
+            --secondary-color: #f94144;
+            --bg-color: #0a0e27;
+            --surface-color: #151932;
+            --text-color: #e0e1dd;
+            --text-muted: #a8a9ad;
+            --font-family: 'Poppins', sans-serif;
+            --mobile-padding: 15px;
+            --mobile-button-height: 56px;
+            --mobile-touch-target: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+        }
+
+        header {
+            background-color: var(--surface-color);
+            padding: 15px var(--mobile-padding);
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        main {
+            flex: 1;
+            padding: var(--mobile-padding);
+            padding-bottom: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-container {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--text-muted);
+            z-index: 1;
+        }
+
+        .progress-bar .progress {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            z-index: 3;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .progress-step.active {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .progress-step.completed {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .instruction-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .instruction-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .step-content {
+            margin-bottom: 30px;
+        }
+
+        .step-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .user-details {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .user-details p {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .user-details strong {
+            color: var(--primary-color);
+        }
+
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .qr-container img {
+            max-width: 220px;
+            width: 100%;
+            border: 1px solid var(--text-muted);
+            border-radius: 10px;
+            padding: 15px;
+            background-color: white;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            min-height: var(--mobile-touch-target);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .download-btn.loading::before {
+            content: '⏳';
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .download-btn::before {
+            content: '⬇';
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .illustration {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .illustration img {
+            max-width: 180px;
+            width: 100%;
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border: 2px dashed var(--text-muted);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-height: var(--mobile-touch-target);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-input-label.has-file {
+            border-color: var(--primary-color);
+            background-color: rgba(249, 199, 79, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+            margin: 5px;
+            min-height: var(--mobile-button-height);
+            width: 100%;
+            touch-action: manipulation;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-muted);
+            color: var(--bg-color);
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background-color: #4CAF50;
+        }
+
+        .notification.error {
+            background-color: var(--secondary-color);
+        }
+
+        .notification.info {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(249, 199, 79, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-top: 20px;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 15px;
+                border-radius: 10px;
+            }
+            
+            .step-title {
+                font-size: 1.2rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 0;
+            }
+            
+            .qr-container img {
+                max-width: 200px;
+            }
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            .btn {
+                -webkit-appearance: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+            .btn {
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pembayaran QR - PROSTREAM</h1>
+    </header>
+
+    <main>
+        <div class="payment-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+                <div class="progress-step active" id="step-1-indicator">1</div>
+                <div class="progress-step" id="step-2-indicator">2</div>
+                <div class="progress-step" id="step-3-indicator">3</div>
+                <div class="progress-step" id="step-4-indicator">4</div>
+                <div class="progress-step" id="step-5-indicator">5</div>
+            </div>
+
+            <!-- Step 1: Verify Details -->
+            <div class="instruction-step active" id="step-1">
+                <h2 class="step-title">Cara-cara pembayaran QR</h2>
+                <div class="step-content">
+                    <p>1. Pastikan detail (Nama, Email dan No. Telefon Betul)</p>
+                    <div class="user-details">
+                        <p><strong>Nama:</strong> <span id="display-name"></span></p>
+                        <p><strong>Email:</strong> <span id="display-email"></span></p>
+                        <p><strong>No. Telefon:</strong> <span id="display-phone"></span></p>
+                        <p><strong>Jumlah:</strong> RM <span id="display-amount"></span></p>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="btn" id="step-1-next" type="button">Seterusnya</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Download QR -->
+            <div class="instruction-step" id="step-2">
+                <h2 class="step-title">Cara-cara pembayaran QR</h2>
+                <div class="step-content">
+                    <p>2. Tekan, download QR di atas kanan dan Save, Atau boleh screenshot</p>
+                    <div class="qr-container">
+                        <img id="qr-code-image" src="https://i.imgur.com/536QruQ.jpeg" alt="QR Code for Payment">
+                        <button class="download-btn" id="download-qr" type="button">Download QR</button>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="btn btn-secondary" id="step-2-prev" type="button">Kembali</button>
+                    <button class="btn" id="step-2-next" type="button">Seterusnya</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Scan QR -->
+            <div class="instruction-step" id="step-3">
+                <h2 class="step-title">Cara-cara pembayaran QR</h2>
+                <div class="step-content">
+                    <p>3. Masuk ke bank dan scan. Pastikan amount yang dimasukkan adalah betul (RM <span id="amount-verification"></span>)</p>
+                    <div class="illustration">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3208/3208465.png" alt="Bank App Scanning QR">
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="btn btn-secondary" id="step-3-prev" type="button">Kembali</button>
+                    <button class="btn" id="step-3-next" type="button">Seterusnya</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Save Receipt -->
+            <div class="instruction-step" id="step-4">
+                <h2 class="step-title">Cara-cara pembayaran QR</h2>
+                <div class="step-content">
+                    <p>4. Setelah siap payment simpan gambar resit/transfer, atau boleh screenshot</p>
+                    <div class="illustration">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5623/5623662.png" alt="Mobile Screenshot">
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="btn btn-secondary" id="step-4-prev" type="button">Kembali</button>
+                    <button class="btn" id="step-4-next" type="button">Seterusnya</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Upload Receipt -->
+            <div class="instruction-step" id="step-5">
+                <h2 class="step-title">Cara-cara pembayaran QR</h2>
+                <div class="step-content">
+                    <p>5. Upload gambar resit/transfer dan tekan Saya Sudah bayar. Tunggu sehingga Admin Contact.</p>
+                    <form id="payment-form">
+                        <div class="form-group">
+                            <label for="proof-image">Muat Naik Resit Pembayaran</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="proof-image" accept="image/*" required>
+                                <label for="proof-image" class="file-input-label" id="file-label">
+                                    Klik untuk memilih gambar resit
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="button-container">
+                    <button class="btn btn-secondary" id="step-5-prev" type="button">Kembali</button>
+                    <button class="btn btn-success" id="submit-payment" type="button">Saya Sudah Bayar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Sedang memproses pembayaran anda...</div>
+        </div>
+    </div>
+
+    <script>
+        // Discord webhook URL
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
+
+        // Function to get order data from URL parameters or local storage
+        function getOrderData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            const email = urlParams.get('email');
+            const phone = urlParams.get('phone');
+            const amount = urlParams.get('amount');
+            
+            if (name && email && phone && amount) {
+                const orderData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    amount: amount,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem('prostreamQRPaymentData', JSON.stringify(orderData));
+                return orderData;
+            }
+            
+            const savedData = localStorage.getItem('prostreamQRPaymentData');
+            if (savedData) {
+                try {
+                    const orderData = JSON.parse(savedData);
+                    
+                    const savedTime = new Date(orderData.timestamp);
+                    const currentTime = new Date();
+                    const timeDiff = currentTime - savedTime;
+                    const hoursDiff = timeDiff / (1000 * 60 * 60);
+                    
+                    if (hoursDiff < 24) {
+                        return orderData;
+                    }
+                } catch (error) {
+                    console.error('Error loading order data:', error);
+                }
+            }
+            
+            showNotification('Maklumat pesanan tidak dijumpai. Sila isi borang pesanan semula.', 'error');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 3000);
+            
+            return null;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderData = getOrderData();
+            
+            if (!orderData) {
+                document.body.innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Mengalihkan ke halaman pesanan...</h2></div>';
+                return;
+            }
+
+            document.getElementById('display-name').textContent = orderData.name || '';
+            document.getElementById('display-email').textContent = orderData.email || '';
+            document.getElementById('display-phone').textContent = orderData.phone || '';
+            document.getElementById('display-amount').textContent = orderData.amount || '';
+            document.getElementById('amount-verification').textContent = orderData.amount || '';
+
+            let currentStep = 1;
+            const totalSteps = 5;
+
+            function updateProgress() {
+                const progress = document.getElementById('progress');
+                const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+                progress.style.width = `${progressPercentage}%`;
+
+                for (let i = 1; i <= totalSteps; i++) {
+                    const indicator = document.getElementById(`step-${i}-indicator`);
+                    if (i < currentStep) {
+                        indicator.classList.add('completed');
+                        indicator.classList.remove('active');
+                    } else if (i === currentStep) {
+                        indicator.classList.add('active');
+                        indicator.classList.remove('completed');
+                    } else {
+                        indicator.classList.remove('active', 'completed');
+                    }
+                }
+            }
+
+            function showStep(step) {
+                document.querySelectorAll('.instruction-step').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                document.getElementById(`step-${step}`).classList.add('active');
+                currentStep = step;
+                updateProgress();
+                
+                localStorage.setItem('prostreamQRPaymentStep', step.toString());
+                
+                document.querySelector('.payment-container').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function restoreLastStep() {
+                const savedStep = localStorage.getItem('prostreamQRPaymentStep');
+                if (savedStep) {
+                    const step = parseInt(savedStep);
+                    if (step >= 1 && step <= totalSteps) {
+                        showStep(step);
+                        showNotification(`Anda telah dipulihkan ke langkah ${step} dari sesi sebelumnya`, 'info');
+                        return;
+                    }
+                }
+                
+                showStep(1);
+            }
+
+            const step1NextBtn = document.getElementById('step-1-next');
+            if (step1NextBtn) {
+                step1NextBtn.addEventListener('click', () => {
+                    showStep(2);
+                });
+            }
+
+            const step2PrevBtn = document.getElementById('step-2-prev');
+            const step2NextBtn = document.getElementById('step-2-next');
+            
+            if (step2PrevBtn) {
+                step2PrevBtn.addEventListener('click', () => {
+                    showStep(1);
+                });
+            }
+            
+            if (step2NextBtn) {
+                step2NextBtn.addEventListener('click', () => {
+                    showStep(3);
+                });
+            }
+
+            const step3PrevBtn = document.getElementById('step-3-prev');
+            const step3NextBtn = document.getElementById('step-3-next');
+            
+            if (step3PrevBtn) {
+                step3PrevBtn.addEventListener('click', () => {
+                    showStep(2);
+                });
+            }
+            
+            if (step3NextBtn) {
+                step3NextBtn.addEventListener('click', () => {
+                    showStep(4);
+                });
+            }
+
+            const step4PrevBtn = document.getElementById('step-4-prev');
+            const step4NextBtn = document.getElementById('step-4-next');
+            
+            if (step4PrevBtn) {
+                step4PrevBtn.addEventListener('click', () => {
+                    showStep(3);
+                });
+            }
+            
+            if (step4NextBtn) {
+                step4NextBtn.addEventListener('click', () => {
+                    showStep(5);
+                });
+            }
+
+            const step5PrevBtn = document.getElementById('step-5-prev');
+            if (step5PrevBtn) {
+                step5PrevBtn.addEventListener('click', () => {
+                    showStep(4);
+                });
+            }
+
+            const downloadQrBtn = document.getElementById('download-qr');
+            if (downloadQrBtn) {
+                downloadQrBtn.addEventListener('click', async function() {
+                    const downloadBtn = this;
+                    const originalText = downloadBtn.innerHTML;
+                    
+                    downloadBtn.classList.add('loading');
+                    downloadBtn.innerHTML = '<span style="margin-right: 8px;">⏳</span> Memuat turun...';
+                    
+                    try {
+                        const qrImage = document.getElementById('qr-code-image');
+                        const imageUrl = qrImage.src;
+                        
+                        if ('download' in document.createElement('a')) {
+                            const response = await fetch(imageUrl);
+                            const blob = await response.blob();
+                            
+                            const blobUrl = URL.createObjectURL(blob);
+                            
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = blobUrl;
+                            downloadLink.download = 'qr.png';
+                            downloadLink.style.display = 'none';
+                            
+                            document.body.appendChild(downloadLink);
+                            downloadLink.click();
+                            document.body.removeChild(downloadLink);
+                            
+                            setTimeout(() => {
+                                URL.revokeObjectURL(blobUrl);
+                            }, 100);
+                            
+                            showNotification('QR telah dimuat turun ke folder muat turun anda!', 'success');
+                        }
+                        
+                        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const img = new Image();
+                            img.crossOrigin = 'anonymous';
+                            
+                            img.onload = function() {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                                
+                                canvas.toBlob(function(blob) {
+                                    const file = new File([blob], 'qr.png', { type: 'image/png' });
+                                    
+                                    if (navigator.share && navigator.canShare({ files: [file] })) {
+                                        navigator.share({
+                                            files: [file],
+                                            title: 'QR Code PROSTREAM',
+                                            text: 'QR code untuk pembayaran PROSTREAM'
+                                        }).then(() => {
+                                            showNotification('QR dikongsi untuk disimpan!', 'success');
+                                        }).catch(() => {
+                                            window.open(imageUrl, '_blank');
+                                            showNotification('Sila simpan gambar dari tab baru', 'success');
+                                        });
+                                    } else {
+                                        window.open(imageUrl, '_blank');
+                                        showNotification('Untuk iOS: Tekan dan tahan gambar, kemudian pilih "Simpan Gambar"', 'success');
+                                    }
+                                }, 'image/png');
+                            };
+                            
+                            img.src = imageUrl;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Download error:', error);
+                        
+                        const qrImage = document.getElementById('qr-code-image');
+                        const newWindow = window.open(qrImage.src, '_blank');
+                        
+                        showNotification('Sila muat turun gambar dari tab baru yang dibuka', 'success');
+                        
+                        setTimeout(() => {
+                            if (newWindow && !newWindow.closed) {
+                                newWindow.close();
+                            }
+                        }, 3000);
+                    } finally {
+                        setTimeout(() => {
+                            downloadBtn.classList.remove('loading');
+                            downloadBtn.innerHTML = originalText;
+                        }, 1000);
+                    }
+                });
+            }
+
+            const proofImageInput = document.getElementById('proof-image');
+            if (proofImageInput) {
+                proofImageInput.addEventListener('change', function() {
+                    const fileLabel = document.getElementById('file-label');
+                    if (this.files && this.files[0]) {
+                        fileLabel.textContent = this.files[0].name;
+                        fileLabel.classList.add('has-file');
+                    } else {
+                        fileLabel.textContent = 'Klik untuk memilih gambar resit';
+                        fileLabel.classList.remove('has-file');
+                    }
+                });
+            }
+
+            const submitPaymentBtn = document.getElementById('submit-payment');
+            if (submitPaymentBtn) {
+                submitPaymentBtn.addEventListener('click', async function() {
+                    const fileInput = document.getElementById('proof-image');
+                    
+                    if (!fileInput.files || !fileInput.files[0]) {
+                        showNotification('Sila pilih gambar resit pembayaran', 'error');
+                        return;
+                    }
+
+                    if (fileInput.files[0].size > 5 * 1024 * 1024) {
+                        showNotification('Saiz gambar terlalu besar. Sila pilih gambar kurang dari 5MB.', 'error');
+                        return;
+                    }
+
+                    showLoading();
+
+                    const formData = new FormData();
+                    formData.append("payload_json", JSON.stringify({
+                        username: "PROSTREAM Payment Bot",
+                        content: `💳 **Bukti Pembayaran QR Diterima!**\n**Nama:** ${orderData.name}\n**Email:** ${orderData.email}\n**No. Telefon:** ${orderData.phone}\n**Jumlah:** RM${orderData.amount}`
+                    }));
+                    formData.append("file", fileInput.files[0]);
+
+                    try {
+                        const res = await fetch(DISCORD_WEBHOOK_URL, { method: "POST", body: formData });
+                        
+                        // Check if response is successful (status 200-299)
+                        if (res.status >= 200 && res.status < 300) {
+                            // Track Purchase with Meta Pixel after successful Discord notification
+                            fbq('track', 'Purchase', {
+                                content_name: 'PROSTREAM 4 App Power Package',
+                                content_category: 'Streaming',
+                                content_ids: ['prostream_4app_package'],
+                                content_type: 'product',
+                                value: parseFloat(orderData.amount),
+                                currency: 'MYR'
+                            });
+                            
+                            hideLoading();
+                            showNotification('Bukti pembayaran telah dihantar! Kami akan menghubungi anda tidak lama lagi.', 'success');
+                            
+                            localStorage.removeItem('prostreamQRPaymentData');
+                            localStorage.removeItem('prostreamQRPaymentStep');
+                            
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 3000);
+                        } else {
+                            // Handle HTTP errors
+                            hideLoading();
+                            console.error('Discord API Error - Status:', res.status, 'Response:', res.statusText);
+                            showNotification(`Ralat semasa menghantar ke Discord (Status: ${res.status}). Sila cuba lagi.`, 'error');
+                        }
+                    } catch (err) {
+                        console.error('Fetch Error:', err);
+                        hideLoading();
+                        showNotification('Ralat sambungan. Sila cuba lagi.', 'error');
+                    }
+                });
+            }
+
+            window.addEventListener('beforeunload', function(e) {
+                if (currentStep < totalSteps) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                    return '';
+                }
+            });
+
+            window.addEventListener('popstate', function(event) {
+                if (currentStep > 1) {
+                    showStep(currentStep - 1);
+                    window.history.pushState(null, null, window.location.pathname);
+                }
+            });
+
+            window.history.pushState(null, null, window.location.pathname);
+
+            document.querySelectorAll('.btn, .download-btn').forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                });
+            });
+
+            document.querySelectorAll('img').forEach(img => {
+                img.loading = 'lazy';
+            });
+
+            window.addEventListener('orientationchange', function() {
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                }, 200);
+            });
+
+            restoreLastStep();
+        });
+    </script>
+</body>
+</html>
