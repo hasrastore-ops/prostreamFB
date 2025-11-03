@@ -64,7 +64,6 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 data: [event],
-                test_event_code: 'TEST12345' // Remove this for production
             })
         });
 
