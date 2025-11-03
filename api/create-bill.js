@@ -88,7 +88,7 @@ export default async function handler(req, res) {
         body.append('billPaymentChannel', billPaymentChannel);
         body.append('billChargeToCustomer', billChargeToCustomer);
         body.append('billExpiryDate', formattedExpiryDate);
-        body.append('billContentEmail', 'Terima kasih atas pembelian pakej PROSTREAM.Untuk cara-cara install dan download apps sila tekan link dibawah.Kami sediakan full video tutorial, termasuk code apps untuk download.   https://tinyurl.com/PROSTREAMX');
+        body.append('billContentEmail', 'Terima kasih atas pembelian anda. Sila semak emel untuk panduan pemasangan aplikasi PROSTREAM.');
 
         // Log the data being sent (without the secret key)
         const logData = {};
@@ -136,6 +136,49 @@ export default async function handler(req, res) {
             console.log('Bill created successfully!');
             console.log('Bill Code:', billCode);
             console.log('Bill URL:', billUrl);
+
+            // Send InitiateCheckout event to Facebook Conversions API
+            try {
+                const pixelId = '2276519576162204';
+                const accessToken = 'EAAcJZCFldLZAYBP2Rt17ob7AJUEAPnCZCdiIOHZBereJjCRiofT1SottrBAL8EjPME1L6LANNoRN5I0yootHZCYioBgN2SUZBHPbUU93iRd54xOSeM7RbiHHIqemm6zM5p6GLIZAHNOezCVLROwIER8spOyZB3iC4wYTB1qZBADgHpWlZCpcZC0VA3Hi26sRJ85fwZDZD';
+                
+                const eventResponse = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        data: [{
+                            event_name: 'InitiateCheckout',
+                            event_time: Math.floor(Date.now() / 1000),
+                            action_source: 'website',
+                            event_source_url: 'https://prostreamfb.vercel.app/',
+                            event_id: `checkout_${billExternalReferenceNo}`,
+                            user_data: {
+                                em: Buffer.from(email).toString('base64'),
+                                ph: Buffer.from(phone).toString('base64'),
+                                fn: Buffer.from(name.split(' ')[0]).toString('base64'),
+                                ln: Buffer.from(name.split(' ').slice(1).join(' ')).toString('base64'),
+                                client_user_agent: req.headers['user-agent'],
+                                client_ip_address: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                            },
+                            custom_data: {
+                                currency: 'MYR',
+                                value: (amount * 100).toString(),
+                                content_name: 'PROSTREAM 4 App Power Package',
+                                content_category: 'Streaming',
+                                content_ids: ['prostream_4app_package'],
+                                content_type: 'product'
+                            }
+                        }],
+                    })
+                });
+                
+                const eventResult = await eventResponse.json();
+                console.log('Facebook InitiateCheckout Event Response:', eventResult);
+            } catch (error) {
+                console.error('Error sending InitiateCheckout event:', error);
+            }
 
             // Send the successful response back to the frontend
             return res.status(200).json({ 
