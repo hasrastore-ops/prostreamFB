@@ -2351,33 +2351,33 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         });
         
         // ====================================
-        //      TOYYIBPAY INTEGRATION
-        // ====================================
-        function generateBillNo() {
-            const timestamp = Date.now();
-            const random = Math.floor(Math.random() * 1000);
-            return `PS${timestamp}${random}`;
-        }
-        
-        function showPaymentRedirectModal(billCode) {
-            const modal = document.getElementById('paymentRedirectModal');
-            modal.style.display = 'block';
-            
-            // Set up the redirect button
-            document.getElementById('manualRedirectBtn').onclick = function() {
-                window.location.href = `https://toyyibpay.com/${billCode}`;
-            };
-        }
-        
-        function showPaymentLoading() {
-            document.getElementById('paymentLoading').classList.add('active');
-        }
-        
-        function hidePaymentLoading() {
-            document.getElementById('paymentLoading').classList.remove('active');
-        }
-        
-        async function redirectToToyyibPay(orderData) {
+//      TOYYIBPAY INTEGRATION
+// ====================================
+function generateBillNo() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    return `PS${timestamp}${random}`;
+}
+
+function showPaymentRedirectModal(billCode) {
+    const modal = document.getElementById('paymentRedirectModal');
+    modal.style.display = 'block';
+    
+    // Set up the redirect button
+    document.getElementById('manualRedirectBtn').onclick = function() {
+        window.location.href = `https://toyyibpay.com/${billCode}`;
+    };
+}
+
+function showPaymentLoading() {
+    document.getElementById('paymentLoading').classList.add('active');
+}
+
+function hidePaymentLoading() {
+    document.getElementById('paymentLoading').classList.remove('active');
+}
+
+async function redirectToToyyibPay(orderData) {
     console.log('Starting payment process with order data:', orderData);
     
     try {
@@ -2402,11 +2402,13 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         console.log('Response from our server:', result);
 
         if (result.success) {
-            // Store order data
+            // Store order data with additional metadata
             localStorage.setItem('pendingOrder', JSON.stringify({
                 orderData: orderData,
                 billNo: result.billCode,
-                totalAmount: orderData.total
+                billExternalReferenceNo: result.billExternalReferenceNo,
+                totalAmount: orderData.total,
+                timestamp: new Date().toISOString()
             }));
             
             hidePaymentLoading();
@@ -2678,5 +2680,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     </script>
 </body>
 </html>
+
 
 
