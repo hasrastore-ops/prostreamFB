@@ -42,15 +42,15 @@ export default async function handler(req, res) {
         const billPriceSetting = '1';
         const billPayorInfo = '1';
         const billAmount = `${amount * 100}`; // Convert to cents
-        const billReturnUrl = 'https://prostream-rho.vercel.app/payment-successful.html';
-        const billCallbackUrl = 'https://prostream-rho.vercel.app/api/payment-callback';
+        const billReturnUrl = 'https://prostreamfb.vercel.app/payment-successful.html';
+        const billCallbackUrl = 'https://prostreamfb.vercel.app/api/payment-callback';
         
         // Create bill reference number with timestamp (using UTC time)
         const billExternalReferenceNo = `PS${now.getTime()}`;
         
         // Create expiry date in UTC to avoid timezone issues
-        const expiryDate = new Date();
-        expiryDate.setUTCDate(expiryDate.getUTCDate() + 3);
+        // Format: dd-MM-yyyy HH:mm:ss (24-hour format)
+        const expiryDate = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // Add 3 days
         const formattedExpiryDate = 
             `${expiryDate.getUTCDate().toString().padStart(2, '0')}-` +
             `${(expiryDate.getUTCMonth() + 1).toString().padStart(2, '0')}-` +
@@ -88,6 +88,7 @@ export default async function handler(req, res) {
         body.append('billPaymentChannel', billPaymentChannel);
         body.append('billChargeToCustomer', billChargeToCustomer);
         body.append('billExpiryDate', formattedExpiryDate);
+        body.append('billContentEmail', 'Terima kasih atas pembelian pakej PROSTREAM.Untuk cara-cara install dan download apps sila tekan link dibawah.Kami sediakan full video tutorial, termasuk code apps untuk download.   https://tinyurl.com/PROSTREAMX');
 
         // Log the data being sent (without the secret key)
         const logData = {};
