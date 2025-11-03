@@ -18,7 +18,9 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2276519576162204');
+fbq('init', '2276519576162204', {
+    'domain': ['prostreamfb.vercel.app']
+});
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
@@ -466,6 +468,46 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             }
         }
 
+        // Function to send conversion event via Conversions API
+        async function sendConversionEvent(orderData) {
+            try {
+                const response = await fetch('/api/conversion-api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        eventName: 'Purchase',
+                        eventId: `purchase_${orderData.billNo}_${Date.now()}`,
+                        value: orderData.totalAmount || orderData.orderData.total,
+                        currency: 'MYR',
+                        customerData: {
+                            email: orderData.orderData.customerEmail,
+                            phone: orderData.orderData.customerPhone,
+                            firstName: orderData.orderData.customerName.split(' ')[0],
+                            lastName: orderData.orderData.customerName.split(' ').slice(1).join(' ')
+                        },
+                        contentData: {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product'
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                if (!result.success) {
+                    console.error('Failed to send conversion event:', result.error);
+                }
+                
+                return result.success;
+            } catch (error) {
+                console.error('Error sending conversion event:', error);
+                return false;
+            }
+        }
+
         // Function to load order details
         async function loadOrderDetails() {
             console.log('🔄 Loading order details...');
@@ -519,18 +561,29 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 
                 displayOrderDetails(orderData);
                 
-                // Track Purchase with Meta Pixel - ENSURE THIS IS CALLED
-                console.log('🎯 Firing Meta Purchase event...');
-                fbq('track', 'Purchase', {
-                    content_name: 'PROSTREAM 4 App Power Package',
-                    content_category: 'Streaming',
-                    content_ids: ['prostream_4app_package'],
-                    content_type: 'product',
-                    value: orderData.totalAmount || orderData.orderData.total,
-                    currency: 'MYR'
-                });
+                // Try to send conversion event via Conversions API
+                console.log('🎯 Sending conversion via Conversions API...');
+                const conversionSent = await sendConversionEvent(orderData);
                 
-                console.log('✅ Meta Purchase event fired successfully');
+                if (conversionSent) {
+                    console.log('✅ Conversion event sent successfully via Conversions API');
+                } else {
+                    console.log('⚠️ Conversions API failed, trying client-side pixel tracking');
+                    // Fallback to client-side pixel tracking
+                    try {
+                        fbq('track', 'Purchase', {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product',
+                            value: orderData.totalAmount || orderData.orderData.total,
+                            currency: 'MYR'
+                        });
+                        console.log('✅ Meta Purchase event fired successfully via client-side pixel');
+                    } catch (error) {
+                        console.error('❌ Client-side pixel tracking also failed:', error);
+                    }
+                }
                 
                 // Send Discord notification for successful payment
                 console.log('📧 Sending Discord notification...');
