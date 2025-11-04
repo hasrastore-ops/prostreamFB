@@ -660,53 +660,59 @@
         }
 
         // ====================================
-        //      NEW: CONVERSION API FUNCTION
+//      UPDATED: CONVERSION API FUNCTION
+// ====================================
+async function sendConversionEvent(orderData) {
+    try {
         // ====================================
-        async function sendConversionEvent(orderData) {
-            try {
-                // Generate a unique event ID to prevent duplicate conversions
-                const eventId = `qr_${orderData.phone}_${Date.now()}`;
+        //      CRITICAL CHANGE: RETRIEVE STORED EVENT ID
+        // ====================================
+        // Retrieve the event ID from local storage
+        const eventId = localStorage.getItem('prostreamCheckoutEventId');
 
-                // Split the name into first and last name
-                const nameParts = orderData.name.split(' ');
-                const firstName = nameParts[0];
-                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+        // If no event ID is found, generate a new one (fallback)
+        const finalEventId = eventId || `qr_${orderData.phone}_${Date.now()}`;
 
-                const response = await fetch('/api/conversionqr.js', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        eventName: 'Purchase',
-                        eventId: eventId,
-                        value: parseFloat(orderData.amount),
-                        currency: 'MYR',
-                        customerData: {
-                            email: orderData.email,
-                            phone: orderData.phone,
-                            firstName: firstName,
-                            lastName: lastName
-                        },
-                        contentData: {
-                            content_name: 'PROSTREAM 4 App Power Package',
-                            content_category: 'Streaming',
-                            content_ids: ['prostream_4app_package'],
-                            content_type: 'product'
-                        }
-                    })
-                });
+        // Split the name into first and last name
+        const nameParts = orderData.name.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-                const result = await response.json();
-                if (result.success) {
-                    console.log('Conversion API event sent successfully:', result);
-                } else {
-                    console.error('Failed to send Conversion API event:', result);
+        const response = await fetch('/api/conversionqr.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                eventName: 'Purchase',
+                eventId: finalEventId, // Use the retrieved or generated event ID
+                value: parseFloat(orderData.amount),
+                currency: 'MYR',
+                customerData: {
+                    email: orderData.email,
+                    phone: orderData.phone,
+                    firstName: firstName,
+                    lastName: lastName
+                },
+                contentData: {
+                    content_name: 'PROSTREAM 4 App Power Package',
+                    content_category: 'Streaming',
+                    content_ids: ['prostream_4app_package'],
+                    content_type: 'product'
                 }
-            } catch (error) {
-                console.error('Error sending Conversion API event:', error);
-            }
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            console.log('Conversion API event sent successfully:', result);
+        } else {
+            console.error('Failed to send Conversion API event:', result);
         }
+    } catch (error) {
+        console.error('Error sending Conversion API event:', error);
+    }
+}
 
         document.addEventListener('DOMContentLoaded', function() {
             const orderData = getOrderData();
@@ -1047,3 +1053,4 @@
     </script>
 </body>
 </html>
+
