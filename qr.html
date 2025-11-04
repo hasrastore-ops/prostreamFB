@@ -659,6 +659,55 @@
             document.body.style.overflow = '';
         }
 
+        // ====================================
+        //      NEW: CONVERSION API FUNCTION
+        // ====================================
+        async function sendConversionEvent(orderData) {
+            try {
+                // Generate a unique event ID to prevent duplicate conversions
+                const eventId = `qr_${orderData.phone}_${Date.now()}`;
+
+                // Split the name into first and last name
+                const nameParts = orderData.name.split(' ');
+                const firstName = nameParts[0];
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+                const response = await fetch('/api/conversionqr.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        eventName: 'Purchase',
+                        eventId: eventId,
+                        value: parseFloat(orderData.amount),
+                        currency: 'MYR',
+                        customerData: {
+                            email: orderData.email,
+                            phone: orderData.phone,
+                            firstName: firstName,
+                            lastName: lastName
+                        },
+                        contentData: {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product'
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log('Conversion API event sent successfully:', result);
+                } else {
+                    console.error('Failed to send Conversion API event:', result);
+                }
+            } catch (error) {
+                console.error('Error sending Conversion API event:', error);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const orderData = getOrderData();
             
@@ -917,7 +966,10 @@
                         
                         // Check if response is successful (status 200-299)
                         if (res.status >= 200 && res.status < 300) {
-                            // Track Purchase with Meta Pixel after successful Discord notification
+                            // ====================================
+                            //      MODIFICATION: FIRE CONVERSION API
+                            // ====================================
+                            // 1. Fire the Meta Pixel (as a fallback)
                             fbq('track', 'Purchase', {
                                 content_name: 'PROSTREAM 4 App Power Package',
                                 content_category: 'Streaming',
@@ -926,6 +978,9 @@
                                 value: parseFloat(orderData.amount),
                                 currency: 'MYR'
                             });
+                            
+                            // 2. Fire the Conversion API (the reliable method)
+                            await sendConversionEvent(orderData);
                             
                             hideLoading();
                             showNotification('Bukti pembayaran telah dihantar! Kami akan menghubungi anda tidak lama lagi.', 'success');
