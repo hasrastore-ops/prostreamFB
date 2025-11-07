@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         console.log('Request Body:', JSON.stringify(req.body, null, 2));
 
         // Get data from the frontend request
-        const { name, email, phone, amount, billDescription } = req.body;
+        const { name, email, phone, amount, billDescription, orderId } = req.body;
 
         // Validate required fields
         if (!name || !email || !phone || !amount) {
@@ -33,6 +33,47 @@ export default async function handler(req, res) {
                 success: false, 
                 error: 'Missing required fields: name, email, phone, amount' 
             });
+        }
+
+        // === NEW: Register order in Google Sheets ===
+        let googleOrderId = orderId;
+        
+        // If no orderId provided, create one and register in Google Sheets
+        if (!googleOrderId) {
+            try {
+                // Call Google Apps Script to register the order
+                const googleScriptUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // Replace with your actual URL
+                
+                const formData = new URLSearchParams();
+                formData.append('action', 'createOrder');
+                formData.append('name', name);
+                formData.append('email', email);
+                formData.append('phone', phone);
+                formData.append('package', billDescription || 'PROSTREAM Package');
+                formData.append('paymentMethod', 'toyyibpay');
+                formData.append('amount', amount.toString());
+                
+                const googleResponse = await fetch(googleScriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+                
+                const googleResult = await googleResponse.json();
+                
+                if (googleResult.status === 'success') {
+                    googleOrderId = googleResult.orderId;
+                    console.log('Order registered in Google Sheets with ID:', googleOrderId);
+                } else {
+                    console.error('Failed to register order in Google Sheets:', googleResult.message);
+                    // Continue with payment process even if Google Sheets fails
+                }
+            } catch (error) {
+                console.error('Error registering order in Google Sheets:', error);
+                // Continue with payment process even if Google Sheets fails
+            }
         }
 
         // Your SECRET data is now safe on the server
@@ -46,7 +87,8 @@ export default async function handler(req, res) {
         const billCallbackUrl = 'https://prostreamfb.vercel.app/api/payment-callback';
         
         // Create bill reference number with timestamp (using UTC time)
-        const billExternalReferenceNo = `PS${now.getTime()}`;
+        // Use Google Order ID if available, otherwise create a new one
+        const billExternalReferenceNo = googleOrderId || `PS${now.getTime()}`;
         
         // Create expiry date in UTC to avoid timezone issues
         // Format: dd-MM-yyyy HH:mm:ss (24-hour format)
@@ -88,7 +130,7 @@ export default async function handler(req, res) {
         body.append('billPaymentChannel', billPaymentChannel);
         body.append('billChargeToCustomer', billChargeToCustomer);
         body.append('billExpiryDate', formattedExpiryDate);
-        body.append('billContentEmail', 'Terima kasih atas pembelian anda. Sila semak emel untuk panduan pemasangan aplikasi PROSTREAM.');
+        body.append('billContentEmail', 'Terima kasih atas pembayaran anda. Kami berbesar hati untuk mengesahkan bahawa pesanan anda, Sila tekan link untuk melihat paduan pemasangan dan CODE DOWNLOAD BESERTA CODE LOGIN : https://tinyurl.com/PROSTREAMX ');
 
         // Log the data being sent (without the secret key)
         const logData = {};
@@ -185,7 +227,8 @@ export default async function handler(req, res) {
                 success: true, 
                 billCode: billCode,
                 billUrl: billUrl,
-                billExternalReferenceNo: billExternalReferenceNo
+                billExternalReferenceNo: billExternalReferenceNo,
+                orderId: googleOrderId // Include the Google Order ID in the response
             });
         } else {
             console.error("ToyyibPay API Error:", result);
