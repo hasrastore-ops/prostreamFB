@@ -8,7 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Meta Pixel Code -->
+    <!-- Tesseract.js for OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    
+    <!-- Meta Pixel Code (PageView only) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -38,6 +41,8 @@
             --mobile-padding: 15px;
             --mobile-button-height: 56px;
             --mobile-touch-target: 48px;
+            --success-color: #4CAF50;
+            --whatsapp-color: #25D366;
         }
 
         * {
@@ -347,8 +352,21 @@
         }
 
         .btn-success {
-            background-color: #4CAF50;
+            background-color: var(--success-color);
             color: white;
+        }
+
+        .btn-whatsapp {
+            background-color: var(--whatsapp-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-whatsapp::before {
+            content: '💬';
+            margin-right: 8px;
         }
 
         .button-container {
@@ -378,7 +396,7 @@
         }
 
         .notification.success {
-            background-color: #4CAF50;
+            background-color: var(--success-color);
         }
 
         .notification.error {
@@ -432,6 +450,195 @@
             max-width: 80%;
         }
 
+        .verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .verification-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .verification-content {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .verification-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .verification-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .verification-message {
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .verification-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .verification-failed {
+            display: none;
+        }
+
+        .verification-failed.active {
+            display: block;
+        }
+
+        .verification-failed .verification-icon {
+            color: var(--secondary-color);
+        }
+
+        .verification-success {
+            display: none;
+        }
+
+        .verification-success.active {
+            display: block;
+        }
+
+        .verification-success .verification-icon {
+            color: var(--success-color);
+        }
+
+        /* Instructions Modal Styles */
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .instructions-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .instructions-content {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .instructions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .instructions-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        .instructions-steps {
+            margin-bottom: 20px;
+        }
+
+        .instruction-step-item {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            flex: 1;
+        }
+
+        .step-text h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .step-text p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .instructions-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
         @media (max-width: 480px) {
             .payment-container {
                 padding: 15px;
@@ -454,6 +661,14 @@
             
             .qr-container img {
                 max-width: 200px;
+            }
+            
+            .instructions-content {
+                padding: 20px;
+            }
+            
+            .instructions-title {
+                font-size: 1.3rem;
             }
         }
 
@@ -511,7 +726,7 @@
                 <div class="step-content">
                     <p>2. Tekan, download QR di atas kanan dan Save, Atau boleh screenshot</p>
                     <div class="qr-container">
-                        <img id="qr-code-image" src="https://i.imgur.com/536QruQ.jpeg" alt="QR Code for Payment">
+                        <img id="qr-code-image" src="https://i.imgur.com/Ao5Cvzy.jpeg" alt="QR Code for Payment">
                         <button class="download-btn" id="download-qr" type="button">Download QR</button>
                     </div>
                 </div>
@@ -555,7 +770,7 @@
             <div class="instruction-step" id="step-5">
                 <h2 class="step-title">Cara-cara pembayaran QR</h2>
                 <div class="step-content">
-                    <p>5. Upload gambar resit/transfer dan tekan Saya Sudah bayar. Tunggu sehingga Admin Contact.</p>
+                    <p>5. Upload gambar resit/transfer dan tekan " Saya Sudah bayar" . Tunggu sehingga Pengesahan selesai dan tekan seterusnya untuk dapatkan ID Email</p>
                     <form id="payment-form">
                         <div class="form-group">
                             <label for="proof-image">Muat Naik Resit Pembayaran</label>
@@ -587,17 +802,174 @@
         </div>
     </div>
 
+    <!-- Verification Modal -->
+    <div id="verification-modal" class="verification-modal">
+        <div class="verification-content">
+            <!-- Verification Success -->
+            <div class="verification-success" id="verification-success">
+                <div class="verification-icon">✓</div>
+                <h3 class="verification-title">Pembayaran di Sahkan</h3>
+                <p class="verification-message">Resit pembayaran anda telah disahkan. Terima kasih!</p>
+                <div class="verification-actions">
+                    <button class="btn btn-success" id="continue-to-success">Teruskan</button>
+                </div>
+            </div>
+            
+            <!-- Verification Failed -->
+            <div class="verification-failed" id="verification-failed">
+                <div class="verification-icon">✗</div>
+                <h3 class="verification-title">Pengesahan Gagal</h3>
+                <p class="verification-message">Kami tidak dapat mengesahkan pembayaran anda. Sila hubungi admin untuk bantuan.</p>
+                <div class="verification-actions">
+                    <button class="btn btn-whatsapp" id="contact-admin-whatsapp">Hubungi Admin</button>
+                    <button class="btn btn-secondary" id="try-again">Cuba Lagi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="instructions-modal">
+        <div class="instructions-content">
+            <div class="instructions-header">
+                <h2 class="instructions-title">Panduan Pembayaran QR- Sila ikut untuk Memastikan ID dapat Diberikan</h2>
+                <button class="close-btn" id="close-instructions">✕</button>
+            </div>
+            
+            <div class="instructions-steps">
+                <div class="instruction-step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        <h3>Sahkan Butiran Peribadi</h3>
+                        <p>Pastikan nama, email, nombor telefon dan jumlah pembayaran adalah betul sebelum meneruskan.</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        <h3>Muat Turun Kod QR</h3>
+                        <p>Tekan butang "Download QR" untuk menyimpan kod QR pembayaran atau ambil screenshot kod QR tersebut.</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        <h3>Imbas Kod QR</h3>
+                        <p>Buka aplikasi perbankan anda dan imbas kod QR. Pastikan jumlah yang dimasukkan adalah betul.</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-text">
+                        <h3>Simpan Resit</h3>
+                        <p>Setelah pembayaran selesai, simpan gambar resit atau ambil screenshot sebagai bukti pembayaran.</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-text">
+                        <h3>Muat Naik Resit (Penting!!)</h3>
+                        <p>Muat naik gambar resit pembayaran dan tekan "Saya Sudah Bayar". Tunggu sehingga pengesahan dibuat, Jangan Close/Back.Setelah berjaya tekan button Seterusnya Untuk memastikan ID dapat dihantar ke Email anda.</p>
+                    </div>
+                </div>
+
+                <div class="instruction-step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-text">
+                        <h3>Pengesahan (SANGAT PENTING !!)</h3>
+                        <p>Semasa Pengesahan, jangan back/close, tunggu sehingga selesai. Setelah berjaya Tekan "Seterusnya" untuk dapatkan ID & EMAIL</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions-footer">
+                <button class="btn" id="start-payment">Mula Pembayaran</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Discord webhook URL
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
+        
+        // Google Apps Script URL
+        //const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec'
+        // Function to register order in Google Sheets
+        async function registerOrderInGoogleSheets(orderData) {
+            try {
+                const formData = new URLSearchParams();
+                formData.append('action', 'createOrder');
+                formData.append('name', orderData.name);
+                formData.append('email', orderData.email);
+                formData.append('phone', orderData.phone);
+                formData.append('package', 'PROSTREAM 4 App Power Package');
+                formData.append('paymentMethod', 'QR');
+                formData.append('amount', orderData.amount);
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    console.log('Order registered in Google Sheets with ID:', result.orderId);
+                    return result.orderId;
+                } else {
+                    console.error('Failed to register order in Google Sheets:', result.message);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error registering order in Google Sheets:', error);
+                return null;
+            }
+        }
+
+        // Function to update payment status in Google Sheets
+        async function updatePaymentStatusInGoogleSheets(orderId) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'updatePayment',
+                        orderId: orderId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    console.log('Payment status updated in Google Sheets');
+                    return true;
+                } else {
+                    console.error('Failed to update payment status:', result.message);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error updating payment status:', error);
+                return false;
+            }
+        }
 
         // Function to get order data from URL parameters or local storage
-        function getOrderData() {
+        async function getOrderData() {
             const urlParams = new URLSearchParams(window.location.search);
             const name = urlParams.get('name');
             const email = urlParams.get('email');
             const phone = urlParams.get('phone');
             const amount = urlParams.get('amount');
+            const orderId = urlParams.get('orderId'); // Check if orderId is passed from index.html
             
             if (name && email && phone && amount) {
                 const orderData = {
@@ -605,10 +977,22 @@
                     email: email,
                     phone: phone,
                     amount: amount,
+                    orderId: orderId, // Include orderId if available
                     timestamp: new Date().toISOString()
                 };
                 
                 localStorage.setItem('prostreamQRPaymentData', JSON.stringify(orderData));
+                
+                // Register order in Google Sheets if not already registered
+                if (!orderId) {
+                    console.log('Registering new order in Google Sheets...');
+                    const newOrderId = await registerOrderInGoogleSheets(orderData);
+                    if (newOrderId) {
+                        orderData.orderId = newOrderId;
+                        localStorage.setItem('prostreamQRPaymentData', JSON.stringify(orderData));
+                    }
+                }
+                
                 return orderData;
             }
             
@@ -659,63 +1043,84 @@
             document.body.style.overflow = '';
         }
 
-        // ====================================
-//      UPDATED: CONVERSION API FUNCTION
-// ====================================
-async function sendConversionEvent(orderData) {
-    try {
-        // ====================================
-        //      CRITICAL CHANGE: RETRIEVE STORED EVENT ID
-        // ====================================
-        // Retrieve the event ID from local storage
-        const eventId = localStorage.getItem('prostreamCheckoutEventId');
-
-        // If no event ID is found, generate a new one (fallback)
-        const finalEventId = eventId || `qr_${orderData.phone}_${Date.now()}`;
-
-        // Split the name into first and last name
-        const nameParts = orderData.name.split(' ');
-        const firstName = nameParts[0];
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-
-        const response = await fetch('/api/conversionqr.js', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                eventName: 'Purchase',
-                eventId: finalEventId, // Use the retrieved or generated event ID
-                value: parseFloat(orderData.amount),
-                currency: 'MYR',
-                customerData: {
-                    email: orderData.email,
-                    phone: orderData.phone,
-                    firstName: firstName,
-                    lastName: lastName
-                },
-                contentData: {
-                    content_name: 'PROSTREAM 4 App Power Package',
-                    content_category: 'Streaming',
-                    content_ids: ['prostream_4app_package'],
-                    content_type: 'product'
-                }
-            })
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            console.log('Conversion API event sent successfully:', result);
-        } else {
-            console.error('Failed to send Conversion API event:', result);
+        function showVerificationModal(isSuccess) {
+            const modal = document.getElementById('verification-modal');
+            const successContent = document.getElementById('verification-success');
+            const failedContent = document.getElementById('verification-failed');
+            
+            modal.classList.add('active');
+            
+            if (isSuccess) {
+                successContent.classList.add('active');
+                failedContent.classList.remove('active');
+            } else {
+                successContent.classList.remove('active');
+                failedContent.classList.add('active');
+            }
         }
-    } catch (error) {
-        console.error('Error sending Conversion API event:', error);
-    }
-}
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const orderData = getOrderData();
+        function hideVerificationModal() {
+            const modal = document.getElementById('verification-modal');
+            modal.classList.remove('active');
+        }
+
+        // Function to verify receipt using OCR
+        async function verifyReceipt(imageFile) {
+            try {
+                showLoading();
+                document.querySelector('.loading-text').textContent = 'Mengesahkan resit pembayaran...';
+                
+                // Use Tesseract.js to perform OCR on the image
+                const result = await Tesseract.recognize(
+                    imageFile,
+                    'eng+msa', // English and Malay languages
+                    {
+                        logger: m => console.log(m)
+                    }
+                );
+                
+                const extractedText = result.data.text.toLowerCase();
+                console.log('Extracted Text:', extractedText);
+                
+                // Check for verification criteria - UPDATED RULES
+                const nameMatch = extractedText.includes('hasrastore') || 
+                                 extractedText.includes('hasrasstore') || 
+                                 extractedText.includes('hasrastore');
+                
+                const statusMatch = extractedText.includes('successful') || 
+                                   extractedText.includes('paid') ||
+                                   extractedText.includes('QR') || 
+                                   extractedText.includes('success');
+                
+                // Check for amount variations
+                const amountMatch = extractedText.includes('29.90') || 
+                                   extractedText.includes('30.00') || 
+                                   extractedText.includes('30') || 
+                                   extractedText.includes('29');
+                
+                // Return verification result - ALL THREE CONDITIONS MUST BE MET
+                return {
+                    verified: nameMatch && amountMatch,
+                    extractedText: extractedText,
+                    details: {
+                        nameFound: nameMatch,
+                        amountFound: amountMatch
+                    }
+                };
+            } catch (error) {
+                console.error('Error during OCR verification:', error);
+                return {
+                    verified: false,
+                    extractedText: '',
+                    error: error.message
+                };
+            } finally {
+                hideLoading();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const orderData = await getOrderData();
             
             if (!orderData) {
                 document.body.innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Mengalihkan ke halaman pesanan...</h2></div>';
@@ -777,6 +1182,31 @@ async function sendConversionEvent(orderData) {
                 
                 showStep(1);
             }
+
+            // Instructions Modal
+            function showInstructionsModal() {
+                document.getElementById('instructions-modal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideInstructionsModal() {
+                document.getElementById('instructions-modal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Check if it's the first visit
+            const hasVisitedBefore = localStorage.getItem('prostreamQRPaymentVisited');
+            if (!hasVisitedBefore) {
+                // Show instructions modal on first visit
+                setTimeout(() => {
+                    showInstructionsModal();
+                    localStorage.setItem('prostreamQRPaymentVisited', 'true');
+                }, 500);
+            }
+
+            // Instructions modal event listeners
+            document.getElementById('close-instructions').addEventListener('click', hideInstructionsModal);
+            document.getElementById('start-payment').addEventListener('click', hideInstructionsModal);
 
             const step1NextBtn = document.getElementById('step-1-next');
             if (step1NextBtn) {
@@ -885,7 +1315,7 @@ async function sendConversionEvent(orderData) {
                                 
                                 canvas.toBlob(function(blob) {
                                     const file = new File([blob], 'qr.png', { type: 'image/png' });
-                                    
+                                        
                                     if (navigator.share && navigator.canShare({ files: [file] })) {
                                         navigator.share({
                                             files: [file],
@@ -895,7 +1325,7 @@ async function sendConversionEvent(orderData) {
                                             showNotification('QR dikongsi untuk disimpan!', 'success');
                                         }).catch(() => {
                                             window.open(imageUrl, '_blank');
-                                            showNotification('Sila simpan gambar dari tab baru', 'success');
+                                            showNotification('Untuk iOS: Tekan dan tahan gambar, kemudian pilih "Simpan Gambar"', 'success');
                                         });
                                     } else {
                                         window.open(imageUrl, '_blank');
@@ -943,6 +1373,37 @@ async function sendConversionEvent(orderData) {
                 });
             }
 
+            // Verification modal buttons
+            const continueToSuccessBtn = document.getElementById('continue-to-success');
+            if (continueToSuccessBtn) {
+                continueToSuccessBtn.addEventListener('click', function() {
+                    hideVerificationModal();
+                    window.location.href = 'payment-successful.html';
+                });
+            }
+
+            const contactAdminBtn = document.getElementById('contact-admin-whatsapp');
+            if (contactAdminBtn) {
+                contactAdminBtn.addEventListener('click', function() {
+                    hideVerificationModal();
+                    // Open WhatsApp with a pre-filled message
+                    const phoneNumber = '601127412402'; // Replace with actual admin WhatsApp number
+                    const message = encodeURIComponent(`Saya mempunyai masalah dengan pengesahan pembayaran. Nama: ${orderData.name}, Email: ${orderData.email}, No. Telefon: ${orderData.phone}`);
+                    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                });
+            }
+
+            const tryAgainBtn = document.getElementById('try-again');
+            if (tryAgainBtn) {
+                tryAgainBtn.addEventListener('click', function() {
+                    hideVerificationModal();
+                    // Reset file input
+                    document.getElementById('proof-image').value = '';
+                    document.getElementById('file-label').textContent = 'Klik untuk memilih gambar resit';
+                    document.getElementById('file-label').classList.remove('has-file');
+                });
+            }
+
             const submitPaymentBtn = document.getElementById('submit-payment');
             if (submitPaymentBtn) {
                 submitPaymentBtn.addEventListener('click', async function() {
@@ -958,12 +1419,19 @@ async function sendConversionEvent(orderData) {
                         return;
                     }
 
-                    showLoading();
+                    // Verify receipt using OCR
+                    const verificationResult = await verifyReceipt(fileInput.files[0]);
+                    
+                    if (verificationResult.error) {
+                        showNotification('Ralat semasa mengesahkan resit. Sila cuba lagi.', 'error');
+                        return;
+                    }
 
+                    // Send to Discord regardless of verification result
                     const formData = new FormData();
                     formData.append("payload_json", JSON.stringify({
                         username: "PROSTREAM Payment Bot",
-                        content: `💳 **Bukti Pembayaran QR Diterima!**\n**Nama:** ${orderData.name}\n**Email:** ${orderData.email}\n**No. Telefon:** ${orderData.phone}\n**Jumlah:** RM${orderData.amount}`
+                        content: `💳 **Bukti Pembayaran QR Diterima!**\n**Nama:** ${orderData.name}\n**Email:** ${orderData.email}\n**No. Telefon:** ${orderData.phone}\n**Jumlah:** RM${orderData.amount}\n**Pengesahan Automatik:** ${verificationResult.verified ? '✅ Disahkan' : '❌ Gagal'}\n**Nama Dijumpai:** ${verificationResult.details?.nameFound ? '✅' : '❌'}\n**Status Dijumpai:** ${verificationResult.details?.statusFound ? '✅' : '❌'}\n**Jumlah Dijumpai:** ${verificationResult.details?.amountFound ? '✅' : '❌'}`
                     }));
                     formData.append("file", fileInput.files[0]);
 
@@ -972,40 +1440,45 @@ async function sendConversionEvent(orderData) {
                         
                         // Check if response is successful (status 200-299)
                         if (res.status >= 200 && res.status < 300) {
-                            // ====================================
-                            //      MODIFICATION: FIRE CONVERSION API
-                            // ====================================
-                            // 1. Fire the Meta Pixel (as a fallback)
-                            fbq('track', 'Purchase', {
-                                content_name: 'PROSTREAM 4 App Power Package',
-                                content_category: 'Streaming',
-                                content_ids: ['prostream_4app_package'],
-                                content_type: 'product',
-                                value: parseFloat(orderData.amount),
-                                currency: 'MYR'
-                            });
+                            // Show appropriate verification modal
+                            showVerificationModal(verificationResult.verified);
                             
-                            // 2. Fire the Conversion API (the reliable method)
-                            await sendConversionEvent(orderData);
-                            
-                            hideLoading();
-                            showNotification('Bukti pembayaran telah dihantar! Kami akan menghubungi anda tidak lama lagi.', 'success');
-                            
-                            localStorage.removeItem('prostreamQRPaymentData');
-                            localStorage.removeItem('prostreamQRPaymentStep');
-                            
-                            setTimeout(() => {
-                                window.location.href = 'index.html';
-                            }, 3000);
+                            // If verified, update Google Sheets and prepare for redirect
+                            if (verificationResult.verified) {
+                                // Update payment status in Google Sheets
+                                if (orderData.orderId) {
+                                    console.log('Updating payment status in Google Sheets...');
+                                    await updatePaymentStatusInGoogleSheets(orderData.orderId);
+                                }
+                                
+                                // Store order data for payment-successful.html to use
+                                const pendingOrder = {
+                                    billNo: orderData.orderId || `QR_${orderData.phone}_${Date.now()}`,
+                                    orderData: {
+                                        customerName: orderData.name,
+                                        customerEmail: orderData.email,
+                                        customerPhone: orderData.phone,
+                                        product: 'PROSTREAM 4 App Power Package',
+                                        total: parseFloat(orderData.amount)
+                                    },
+                                    totalAmount: parseFloat(orderData.amount),
+                                    timestamp: new Date().toISOString(),
+                                    orderId: orderData.orderId
+                                };
+                                
+                                localStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
+                                
+                                // Clear QR payment specific data
+                                localStorage.removeItem('prostreamQRPaymentData');
+                                localStorage.removeItem('prostreamQRPaymentStep');
+                            }
                         } else {
                             // Handle HTTP errors
-                            hideLoading();
                             console.error('Discord API Error - Status:', res.status, 'Response:', res.statusText);
                             showNotification(`Ralat semasa menghantar ke Discord (Status: ${res.status}). Sila cuba lagi.`, 'error');
                         }
                     } catch (err) {
                         console.error('Fetch Error:', err);
-                        hideLoading();
                         showNotification('Ralat sambungan. Sila cuba lagi.', 'error');
                     }
                 });
@@ -1053,4 +1526,3 @@ async function sendConversionEvent(orderData) {
     </script>
 </body>
 </html>
-
