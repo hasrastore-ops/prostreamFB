@@ -245,6 +245,321 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         }
         .close-btn:hover { color: var(--secondary-color); }
 
+        /* Exclusive Gallery Section Styles */
+        .exclusive-gallery {
+            padding: 60px 0;
+            background-color: var(--bg-color);
+        }
+
+        .gallery-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            transform: translateY(-2px);
+        }
+
+        .gallery-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3));
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .overlay-content {
+            color: white;
+            width: 100%;
+        }
+
+        .overlay-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .overlay-content p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .view-btn {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .view-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background-color: var(--surface-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .gallery-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--primary-color);
+            width: 25px;
+            border-radius: 5px;
+        }
+
+        /* Enhanced Lightbox for Gallery */
+        .gallery-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .gallery-lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .lightbox-nav.prev {
+            left: -70px;
+        }
+
+        .lightbox-nav.next {
+            right: -70px;
+        }
+
+        /* Responsive Design for Gallery */
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-categories {
+                gap: 8px;
+            }
+            
+            .category-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .gallery-item {
+                aspect-ratio: 16/9;
+            }
+            
+            .overlay-content h3 {
+                font-size: 1rem;
+            }
+            
+            .overlay-content p {
+                font-size: 0.85rem;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .lightbox-nav.prev {
+                left: 10px;
+            }
+            
+            .lightbox-nav.next {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-categories {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .gallery-categories::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .gallery-categories::-webkit-scrollbar-track {
+                background: var(--surface-color);
+            }
+            
+            .gallery-categories::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: 2px;
+            }
+        }
+
         /* Pricing Section */
         .pricing {
             background-color: var(--surface-color);
@@ -329,6 +644,47 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         }
         .package-option strong { color: var(--primary-color); font-size: 1.2rem; }
         .package-option .stock-info { font-size: 0.9rem; color: var(--secondary-color); }
+
+        /* Payment Method Selection */
+        .payment-method-selection {
+            margin: 25px 0;
+            text-align: left;
+        }
+        .payment-method-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        .payment-method-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .payment-method-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #2a2f4a;
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .payment-method-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(249, 199, 79, 0.1);
+        }
+        .payment-method-option input[type="radio"] { display: none; }
+        .payment-method-option .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .payment-method-option .payment-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
 
         /* How it works */
         .how-it-works { text-align: center; }
@@ -526,6 +882,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             margin: 10px;
         }
 
+        /* Enhanced Payment Loading Modal */
         .payment-loading {
             display: none;
             position: fixed;
@@ -533,30 +890,102 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
+            background: rgba(10, 14, 39, 0.98);
+            z-index: 9999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            backdrop-filter: blur(5px);
         }
 
         .payment-loading.active {
             display: flex;
         }
 
+        .payment-loading-content {
+            text-align: center;
+            max-width: 400px;
+            padding: 40px;
+            background: var(--surface-color);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(249, 199, 79, 0.2);
+        }
+
         .payment-loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(249, 199, 79, 0.3);
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(249, 199, 79, 0.2);
             border-radius: 50%;
             border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
         }
 
         .payment-loading-text {
             color: var(--text-color);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .payment-loading-subtext {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .payment-loading-steps {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .loading-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .loading-step.active {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+
+        .loading-step-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Add progress bar */
+        .payment-loading-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(249, 199, 79, 0.2);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .payment-loading-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            width: 0%;
+            animation: progress 3s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
         }
 
         /* --- Responsive Design --- */
@@ -564,6 +993,9 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             h1 { font-size: 3.5rem; }
             h2 { font-size: 2.5rem; }
             .apps-grid { grid-template-columns: 1fr 1fr; }
+            .payment-method-options {
+                flex-direction: row;
+            }
         }
         @media (min-width: 1024px) {
             .apps-grid { grid-template-columns: repeat(4, 1fr); }
@@ -1057,9 +1489,88 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 font-size: 28px;
             }
         }
+
+        /* Floating Order Button - Top Left */
+        .floating-order-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #f94144 0%, #d62828 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(249, 65, 68, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+            border: none;
+        }
+
+        .floating-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 65, 68, 0.5);
+            background: linear-gradient(135deg, #d62828 0%, #f94144 100%);
+        }
+
+        .floating-order-btn::before {
+            content: '🔥';
+            font-size: 1.2rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .floating-order-btn {
+                top: 15px;
+                left: 15px;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+            
+            .floating-order-btn::before {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .floating-order-btn {
+                top: 10px;
+                left: 10px;
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Hide on desktop when not needed */
+        @media (min-width: 1024px) {
+            .floating-order-btn {
+                opacity: 0.7;
+            }
+            
+            .floating-order-btn:hover {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Floating Order Button -->
+    <button class="floating-order-btn" onclick="scrollToCheckout()">
+        Order Sekarang 70% OFF
+    </button>
 
     <!-- HERO SECTION -->
     <header class="hero">
@@ -1163,6 +1674,165 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=14" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=App+Screen+14" alt="Screenshot 14" loading="lazy">
                     </div>
                     <p>*Sila slide ke kanan untuk tengok semua gambar dan tekan untuk zoom</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXCLUSIVE GALLERY SECTION -->
+        <section id="exclusive-gallery" class="exclusive-gallery">
+            <div class="container">
+                <h2>Paparan Eksklusif Aplikasi PROSTREAM</h2>
+                <p class="section-subtitle">Lihat sendiri kualiti premium yang kami tawarkan, Dan banyak lagi di dalam APPS</p>
+                
+                <div class="gallery-categories">
+                    <button class="category-btn active" data-category="movies">Filem</button>
+                    <button class="category-btn" data-category="tv">TV Shows</button>
+                    <button class="category-btn" data-category="anime">Anime</button>
+                    <button class="category-btn" data-category="live">Live TV</button>
+                </div>
+                
+                <div class="gallery-container">
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-category="movies">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Koleksi Filem Terkini</h3>
+                                    <p>Filem blockbuster & pawagam</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp" alt="Filem Terkini" loading="lazy">
+                        </div>
+                        <div class="gallery-item" data-category="movies">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Koleksi Filem Terkini</h3>
+                                    <p>Filem blockbuster & pawagam</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp" alt="Filem Terkini" loading="lazy">
+                        </div>
+
+                        <div class="gallery-item" data-category="tv">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Drama & Siri Popular</h3>
+                                    <p>Koleksi drama terkini</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp" alt="Drama Popular" loading="lazy">
+                        </div>
+
+                        <div class="gallery-item" data-category="anime">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Anime Terkini</h3>
+                                    <p>Update ikut Jepun</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp" alt="Anime Terkini" loading="lazy">
+                        </div>
+
+                        <div class="gallery-item" data-category="movies">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Koleksi Filem Terkini</h3>
+                                    <p>Filem blockbuster & pawagam</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp" alt="Filem Terkini" loading="lazy">
+                        </div>
+                        <div class="gallery-item" data-category="movies">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Koleksi Filem Terkini</h3>
+                                    <p>Filem blockbuster & pawagam</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp" alt="Filem Terkini" loading="lazy">
+                        </div>
+                        <div class="gallery-item" data-category="anime">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Anime Terkini</h3>
+                                    <p>Update ikut Jepun</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp" alt="Anime Terkini" loading="lazy">
+                        </div>
+
+                        <div class="gallery-item" data-category="tv">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Drama & Siri Popular</h3>
+                                    <p>Koleksi drama terkini</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp" alt="Drama Popular" loading="lazy">
+                        </div>
+                        
+                        <div class="gallery-item" data-category="tv">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Drama & Siri Popular</h3>
+                                    <p>Koleksi drama terkini</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp" alt="Drama Popular" loading="lazy">
+                        </div>
+
+                        <div class="gallery-item" data-category="tv">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Drama & Siri Popular</h3>
+                                    <p>Koleksi drama terkini</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp" alt="Drama Popular" loading="lazy">
+                        </div>
+                        
+                        <div class="gallery-item" data-category="anime">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Anime Terkini</h3>
+                                    <p>Update ikut Jepun</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp" alt="Anime Terkini" loading="lazy">
+                        </div>
+                        
+                        <div class="gallery-item" data-category="live">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Live TV Channels</h3>
+                                    <p>Channel Astro & Sports</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp" alt="Live TV" loading="lazy">
+                        </div>
+                        
+                        <div class="gallery-item" data-category="live">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3>Subtitle Lengkap</h3>
+                                    <p>Bahasa Melayu & English</p>
+                                    <button class="view-btn" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp" loading="lazy">Lihat</button>
+                                </div>
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp" alt="Subtitle Lengkap" loading="lazy">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1441,7 +2111,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     <label class="package-option selected">
                         <input type="radio" name="package" value="29.90" checked>
                         <strong>RM 29.90</strong> - Harga Promo
-                        <span class="stock-info">(Pakej untuk 50 orang, tinggal 12 lagi !!)</span>
+                        <span class="stock-info">(Pakej untuk 50 orang sahaja- tinggal 12 lagi !)</span>
                     </label>
                     <label class="package-option disabled">
                         <input type="radio" name="package" value="98.90" disabled>
@@ -1462,12 +2132,25 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     <input type="email" id="email" name="email" required>
                 </div>
                 
-                <button type="submit" class="btn" id="toyyibpay-btn" style="width: 100%; font-size: 1.2rem; padding: 18px; background-color: var(--text-muted);" disabled>
-                    🚀 Bayar Guna Online Payment (FPX,Toyyibpay) 🚀
-                </button>
+                <!-- Payment Method Selection -->
+                <div class="payment-method-selection">
+                    <div class="payment-method-title">Pilih Kaedah Pembayaran:</div>
+                    <div class="payment-method-options">
+                        <label class="payment-method-option selected">
+                            <input type="radio" name="payment-method" value="toyyibpay" checked>
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-name">Bayar guna Online Payment (Fpx,Toyyibpay)</div>
+                        </label>
+                        <label class="payment-method-option">
+                            <input type="radio" name="payment-method" value="qr">
+                            <div class="payment-icon">📱</div>
+                            <div class="payment-name">Bayar guna QR (Duitnow,TnG,MAE,dan Lain-lain)</div>
+                        </label>
+                    </div>
+                </div>
                 
-                <button type="button" class="btn" id="qr-payment-btn" style="width: 100%; font-size: 1.2rem; padding: 18px; margin-top: 10px;">
-                    📱 Bayar Guna QR 📱
+                <button type="submit" class="btn" id="submit-btn" style="width: 100%; font-size: 1.2rem; padding: 18px;">
+                    🚀 Bayar Sekarang 🚀
                 </button>
             </form>
             
@@ -1566,10 +2249,36 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         <source src="https://www.freesfx.co.uk/sound/16297_1460570779.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Payment Loading Modal -->
+    <!-- Enhanced Payment Loading Modal -->
     <div id="paymentLoading" class="payment-loading">
-        <div class="payment-loading-spinner"></div>
-        <div class="payment-loading-text">Sedang memproses pembayaran anda...</div>
+        <div class="payment-loading-content">
+            <div class="payment-loading-spinner"></div>
+            <div class="payment-loading-text">Sedang Memproses Pesanan Anda...</div>
+            <div class="payment-loading-subtext">Sila tunggu sebentar, kami sedang menghubungkan anda ke gateway pembayaran yang selamat</div>
+            
+            <div class="payment-loading-steps">
+                <div class="loading-step active" id="step1">
+                    <span class="loading-step-icon">✓</span>
+                    <span>Mengesahkan maklumat pesanan</span>
+                </div>
+                <div class="loading-step" id="step2">
+                    <span class="loading-step-icon">⏳</span>
+                    <span>Mencipta bil pembayaran</span>
+                </div>
+                <div class="loading-step" id="step3">
+                    <span class="loading-step-icon">⏳</span>
+                    <span>Menghubungkan ke pembekal pembayaran</span>
+                </div>
+            </div>
+            
+            <div class="payment-loading-progress">
+                <div class="payment-loading-progress-bar"></div>
+            </div>
+            
+            <div class="payment-loading-subtext" style="margin-top: 20px; font-size: 0.85rem;">
+                🛡️ Pembayaran anda dienkripsi 100% | Jangan tutup tetingkap ini
+            </div>
+        </div>
     </div>
 
     <!-- Payment Redirect Modal -->
@@ -1580,6 +2289,16 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             <p>Halaman pembayaran telahpun disediakan. Sila klik butang di bawah untuk meneruskan pembayaran.</p>
             <button id="manualRedirectBtn" class="btn">Teruskan Pembayaran</button>
             <p style="font-size: 0.9rem; margin-top: 15px;">Jika halaman pembayaran tidak dibuka secara automatik, sila gunakan butang di atas.</p>
+        </div>
+    </div>
+
+    <!-- Gallery Lightbox -->
+    <div id="gallery-lightbox" class="gallery-lightbox">
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Gallery Image">
+            <button class="lightbox-close">&times;</button>
+            <button class="lightbox-nav prev">&lt;</button>
+            <button class="lightbox-nav next">&gt;</button>
         </div>
     </div>
 
@@ -1684,18 +2403,26 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             }
         }
 
+        // ====================================
+//      GOOGLE SHEETS INTEGRATION
+// ====================================
+// Add this at the top of your script
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
+
         // Save form data to local storage
         function saveFormDataToLocalStorage() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const selectedPackage = document.querySelector('input[name="package"]:checked').value;
+            const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
             
             const formData = {
                 name: name,
                 phone: phone,
                 email: email,
                 package: selectedPackage,
+                paymentMethod: selectedPaymentMethod,
                 timestamp: new Date().toISOString()
             };
             
@@ -1722,14 +2449,25 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         document.getElementById('phone').value = formData.phone || '';
                         document.getElementById('email').value = formData.email || '';
                         
-                        // Select the saved package
+                        // Select saved package
                         const packageRadios = document.querySelectorAll('input[name="package"]');
                         packageRadios.forEach(radio => {
                             if (radio.value === formData.package) {
                                 radio.checked = true;
-                                // Update the UI to show the selected package
+                                // Update UI to show selected package
                                 packageOptions.forEach(opt => opt.classList.remove('selected'));
                                 radio.closest('.package-option').classList.add('selected');
+                            }
+                        });
+                        
+                        // Select saved payment method
+                        const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+                        paymentMethodRadios.forEach(radio => {
+                            if (radio.value === formData.paymentMethod) {
+                                radio.checked = true;
+                                // Update UI to show selected payment method
+                                paymentMethodOptions.forEach(opt => opt.classList.remove('selected'));
+                                radio.closest('.payment-method-option').classList.add('selected');
                             }
                         });
                         
@@ -1749,6 +2487,40 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             paymentMessage.style.color = type === 'error' ? 'var(--secondary-color)' : 
                                        type === 'info' ? 'var(--primary-color)' : 
                                        'var(--text-color)';
+        }
+
+        // Function to scroll to checkout section
+        function scrollToCheckout() {
+            // Track button click with Meta Pixel
+            fbq('track', 'Lead', {
+                content_name: 'Floating Order Button Click',
+                content_category: 'Button Click'
+            });
+            
+            // Smooth scroll to checkout section
+            document.getElementById('checkout').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Enhanced payment loading with steps
+        function showPaymentLoadingWithSteps() {
+            const modal = document.getElementById('paymentLoading');
+            modal.classList.add('active');
+            
+            // Animate through steps
+            setTimeout(() => {
+                document.getElementById('step1').classList.add('active');
+            }, 500);
+            
+            setTimeout(() => {
+                document.getElementById('step2').classList.add('active');
+            }, 1500);
+            
+            setTimeout(() => {
+                document.getElementById('step3').classList.add('active');
+            }, 2500);
         }
 
         // --- App Preview Carousel Logic ---
@@ -1784,6 +2556,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
 
         // --- Form & Package Selection Logic ---
         const packageOptions = document.querySelectorAll('.package-option');
+        const paymentMethodOptions = document.querySelectorAll('.payment-method-option');
         const orderForm = document.getElementById('order-form');
         const loadingSpinner = document.getElementById('loading-spinner');
         const paymentMessage = document.getElementById('payment-message');
@@ -1792,6 +2565,15 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             option.addEventListener('click', function() {
                 if (this.classList.contains('disabled')) return;
                 packageOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+                saveFormDataToLocalStorage();
+            });
+        });
+
+        paymentMethodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                paymentMethodOptions.forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
                 this.querySelector('input[type="radio"]').checked = true;
                 saveFormDataToLocalStorage();
@@ -1820,13 +2602,145 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         document.getElementById('phone').addEventListener('input', saveFormDataToLocalStorage);
         document.getElementById('email').addEventListener('input', saveFormDataToLocalStorage);
 
-        // QR Payment Button Handler
-document.getElementById('qr-payment-btn').addEventListener('click', function() {
+        // ====================================
+        //      TOYYIBPAY INTEGRATION
+        // ====================================
+        function generateBillNo() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `PS${timestamp}${random}`;
+        }
+
+        function showPaymentRedirectModal(billCode) {
+            const modal = document.getElementById('paymentRedirectModal');
+            modal.style.display = 'block';
+            
+            // Set up the redirect button
+            document.getElementById('manualRedirectBtn').onclick = function() {
+                window.location.href = `https://toyyibpay.com/${billCode}`;
+            };
+        }
+
+        function showPaymentLoading() {
+            document.getElementById('paymentLoading').classList.add('active');
+        }
+
+        function hidePaymentLoading() {
+            document.getElementById('paymentLoading').classList.remove('active');
+        }
+
+        async function redirectToToyyibPay(orderData) {
+    console.log('Starting payment process with order data:', orderData);
+    
+    try {
+        showPaymentLoading();
+        
+        // Call YOUR serverless function, not ToyyibPay directly
+        const response = await fetch('/api/create-bill', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: orderData.customerName,
+                email: orderData.customerEmail,
+                phone: orderData.customerPhone,
+                amount: orderData.total,
+                billDescription: `Pembelian ${orderData.quantity} unit ${orderData.product}`,
+                orderId: orderData.orderId // Include the order ID from Google Sheets
+            })
+        });
+        
+        const result = await response.json();
+        console.log('Response from our server:', result);
+
+        if (result.success) {
+            // Store order data with additional metadata
+            localStorage.setItem('pendingOrder', JSON.stringify({
+                orderData: orderData,
+                billNo: result.billCode,
+                billExternalReferenceNo: result.billExternalReferenceNo,
+                totalAmount: orderData.total,
+                timestamp: new Date().toISOString(),
+                orderId: result.orderId || orderData.orderId // Store the order ID from Google Sheets
+            }));
+            
+            hidePaymentLoading();
+            showPaymentRedirectModal(result.billCode);
+            
+            // Fallback redirect
+            setTimeout(() => {
+                window.open(result.billUrl, '_blank');
+            }, 1000);
+            
+            return true;
+        } else {
+            hidePaymentLoading();
+            const errorMessage = result.error || 'Ralat: Tidak dapat menjana bil pembayaran. Sila cuba lagi.';
+            showMessage(errorMessage, 'error');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error during payment process:', error);
+        hidePaymentLoading();
+        showMessage('Sedang Maintainance,Sila Guna QR', 'error');
+        return false;
+    }
+}
+
+        // QR Payment Handler
+        function redirectToQRPayment(orderData) {
+    // Get order ID from sessionStorage
+    const orderId = sessionStorage.getItem('orderId');
+    
+    // Generate a unique event ID for this checkout attempt
+    const eventId = `qr_${orderData.customerPhone}_${Date.now()}`;
+    
+    // Store event ID in local storage to be used in qr.html
+    localStorage.setItem('prostreamCheckoutEventId', eventId);
+    
+    // Save form data to local storage
+    saveFormDataToLocalStorage();
+    
+    // Track InitiateCheckout with Meta Pixel, including event ID
+    fbq('track', 'InitiateCheckout', {
+        content_name: 'PROSTREAM 4 App Power Package',
+        content_category: 'Streaming',
+        content_ids: ['prostream_4app_package'],
+        content_type: 'product',
+        value: orderData.total,
+        currency: 'MYR',
+        eventID: eventId // Add the event ID here
+    });
+    
+    // Show loading state
+    loadingSpinner.style.display = 'block';
+    paymentMessage.style.display = 'none';
+    
+    // Simulate processing delay for better UX
+    setTimeout(() => {
+        // Redirect to qr.html with order data
+        const params = new URLSearchParams();
+        params.append('name', orderData.customerName);
+        params.append('phone', orderData.customerPhone);
+        params.append('email', orderData.customerEmail);
+        params.append('amount', orderData.total);
+        params.append('orderId', orderId); // Add order ID
+        
+        window.location.href = `qr.html?${params.toString()}`;
+    }, 500);
+}
+        
+        // Form submission handler
+        orderForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
     // Get form values
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const email = document.getElementById('email').value;
     const selectedPackage = document.querySelector('input[name="package"]:checked').value;
+    const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
     
     // Validate form
     if (!name || !phone || !email) {
@@ -1840,18 +2754,6 @@ document.getElementById('qr-payment-btn').addEventListener('click', function() {
         return;
     }
     
-    // ====================================
-    //      CRITICAL CHANGE: GENERATE AND STORE EVENT ID
-    // ====================================
-    // Generate a unique event ID for this checkout attempt
-    const eventId = `qr_${phone}_${Date.now()}`;
-    
-    // Store the event ID in local storage to be used in qr.html
-    localStorage.setItem('prostreamCheckoutEventId', eventId);
-    
-    // Save form data to local storage
-    saveFormDataToLocalStorage();
-    
     // Create order data object
     const orderData = {
         customerName: name,
@@ -1860,43 +2762,165 @@ document.getElementById('qr-payment-btn').addEventListener('click', function() {
         product: 'PROSTREAM 4 App Power Package',
         quantity: 1,
         total: parseFloat(selectedPackage),
-        package: selectedPackage
+        package: selectedPackage,
+        paymentMethod: selectedPaymentMethod
     };
     
-    // Send Discord notification immediately when QR button is clicked
-    sendDiscordNotification(orderData, 'pending');
+    // Show enhanced loading modal
+    showPaymentLoadingWithSteps();
     
-    // ====================================
-    //      CRITICAL CHANGE: INCLUDE EVENT ID IN PIXEL TRACKING
-    // ====================================
-    // Track InitiateCheckout with Meta Pixel, including the event ID
-    fbq('track', 'InitiateCheckout', {
-        content_name: 'PROSTREAM 4 App Power Package',
-        content_category: 'Streaming',
-        content_ids: ['prostream_4app_package'],
-        content_type: 'product',
-        value: parseFloat(selectedPackage),
-        currency: 'MYR',
-        eventID: eventId // Add the event ID here
-    });
-    
-    // Show loading state
-    loadingSpinner.style.display = 'block';
-    paymentMessage.style.display = 'none';
-    
-    // Simulate processing delay for better UX
-    setTimeout(() => {
-        // Redirect to qr.html with order data
-        const params = new URLSearchParams();
-        params.append('name', name);
-        params.append('phone', phone);
-        params.append('email', email);
-        params.append('amount', selectedPackage);
+    try {
+        // Send data to Google Sheet first
+        const sheetResponse = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'createOrder',
+                name: name,
+                email: email,
+                phone: phone,
+                package: selectedPackage,
+                paymentMethod: selectedPaymentMethod,
+                amount: selectedPackage
+            })
+        });
         
-        window.location.href = `qr.html?${params.toString()}`;
-    }, 500);
+        const sheetResult = await sheetResponse.json();
+        
+        if (sheetResult.status === 'success') {
+            // Store order ID in sessionStorage for later use
+            sessionStorage.setItem('orderId', sheetResult.orderId);
+            
+            // Send Discord notification
+            await sendDiscordNotification(orderData, 'pending');
+            
+            // Track InitiateCheckout with Meta Pixel
+            fbq('track', 'InitiateCheckout', {
+                content_name: 'PROSTREAM 4 App Power Package',
+                content_category: 'Streaming',
+                content_ids: ['prostream_4app_package'],
+                content_type: 'product',
+                value: parseFloat(selectedPackage),
+                currency: 'MYR'
+            });
+            
+            // Process payment based on selected method
+            if (selectedPaymentMethod === 'toyyibpay') {
+                // Redirect to ToyyibPay
+                const success = await redirectToToyyibPay(orderData);
+                
+                if (!success) {
+                    hidePaymentLoading();
+                }
+            } else if (selectedPaymentMethod === 'qr') {
+                // Redirect to QR payment
+                redirectToQRPayment(orderData);
+            }
+        } else {
+            throw new Error(sheetResult.message || 'Gagal mendaftarkan pesanan');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        hidePaymentLoading();
+        showMessage('Ralat: ' + error.message, 'error');
+    }
 });
-
+        
+        // ====================================
+        //      GALLERY FUNCTIONALITY
+        // ====================================
+        // Gallery category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        // Initialize gallery to show only movies by default
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all gallery items that are not movies
+            galleryItems.forEach(item => {
+                if (item.getAttribute('data-category') !== 'movies') {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active button
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                
+                // Filter gallery items
+                galleryItems.forEach(item => {
+                    if (item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Gallery lightbox functionality
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const galleryLightbox = document.getElementById('gallery-lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const lightboxPrev = document.querySelector('.lightbox-nav.prev');
+        const lightboxNext = document.querySelector('.lightbox-nav.next');
+        
+        let currentImageIndex = 0;
+        let galleryImages = [];
+        
+        // Collect all gallery images
+        galleryItems.forEach(item => {
+            const img = item.querySelector('img');
+            if (img) {
+                galleryImages.push(img.src);
+            }
+        });
+        
+        // Open lightbox when view button is clicked
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const imgSrc = this.getAttribute('data-src');
+                currentImageIndex = galleryImages.indexOf(imgSrc);
+                
+                if (currentImageIndex !== -1) {
+                    lightboxImg.src = imgSrc;
+                    galleryLightbox.classList.add('active');
+                }
+            });
+        });
+        
+        // Close lightbox
+        lightboxClose.addEventListener('click', function() {
+            galleryLightbox.classList.remove('active');
+        });
+        
+        // Navigate to previous image
+        lightboxPrev.addEventListener('click', function() {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            lightboxImg.src = galleryImages[currentImageIndex];
+        });
+        
+        // Navigate to next image
+        lightboxNext.addEventListener('click', function() {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            lightboxImg.src = galleryImages[currentImageIndex];
+        });
+        
+        // Close lightbox when clicking outside the image
+        galleryLightbox.addEventListener('click', function(e) {
+            if (e.target === galleryLightbox) {
+                galleryLightbox.classList.remove('active');
+            }
+        });
+        
         // ====================================
         //      WHATSAPP REVIEW FUNCTIONALITY
         // ====================================
@@ -1940,7 +2964,90 @@ document.getElementById('qr-payment-btn').addEventListener('click', function() {
                 }
             });
         });
-
+        
+        // ====================================
+        //      MODAL FUNCTIONALITY
+        // ====================================
+        // Payment redirect modal
+        const paymentRedirectModal = document.getElementById('paymentRedirectModal');
+        const modalCloseBtns = document.querySelectorAll('.modal-close');
+        
+        modalCloseBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === paymentRedirectModal) {
+                paymentRedirectModal.style.display = 'none';
+            }
+        });
+        
+        // ====================================
+        //      SOCIAL PROOF NOTIFICATION
+        // ====================================
+        const socialProofNotification = document.getElementById('social-proof');
+        const notificationClose = document.querySelector('.notification-close');
+        const notificationSound = document.getElementById('notification-sound');
+        
+        // Names for social proof
+        const names = [
+            'Ahmad Alias', 'Siti Natasha', 'Mohd Razif', 'Farah Ahmad', 
+            'Ismail Bakar', 'Nurul Huda', 'Azman Harun', 'Sarah Ismail',
+            'Hafizdhul', 'Aminah Yusof', 'Khalid Rahman', 'Mariam',
+            'Zainal', 'Anis', 'Hassan Mohd', 'Aishah Omar'
+        ];
+        
+        // Time ranges for social proof
+        const timeRanges = [
+            'beberapa minit yang lepas', '15 minit yang lepas', '30 minit yang lepas',
+            '1 jam yang lepas', '2 jam yang lepas', '3 jam yang lepas',
+            'semalam', '2 hari yang lepas'
+        ];
+        
+        // Function to show social proof notification
+        function showSocialProofNotification() {
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomTime = timeRanges[Math.floor(Math.random() * timeRanges.length)];
+            
+            document.querySelector('.notification-name').textContent = randomName;
+            document.querySelector('.notification-time').textContent = `telah beli ${randomTime}`;
+            
+            socialProofNotification.classList.add('show');
+            
+            // Play notification sound
+            notificationSound.play().catch(e => console.log('Audio play failed:', e));
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                socialProofNotification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Close notification when close button is clicked
+        notificationClose.addEventListener('click', function() {
+            socialProofNotification.classList.remove('show');
+        });
+        
+        // Show social proof notification at random intervals
+        function scheduleNextNotification() {
+            const minTime = 10000; // 10 seconds
+            const maxTime = 30000; // 30 seconds
+            const randomTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+            
+            setTimeout(() => {
+                showSocialProofNotification();
+                scheduleNextNotification();
+            }, randomTime);
+        }
+        
+        // Start showing notifications after initial delay
+        setTimeout(() => {
+            showSocialProofNotification();
+            scheduleNextNotification();
+        }, 5000);
+        
         // ====================================
         //      FAQ ACCORDION
         // ====================================
@@ -2040,73 +3147,8 @@ document.getElementById('qr-payment-btn').addEventListener('click', function() {
             }
         });
 
-        // ====================================
-        //      SOCIAL PROOF NOTIFICATION
-        // ====================================
-        const socialProofNotification = document.getElementById('social-proof');
-        const notificationClose = document.querySelector('.notification-close');
-        const notificationSound = document.getElementById('notification-sound');
-        
-        // Names for social proof
-        const names = [
-            'Ahmad Alias', 'Siti Natasha', 'Mohd Razif', 'Farah Ahmad', 
-            'Ismail Bakar', 'Nurul Huda', 'Azman Harun', 'Sarah Ismail',
-            'Hafizdhul', 'Aminah Yusof', 'Khalid Rahman', 'Mariam',
-            'Zainal', 'Anis', 'Hassan Mohd', 'Aishah Omar'
-        ];
-        
-        // Time ranges for social proof
-        const timeRanges = [
-            'beberapa minit yang lepas', '15 minit yang lepas', '30 minit yang lepas',
-            '1 jam yang lepas', '2 jam yang lepas', '3 jam yang lepas',
-            'semalam', '2 hari yang lepas'
-        ];
-        
-        // Function to show social proof notification
-        function showSocialProofNotification() {
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            const randomTime = timeRanges[Math.floor(Math.random() * timeRanges.length)];
-            
-            document.querySelector('.notification-name').textContent = randomName;
-            document.querySelector('.notification-time').textContent = `telah beli ${randomTime}`;
-            
-            socialProofNotification.classList.add('show');
-            
-            // Play notification sound
-            notificationSound.play().catch(e => console.log('Audio play failed:', e));
-            
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                socialProofNotification.classList.remove('show');
-            }, 5000);
-        }
-        
-        // Close notification when close button is clicked
-        notificationClose.addEventListener('click', function() {
-            socialProofNotification.classList.remove('show');
-        });
-        
-        // Show social proof notification at random intervals
-        function scheduleNextNotification() {
-            const minTime = 10000; // 10 seconds
-            const maxTime = 30000; // 30 seconds
-            const randomTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            
-            setTimeout(() => {
-                showSocialProofNotification();
-                scheduleNextNotification();
-            }, randomTime);
-        }
-        
-        // Start showing notifications after initial delay
-        setTimeout(() => {
-            showSocialProofNotification();
-            scheduleNextNotification();
-        }, 5000);
-
         // Load form data when page loads
         document.addEventListener('DOMContentLoaded', loadFormDataFromLocalStorage);
     </script>
 </body>
 </html>
-
