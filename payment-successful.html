@@ -2,32 +2,31 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pembayaran QR - PROSTREAM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Berjaya - PROSTREAM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Tesseract.js for OCR -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-    
-    <!-- Meta Pixel Code (PageView only) -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2276519576162204');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
+
+    <!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2276519576162204', {
+    'domain': ['prostreamfb.vercel.app']
+});
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
     
     <style>
         :root {
@@ -38,18 +37,13 @@
             --text-color: #e0e1dd;
             --text-muted: #a8a9ad;
             --font-family: 'Poppins', sans-serif;
-            --mobile-padding: 15px;
-            --mobile-button-height: 56px;
-            --mobile-touch-target: 48px;
-            --success-color: #4CAF50;
-            --whatsapp-color: #25D366;
+            --success-color: #43b581;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -60,548 +54,105 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
-            overscroll-behavior: contain;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         header {
-            background-color: var(--surface-color);
-            padding: 15px var(--mobile-padding);
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 40px 0;
         }
 
-        header h1 {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        main {
-            flex: 1;
-            padding: var(--mobile-padding);
-            padding-bottom: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .payment-container {
-            background-color: var(--surface-color);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .progress-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: var(--text-muted);
-            z-index: 1;
-        }
-
-        .progress-bar .progress {
-            position: absolute;
-            top: 15px;
-            left: 0;
-            height: 2px;
-            background-color: var(--primary-color);
-            z-index: 2;
-            transition: width 0.5s ease;
-        }
-
-        .progress-step {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            z-index: 3;
-            position: relative;
-            font-size: 0.9rem;
-        }
-
-        .progress-step.active {
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-        }
-
-        .progress-step.completed {
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-        }
-
-        .instruction-step {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .instruction-step.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-title {
-            color: var(--primary-color);
+        .success-icon {
+            font-size: 80px;
+            color: var(--success-color);
             margin-bottom: 20px;
-            font-size: 1.3rem;
+            animation: checkmark 0.5s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
             font-weight: 700;
-        }
-
-        .step-content {
-            margin-bottom: 30px;
-        }
-
-        .step-content p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .user-details {
-            background-color: var(--bg-color);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
-
-        .user-details p {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-
-        .user-details strong {
-            color: var(--primary-color);
-        }
-
-        .qr-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .qr-container img {
-            max-width: 220px;
-            width: 100%;
-            border: 1px solid var(--text-muted);
-            border-radius: 10px;
-            padding: 15px;
-            background-color: white;
-        }
-
-        .download-btn {
-            display: inline-block;
-            margin-top: 15px;
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            min-height: var(--mobile-touch-target);
-        }
-
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
-        }
-
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
-        .download-btn.loading {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .download-btn.loading::before {
-            content: '⏳';
-            margin-right: 8px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .download-btn::before {
-            content: '⬇';
-            margin-right: 8px;
-            font-size: 1.1rem;
-        }
-
-        .illustration {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .illustration img {
-            max-width: 180px;
-            width: 100%;
-            opacity: 0.8;
-        }
-
-        .form-group {
             margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 0.9rem;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 15px;
-            background-color: var(--bg-color);
-            border: 2px dashed var(--text-muted);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            min-height: var(--mobile-touch-target);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .file-input-label:hover {
-            border-color: var(--primary-color);
-        }
-
-        .file-input-label.has-file {
-            border-color: var(--primary-color);
-            background-color: rgba(249, 199, 79, 0.1);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 15px 25px;
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-            font-weight: 700;
-            font-size: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-            border: none;
-            margin: 5px;
-            min-height: var(--mobile-button-height);
-            width: 100%;
-            touch-action: manipulation;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background-color: var(--text-muted);
-            color: var(--bg-color);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-whatsapp {
-            background-color: var(--whatsapp-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-whatsapp::before {
-            content: '💬';
-            margin-right: 8px;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 10px;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            left: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            z-index: 1000;
-            transform: translateY(-100px);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-        }
-
-        .notification.success {
-            background-color: var(--success-color);
-        }
-
-        .notification.error {
-            background-color: var(--secondary-color);
-        }
-
-        .notification.info {
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(249, 199, 79, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-color);
-            font-size: 1.1rem;
-            margin-top: 20px;
-            text-align: center;
-            max-width: 80%;
-        }
-
-        .verification-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-
-        .verification-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .verification-content {
-            background-color: var(--surface-color);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .verification-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        .verification-title {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .verification-message {
-            margin-bottom: 25px;
-            font-size: 1rem;
-        }
-
-        .verification-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .verification-failed {
-            display: none;
-        }
-
-        .verification-failed.active {
-            display: block;
-        }
-
-        .verification-failed .verification-icon {
-            color: var(--secondary-color);
-        }
-
-        .verification-success {
-            display: none;
-        }
-
-        .verification-success.active {
-            display: block;
-        }
-
-        .verification-success .verification-icon {
             color: var(--success-color);
         }
 
-        /* Instructions Modal Styles */
-        .instructions-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 4000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-
-        .instructions-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .instructions-content {
-            background-color: var(--surface-color);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .instructions-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .instructions-title {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-
-        .close-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
             color: var(--text-color);
         }
 
-        .instructions-steps {
+        .success-card {
+            background-color: var(--surface-color);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .order-details {
+            background-color: rgba(249, 199, 79, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .order-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .detail-row span:first-child {
+            color: var(--text-color);
+        }
+
+        .steps {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .steps h3 {
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
 
-        .instruction-step-item {
+        .step {
             display: flex;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             align-items: flex-start;
         }
 
@@ -612,329 +163,289 @@
             height: 30px;
             border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             font-weight: 700;
             margin-right: 15px;
             flex-shrink: 0;
         }
 
-        .step-text {
-            flex: 1;
-        }
-
-        .step-text h3 {
-            color: var(--primary-color);
+        .step-content h4 {
             margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 700;
             font-size: 1.1rem;
+            border-radius: 50px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
         }
 
-        .step-text p {
-            color: var(--text-color);
-            font-size: 0.9rem;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 199, 79, 0.3);
         }
 
-        .instructions-footer {
-            margin-top: 20px;
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+
+        .contact-info {
+            margin-top: 30px;
             text-align: center;
         }
 
-        @media (max-width: 480px) {
-            .payment-container {
-                padding: 15px;
-                border-radius: 10px;
-            }
-            
-            .step-title {
-                font-size: 1.2rem;
-            }
-            
-            .button-container {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .btn {
-                width: 100%;
-                margin: 0;
-            }
-            
-            .qr-container img {
-                max-width: 200px;
-            }
-            
-            .instructions-content {
-                padding: 20px;
-            }
-            
-            .instructions-title {
-                font-size: 1.3rem;
-            }
+        .contact-info p {
+            margin-bottom: 10px;
         }
 
-        @supports (-webkit-touch-callout: none) {
-            .btn {
-                -webkit-appearance: none;
-                -webkit-user-select: none;
-                user-select: none;
-            }
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #2a2f4a;
+            font-size: 0.9rem;
         }
 
-        @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
-            .btn {
-                -webkit-tap-highlight-color: rgba(0,0,0,0);
-            }
+        footer a {
+            margin: 0 10px;
+            color: var(--primary-color);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .notification.error {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .success-card { padding: 30px 20px; }
+            .detail-row { flex-direction: column; }
+            .detail-row span:first-child { margin-bottom: 5px; }
+            .action-buttons { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Pembayaran QR - PROSTREAM</h1>
-    </header>
+    <div class="container">
+        <header>
+            <div class="success-icon">✓</div>
+            <h1>Pembayaran Berjaya!</h1>
+            <h2>Terima kasih atas pembelian anda</h2>
+        </header>
 
-    <main>
-        <div class="payment-container">
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-                <div class="progress-step active" id="step-1-indicator">1</div>
-                <div class="progress-step" id="step-2-indicator">2</div>
-                <div class="progress-step" id="step-3-indicator">3</div>
-                <div class="progress-step" id="step-4-indicator">4</div>
-                <div class="progress-step" id="step-5-indicator">5</div>
-            </div>
+        <main>
+            <div class="success-card">
+                <p>Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.</p>
+                
+                <!-- NEW: Google Sheets Update Status Section -->
+                <div class="order-details" id="orderDetails">
+                    <div class="loading-spinner"></div>
+                    <p style="text-align: center;">Memuatkan butiran pesanan...</p>
+                </div>
 
-            <!-- Step 1: Verify Details -->
-            <div class="instruction-step active" id="step-1">
-                <h2 class="step-title">Cara-cara pembayaran QR</h2>
-                <div class="step-content">
-                    <p>1. Pastikan detail (Nama, Email dan No. Telefon Betul)</p>
-                    <div class="user-details">
-                        <p><strong>Nama:</strong> <span id="display-name"></span></p>
-                        <p><strong>Email:</strong> <span id="display-email"></span></p>
-                        <p><strong>No. Telefon:</strong> <span id="display-phone"></span></p>
-                        <p><strong>Jumlah:</strong> RM <span id="display-amount"></span></p>
-                    </div>
-                </div>
-                <div class="button-container">
-                    <button class="btn" id="step-1-next" type="button">Seterusnya</button>
-                </div>
-            </div>
-
-            <!-- Step 2: Download QR -->
-            <div class="instruction-step" id="step-2">
-                <h2 class="step-title">Cara-cara pembayaran QR</h2>
-                <div class="step-content">
-                    <p>2. Tekan, download QR di atas kanan dan Save, Atau boleh screenshot</p>
-                    <div class="qr-container">
-                        <img id="qr-code-image" src="https://i.imgur.com/Ao5Cvzy.jpeg" alt="QR Code for Payment">
-                        <button class="download-btn" id="download-qr" type="button">Download QR</button>
-                    </div>
-                </div>
-                <div class="button-container">
-                    <button class="btn btn-secondary" id="step-2-prev" type="button">Kembali</button>
-                    <button class="btn" id="step-2-next" type="button">Seterusnya</button>
-                </div>
-            </div>
-
-            <!-- Step 3: Scan QR -->
-            <div class="instruction-step" id="step-3">
-                <h2 class="step-title">Cara-cara pembayaran QR</h2>
-                <div class="step-content">
-                    <p>3. Masuk ke bank dan scan. Pastikan amount yang dimasukkan adalah betul (RM <span id="amount-verification"></span>)</p>
-                    <div class="illustration">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3208/3208465.png" alt="Bank App Scanning QR">
-                    </div>
-                </div>
-                <div class="button-container">
-                    <button class="btn btn-secondary" id="step-3-prev" type="button">Kembali</button>
-                    <button class="btn" id="step-3-next" type="button">Seterusnya</button>
-                </div>
-            </div>
-
-            <!-- Step 4: Save Receipt -->
-            <div class="instruction-step" id="step-4">
-                <h2 class="step-title">Cara-cara pembayaran QR</h2>
-                <div class="step-content">
-                    <p>4. Setelah siap payment simpan gambar resit/transfer, atau boleh screenshot</p>
-                    <div class="illustration">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5623/5623662.png" alt="Mobile Screenshot">
-                    </div>
-                </div>
-                <div class="button-container">
-                    <button class="btn btn-secondary" id="step-4-prev" type="button">Kembali</button>
-                    <button class="btn" id="step-4-next" type="button">Seterusnya</button>
-                </div>
-            </div>
-
-            <!-- Step 5: Upload Receipt -->
-            <div class="instruction-step" id="step-5">
-                <h2 class="step-title">Cara-cara pembayaran QR</h2>
-                <div class="step-content">
-                    <p>5. Upload gambar resit/transfer dan tekan " Saya Sudah bayar" . Tunggu sehingga Pengesahan selesai dan tekan seterusnya untuk dapatkan ID Email</p>
-                    <form id="payment-form">
-                        <div class="form-group">
-                            <label for="proof-image">Muat Naik Resit Pembayaran</label>
-                            <div class="file-input-wrapper">
-                                <input type="file" id="proof-image" accept="image/*" required>
-                                <label for="proof-image" class="file-input-label" id="file-label">
-                                    Klik untuk memilih gambar resit
-                                </label>
-                            </div>
+                <div class="steps">
+                    <h3>Langkah Seterusnya:</h3>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Semak Emel & WhatsApp</h4>
+                            <p>Anda akan menerima pautan muat turun dan panduan pemasangan dalam masa 15 minit.</p>
                         </div>
-                    </form>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Muat Turun Aplikasi</h4>
+                            <p>Ikuti panduan yang disediakan untuk memasang semua 4 aplikasi pada peranti Android TV anda.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Nikmati Kandungan</h4>
+                            <p>Mula menikmati filem terkini, drama, anime dan saluran TV langsung tanpa had!</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="button-container">
-                    <button class="btn btn-secondary" id="step-5-prev" type="button">Kembali</button>
-                    <button class="btn btn-success" id="submit-payment" type="button">Saya Sudah Bayar</button>
+
+                <div class="action-buttons">
+                    <a href="https://prostreamfb.vercel.app/" class="btn">Kembali ke Laman Utama</a>
+                    <a href="#" class="btn btn-whatsapp" id="whatsapp-btn">Hubungi WhatsApp</a>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
+            <div class="contact-info">
+                <h3>Perlu Bantuan?</h3>
+                <p>WhatsApp: +60 11-2741 2402</p>
+                <p>Emel: support@prostream.com</p>
+                <p>Kami sedia membantu 24/7</p>
+            </div>
+        </main>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div>
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Sedang memproses pembayaran anda...</div>
-        </div>
+        <footer>
+            <p>&copy; 2025 PROSTREAM. Hak Cipta Terpelihara.</p>
+            <a href="#">Dasar Privasi</a> | <a href="#">Terma & Syarat</a> | <a href="#">Hubungi Kami</a>
+        </footer>
     </div>
 
-    <!-- Verification Modal -->
-    <div id="verification-modal" class="verification-modal">
-        <div class="verification-content">
-            <!-- Verification Success -->
-            <div class="verification-success" id="verification-success">
-                <div class="verification-icon">✓</div>
-                <h3 class="verification-title">Pembayaran di Sahkan</h3>
-                <p class="verification-message">Resit pembayaran anda telah disahkan. Terima kasih!</p>
-                <div class="verification-actions">
-                    <button class="btn btn-success" id="continue-to-success">Teruskan</button>
-                </div>
-            </div>
-            
-            <!-- Verification Failed -->
-            <div class="verification-failed" id="verification-failed">
-                <div class="verification-icon">✗</div>
-                <h3 class="verification-title">Pengesahan Gagal</h3>
-                <p class="verification-message">Kami tidak dapat mengesahkan pembayaran anda. Sila hubungi admin untuk bantuan.</p>
-                <div class="verification-actions">
-                    <button class="btn btn-whatsapp" id="contact-admin-whatsapp">Hubungi Admin</button>
-                    <button class="btn btn-secondary" id="try-again">Cuba Lagi</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Instructions Modal -->
-    <div id="instructions-modal" class="instructions-modal">
-        <div class="instructions-content">
-            <div class="instructions-header">
-                <h2 class="instructions-title">Panduan Pembayaran QR- Sila ikut untuk Memastikan ID dapat Diberikan</h2>
-                <button class="close-btn" id="close-instructions">✕</button>
-            </div>
-            
-            <div class="instructions-steps">
-                <div class="instruction-step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-text">
-                        <h3>Sahkan Butiran Peribadi</h3>
-                        <p>Pastikan nama, email, nombor telefon dan jumlah pembayaran adalah betul sebelum meneruskan.</p>
-                    </div>
-                </div>
-                
-                <div class="instruction-step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-text">
-                        <h3>Muat Turun Kod QR</h3>
-                        <p>Tekan butang "Download QR" untuk menyimpan kod QR pembayaran atau ambil screenshot kod QR tersebut.</p>
-                    </div>
-                </div>
-                
-                <div class="instruction-step-item">
-                    <div class="step-number">3</div>
-                    <div class="step-text">
-                        <h3>Imbas Kod QR</h3>
-                        <p>Buka aplikasi perbankan anda dan imbas kod QR. Pastikan jumlah yang dimasukkan adalah betul.</p>
-                    </div>
-                </div>
-                
-                <div class="instruction-step-item">
-                    <div class="step-number">4</div>
-                    <div class="step-text">
-                        <h3>Simpan Resit</h3>
-                        <p>Setelah pembayaran selesai, simpan gambar resit atau ambil screenshot sebagai bukti pembayaran.</p>
-                    </div>
-                </div>
-                
-                <div class="instruction-step-item">
-                    <div class="step-number">5</div>
-                    <div class="step-text">
-                        <h3>Muat Naik Resit (Penting!!)</h3>
-                        <p>Muat naik gambar resit pembayaran dan tekan "Saya Sudah Bayar". Tunggu sehingga pengesahan dibuat, Jangan Close/Back.Setelah berjaya tekan button Seterusnya Untuk memastikan ID dapat dihantar ke Email anda.</p>
-                    </div>
-                </div>
-
-                <div class="instruction-step-item">
-                    <div class="step-number">6</div>
-                    <div class="step-text">
-                        <h3>Pengesahan (SANGAT PENTING !!)</h3>
-                        <p>Semasa Pengesahan, jangan back/close, tunggu sehingga selesai. Setelah berjaya Tekan "Seterusnya" untuk dapatkan ID & EMAIL</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="instructions-footer">
-                <button class="btn" id="start-payment">Mula Pembayaran</button>
-            </div>
-        </div>
+    <!-- NEW: Notification element for Google Sheets status updates -->
+    <div id="notification" class="notification">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
     </div>
 
     <script>
-        // Discord webhook URL
+        // ====================================
+        //      DISCORD NOTIFICATION
+        // ====================================
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
-        
-        // Google Apps Script URL
-        //const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec'
-        // Function to register order in Google Sheets
-        async function registerOrderInGoogleSheets(orderData) {
+
+        // Function to send Discord notification
+        async function sendDiscordNotification(orderData) {
+            console.log('Attempting to send Discord notification for:', orderData);
             try {
-                const formData = new URLSearchParams();
-                formData.append('action', 'createOrder');
-                formData.append('name', orderData.name);
-                formData.append('email', orderData.email);
-                formData.append('phone', orderData.phone);
-                formData.append('package', 'PROSTREAM 4 App Power Package');
-                formData.append('paymentMethod', 'QR');
-                formData.append('amount', orderData.amount);
+                const timestamp = new Date().toISOString();
                 
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                const embed = {
+                    title: "✅ PEMBAYARAN BERJAYA - PROSTREAM-FB",
+                    description: "Pelanggan telah berjaya membuat pembayaran!",
+                    color: 0x43b581,
+                    fields: [
+                        { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
+                        { name: "👤 Nama", value: orderData.customerName, inline: true },
+                        { name: "📱 No Telefon", value: orderData.customerPhone, inline: true },
+                        { name: "📧 Email", value: orderData.customerEmail, inline: false },
+                        { name: "📦 Produk", value: orderData.product, inline: true },
+                        { name: "💰 Jumlah", value: `RM ${orderData.total.toFixed(2)}`, inline: true },
+                        { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+                    ],
+                    footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
+                    timestamp: timestamp
+                };
+
+                const payload = {
+                    username: "PROSTREAM Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+                    embeds: [embed]
+                };
+
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                     },
-                    body: formData
+                    body: JSON.stringify(payload)
                 });
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    console.log('Order registered in Google Sheets with ID:', result.orderId);
-                    return result.orderId;
+
+                if (response.ok) {
+                    console.log('✅ Discord notification sent successfully');
+                    return true;
                 } else {
-                    console.error('Failed to register order in Google Sheets:', result.message);
-                    return null;
+                    const errorText = await response.text();
+                    console.error('❌ Failed to send Discord notification:', errorText);
+                    return false;
                 }
             } catch (error) {
-                console.error('Error registering order in Google Sheets:', error);
-                return null;
+                console.error('❌ Error sending Discord notification:', error);
+                return false;
             }
         }
 
-        // Function to update payment status in Google Sheets
-        async function updatePaymentStatusInGoogleSheets(orderId) {
+        // Function to show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const iconElement = notification.querySelector('.notification-icon');
+            const textElement = notification.querySelector('.notification-text');
+            
+            notification.className = `notification ${type}`;
+            textElement.textContent = message;
+            
+            if (type === 'success') {
+                iconElement.textContent = '✓';
+            } else {
+                iconElement.textContent = '✗';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // ====================================
+        //      GOOGLE SHEETS INTEGRATION
+        // ====================================
+        // NEW: Add Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec'; // Replace with your actual URL
+
+        // NEW: Function to update payment status in Google Sheets
+        async function updatePaymentStatus(orderId) {
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -950,578 +461,229 @@
                 const result = await response.json();
                 
                 if (result.status === 'success') {
-                    console.log('Payment status updated in Google Sheets');
+                    console.log('✅ Payment status updated in Google Sheets');
+                    showNotification('Status pembayaran telah dikemaskini. Emel pengesahan telah dihantar.', 'success');
                     return true;
                 } else {
-                    console.error('Failed to update payment status:', result.message);
+                    console.error('❌ Failed to update payment status:', result.message);
+                    showNotification('Ralat mengemaskini status pembayaran: ' + result.message, 'error');
                     return false;
                 }
             } catch (error) {
-                console.error('Error updating payment status:', error);
+                console.error('❌ Error updating payment status:', error);
+                showNotification('Ralat menghubungi pelayan. Sila segarkan halaman.', 'error');
                 return false;
             }
         }
 
-        // Function to get order data from URL parameters or local storage
-        async function getOrderData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const name = urlParams.get('name');
-            const email = urlParams.get('email');
-            const phone = urlParams.get('phone');
-            const amount = urlParams.get('amount');
-            const orderId = urlParams.get('orderId'); // Check if orderId is passed from index.html
-            
-            if (name && email && phone && amount) {
-                const orderData = {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    amount: amount,
-                    orderId: orderId, // Include orderId if available
-                    timestamp: new Date().toISOString()
-                };
-                
-                localStorage.setItem('prostreamQRPaymentData', JSON.stringify(orderData));
-                
-                // Register order in Google Sheets if not already registered
-                if (!orderId) {
-                    console.log('Registering new order in Google Sheets...');
-                    const newOrderId = await registerOrderInGoogleSheets(orderData);
-                    if (newOrderId) {
-                        orderData.orderId = newOrderId;
-                        localStorage.setItem('prostreamQRPaymentData', JSON.stringify(orderData));
-                    }
-                }
-                
-                return orderData;
-            }
-            
-            const savedData = localStorage.getItem('prostreamQRPaymentData');
-            if (savedData) {
-                try {
-                    const orderData = JSON.parse(savedData);
-                    
-                    const savedTime = new Date(orderData.timestamp);
-                    const currentTime = new Date();
-                    const timeDiff = currentTime - savedTime;
-                    const hoursDiff = timeDiff / (1000 * 60 * 60);
-                    
-                    if (hoursDiff < 24) {
-                        return orderData;
-                    }
-                } catch (error) {
-                    console.error('Error loading order data:', error);
-                }
-            }
-            
-            showNotification('Maklumat pesanan tidak dijumpai. Sila isi borang pesanan semula.', 'error');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 3000);
-            
-            return null;
-        }
-
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        function showLoading() {
-            document.getElementById('loading-overlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function showVerificationModal(isSuccess) {
-            const modal = document.getElementById('verification-modal');
-            const successContent = document.getElementById('verification-success');
-            const failedContent = document.getElementById('verification-failed');
-            
-            modal.classList.add('active');
-            
-            if (isSuccess) {
-                successContent.classList.add('active');
-                failedContent.classList.remove('active');
-            } else {
-                successContent.classList.remove('active');
-                failedContent.classList.add('active');
-            }
-        }
-
-        function hideVerificationModal() {
-            const modal = document.getElementById('verification-modal');
-            modal.classList.remove('active');
-        }
-
-        // Function to verify receipt using OCR
-        async function verifyReceipt(imageFile) {
+        // Function to send conversion event via Conversions API
+        async function sendConversionEvent(orderData) {
             try {
-                showLoading();
-                document.querySelector('.loading-text').textContent = 'Mengesahkan resit pembayaran...';
+                const response = await fetch('/api/conversion-api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        eventName: 'Purchase',
+                        eventId: `purchase_${orderData.billNo}_${Date.now()}`,
+                        value: orderData.totalAmount || orderData.orderData.total,
+                        currency: 'MYR',
+                        customerData: {
+                            email: orderData.orderData.customerEmail,
+                            phone: orderData.orderData.customerPhone,
+                            firstName: orderData.orderData.customerName.split(' ')[0],
+                            lastName: orderData.orderData.customerName.split(' ').slice(1).join(' ')
+                        },
+                        contentData: {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product'
+                        }
+                    })
+                });
                 
-                // Use Tesseract.js to perform OCR on the image
-                const result = await Tesseract.recognize(
-                    imageFile,
-                    'eng+msa', // English and Malay languages
-                    {
-                        logger: m => console.log(m)
-                    }
-                );
-                
-                const extractedText = result.data.text.toLowerCase();
-                console.log('Extracted Text:', extractedText);
-                
-                // Check for verification criteria - UPDATED RULES
-                const nameMatch = extractedText.includes('hasrastore') || 
-                                 extractedText.includes('hasrasstore') || 
-                                 extractedText.includes('hasrastore');
-                
-                const statusMatch = extractedText.includes('successful') || 
-                                   extractedText.includes('paid') ||
-                                   extractedText.includes('QR') || 
-                                   extractedText.includes('success');
-                
-                // Check for amount variations
-                const amountMatch = extractedText.includes('29.90') || 
-                                   extractedText.includes('30.00') || 
-                                   extractedText.includes('30') || 
-                                   extractedText.includes('29');
-                
-                // Return verification result - ALL THREE CONDITIONS MUST BE MET
-                return {
-                    verified: nameMatch && amountMatch,
-                    extractedText: extractedText,
-                    details: {
-                        nameFound: nameMatch,
-                        amountFound: amountMatch
-                    }
-                };
+                const result = await response.json();
+                if (!result.success) {
+                    console.error('Failed to send conversion event:', result.error);
+                }
+                return result.success;
             } catch (error) {
-                console.error('Error during OCR verification:', error);
-                return {
-                    verified: false,
-                    extractedText: '',
-                    error: error.message
-                };
-            } finally {
-                hideLoading();
+                console.error('Error sending conversion event:', error);
+                return false;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
-            const orderData = await getOrderData();
+        // Function to display order details
+        function displayOrderDetails(orderData) {
+            const orderDetailsElement = document.getElementById('orderDetails');
             
-            if (!orderData) {
-                document.body.innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Mengalihkan ke halaman pesanan...</h2></div>';
-                return;
-            }
+            orderDetailsElement.innerHTML = `
+                <h3>Butiran Pesanan</h3>
+                <div class="detail-row">
+                    <span>No. Pesanan:</span>
+                    <span>${orderData.billNo || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Nama:</span>
+                    <span>${orderData.orderData?.customerName || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Emel:</span>
+                    <span>${orderData.orderData?.customerEmail || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>No. Telefon:</span>
+                    <span>${orderData.orderData?.customerPhone || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Produk:</span>
+                    <span>${orderData.orderData?.product || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Jumlah:</span>
+                    <span>RM ${(orderData.totalAmount || orderData.orderData?.total || 0).toFixed(2)}</span>
+                </div>
+                ${orderData.timestamp ? `
+                <div class="detail-row">
+                    <span>Tarikh:</span>
+                    <span>${new Date(orderData.timestamp).toLocaleString('ms-MY')}</span>
+                </div>
+                ` : ''}
+            `;
+        }
 
-            document.getElementById('display-name').textContent = orderData.name || '';
-            document.getElementById('display-email').textContent = orderData.email || '';
-            document.getElementById('display-phone').textContent = orderData.phone || '';
-            document.getElementById('display-amount').textContent = orderData.amount || '';
-            document.getElementById('amount-verification').textContent = orderData.amount || '';
-
-            let currentStep = 1;
-            const totalSteps = 5;
-
-            function updateProgress() {
-                const progress = document.getElementById('progress');
-                const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
-                progress.style.width = `${progressPercentage}%`;
-
-                for (let i = 1; i <= totalSteps; i++) {
-                    const indicator = document.getElementById(`step-${i}-indicator`);
-                    if (i < currentStep) {
-                        indicator.classList.add('completed');
-                        indicator.classList.remove('active');
-                    } else if (i === currentStep) {
-                        indicator.classList.add('active');
-                        indicator.classList.remove('completed');
-                    } else {
-                        indicator.classList.remove('active', 'completed');
+        // MODIFIED: loadOrderDetails function to include Google Sheets update
+        async function loadOrderDetails() {
+            console.log('🔄 Loading order details...');
+            
+            try {
+                // Try to get data from localStorage first
+                let pendingOrder = localStorage.getItem('pendingOrder');
+                
+                // If not available, try to get from URL parameters
+                if (!pendingOrder) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const billCode = urlParams.get('billcode');
+                    const order_id = urlParams.get('order_id');
+                    
+                    if (billCode) {
+                        // Create a basic order object from URL parameters
+                        pendingOrder = JSON.stringify({
+                            billNo: billCode,
+                            orderData: {
+                                customerName: 'Pelanggan',
+                                customerEmail: 'email@example.com',
+                                customerPhone: '0123456789',
+                                product: 'PROSTREAM 4 App Power Package',
+                                total: 29.90
+                            },
+                            totalAmount: 29.90,
+                            timestamp: new Date().toISOString(),
+                            orderId: order_id
+                        });
                     }
                 }
-            }
-
-            function showStep(step) {
-                document.querySelectorAll('.instruction-step').forEach(el => {
-                    el.classList.remove('active');
-                });
-
-                document.getElementById(`step-${step}`).classList.add('active');
-                currentStep = step;
-                updateProgress();
                 
-                localStorage.setItem('prostreamQRPaymentStep', step.toString());
-                
-                document.querySelector('.payment-container').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function restoreLastStep() {
-                const savedStep = localStorage.getItem('prostreamQRPaymentStep');
-                if (savedStep) {
-                    const step = parseInt(savedStep);
-                    if (step >= 1 && step <= totalSteps) {
-                        showStep(step);
-                        showNotification(`Anda telah dipulihkan ke langkah ${step} dari sesi sebelumnya`, 'info');
-                        return;
-                    }
+                if (!pendingOrder) {
+                    console.error('❌ No pending order found in localStorage or URL');
+                    showOrderDetailsError();
+                    return;
                 }
                 
-                showStep(1);
-            }
-
-            // Instructions Modal
-            function showInstructionsModal() {
-                document.getElementById('instructions-modal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function hideInstructionsModal() {
-                document.getElementById('instructions-modal').classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            // Check if it's the first visit
-            const hasVisitedBefore = localStorage.getItem('prostreamQRPaymentVisited');
-            if (!hasVisitedBefore) {
-                // Show instructions modal on first visit
-                setTimeout(() => {
-                    showInstructionsModal();
-                    localStorage.setItem('prostreamQRPaymentVisited', 'true');
-                }, 500);
-            }
-
-            // Instructions modal event listeners
-            document.getElementById('close-instructions').addEventListener('click', hideInstructionsModal);
-            document.getElementById('start-payment').addEventListener('click', hideInstructionsModal);
-
-            const step1NextBtn = document.getElementById('step-1-next');
-            if (step1NextBtn) {
-                step1NextBtn.addEventListener('click', () => {
-                    showStep(2);
-                });
-            }
-
-            const step2PrevBtn = document.getElementById('step-2-prev');
-            const step2NextBtn = document.getElementById('step-2-next');
-            
-            if (step2PrevBtn) {
-                step2PrevBtn.addEventListener('click', () => {
-                    showStep(1);
-                });
-            }
-            
-            if (step2NextBtn) {
-                step2NextBtn.addEventListener('click', () => {
-                    showStep(3);
-                });
-            }
-
-            const step3PrevBtn = document.getElementById('step-3-prev');
-            const step3NextBtn = document.getElementById('step-3-next');
-            
-            if (step3PrevBtn) {
-                step3PrevBtn.addEventListener('click', () => {
-                    showStep(2);
-                });
-            }
-            
-            if (step3NextBtn) {
-                step3NextBtn.addEventListener('click', () => {
-                    showStep(4);
-                });
-            }
-
-            const step4PrevBtn = document.getElementById('step-4-prev');
-            const step4NextBtn = document.getElementById('step-4-next');
-            
-            if (step4PrevBtn) {
-                step4PrevBtn.addEventListener('click', () => {
-                    showStep(3);
-                });
-            }
-            
-            if (step4NextBtn) {
-                step4NextBtn.addEventListener('click', () => {
-                    showStep(5);
-                });
-            }
-
-            const step5PrevBtn = document.getElementById('step-5-prev');
-            if (step5PrevBtn) {
-                step5PrevBtn.addEventListener('click', () => {
-                    showStep(4);
-                });
-            }
-
-            const downloadQrBtn = document.getElementById('download-qr');
-            if (downloadQrBtn) {
-                downloadQrBtn.addEventListener('click', async function() {
-                    const downloadBtn = this;
-                    const originalText = downloadBtn.innerHTML;
+                const orderData = JSON.parse(pendingOrder);
+                console.log('✅ Parsed order data:', orderData);
+                
+                // Display order details immediately
+                displayOrderDetails(orderData);
+                
+                // NEW: Update payment status in Google Sheets if we have an orderId
+                let orderId = orderData.orderId;
+                
+                // If no orderId, try to get it from billNo (for QR payments)
+                if (!orderId && orderData.billNo) {
+                    orderId = orderData.billNo;
+                }
+                
+                if (orderId) {
+                    console.log('🔄 Updating payment status in Google Sheets for order:', orderId);
+                    await updatePaymentStatus(orderId);
+                } else {
+                    console.log('⚠️ No order ID found, skipping Google Sheets update');
+                }
+                
+                // Try to send conversion event via Conversions API
+                console.log('🎯 Sending conversion via Conversions API...');
+                const conversionSent = await sendConversionEvent(orderData);
+                
+                if (conversionSent) {
+                    console.log('✅ Conversion event sent successfully via Conversions API');
+                } else {
+                    console.log('⚠️ Conversions API failed, trying client-side pixel tracking');
                     
-                    downloadBtn.classList.add('loading');
-                    downloadBtn.innerHTML = '<span style="margin-right: 8px;">⏳</span> Memuat turun...';
-                    
+                    // Fallback to client-side pixel tracking
                     try {
-                        const qrImage = document.getElementById('qr-code-image');
-                        const imageUrl = qrImage.src;
-                        
-                        if ('download' in document.createElement('a')) {
-                            const response = await fetch(imageUrl);
-                            const blob = await response.blob();
-                            
-                            const blobUrl = URL.createObjectURL(blob);
-                            
-                            const downloadLink = document.createElement('a');
-                            downloadLink.href = blobUrl;
-                            downloadLink.download = 'qr.png';
-                            downloadLink.style.display = 'none';
-                            
-                            document.body.appendChild(downloadLink);
-                            downloadLink.click();
-                            document.body.removeChild(downloadLink);
-                            
-                            setTimeout(() => {
-                                URL.revokeObjectURL(blobUrl);
-                            }, 100);
-                            
-                            showNotification('QR telah dimuat turun ke folder muat turun anda!', 'success');
-                        }
-                        
-                        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
-                            img.crossOrigin = 'anonymous';
-                            
-                            img.onload = function() {
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                                ctx.drawImage(img, 0, 0);
-                                
-                                canvas.toBlob(function(blob) {
-                                    const file = new File([blob], 'qr.png', { type: 'image/png' });
-                                        
-                                    if (navigator.share && navigator.canShare({ files: [file] })) {
-                                        navigator.share({
-                                            files: [file],
-                                            title: 'QR Code PROSTREAM',
-                                            text: 'QR code untuk pembayaran PROSTREAM'
-                                        }).then(() => {
-                                            showNotification('QR dikongsi untuk disimpan!', 'success');
-                                        }).catch(() => {
-                                            window.open(imageUrl, '_blank');
-                                            showNotification('Untuk iOS: Tekan dan tahan gambar, kemudian pilih "Simpan Gambar"', 'success');
-                                        });
-                                    } else {
-                                        window.open(imageUrl, '_blank');
-                                        showNotification('Untuk iOS: Tekan dan tahan gambar, kemudian pilih "Simpan Gambar"', 'success');
-                                    }
-                                }, 'image/png');
-                            };
-                            
-                            img.src = imageUrl;
-                        }
-                        
+                        fbq('track', 'Purchase', {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product',
+                            value: orderData.totalAmount || orderData.orderData?.total || 0,
+                            currency: 'MYR'
+                        });
+                        console.log('✅ Meta Purchase event fired successfully via client-side pixel');
                     } catch (error) {
-                        console.error('Download error:', error);
-                        
-                        const qrImage = document.getElementById('qr-code-image');
-                        const newWindow = window.open(qrImage.src, '_blank');
-                        
-                        showNotification('Sila muat turun gambar dari tab baru yang dibuka', 'success');
-                        
-                        setTimeout(() => {
-                            if (newWindow && !newWindow.closed) {
-                                newWindow.close();
-                            }
-                        }, 3000);
-                    } finally {
-                        setTimeout(() => {
-                            downloadBtn.classList.remove('loading');
-                            downloadBtn.innerHTML = originalText;
-                        }, 1000);
+                        console.error('❌ Client-side pixel tracking also failed:', error);
                     }
-                });
-            }
-
-            const proofImageInput = document.getElementById('proof-image');
-            if (proofImageInput) {
-                proofImageInput.addEventListener('change', function() {
-                    const fileLabel = document.getElementById('file-label');
-                    if (this.files && this.files[0]) {
-                        fileLabel.textContent = this.files[0].name;
-                        fileLabel.classList.add('has-file');
-                    } else {
-                        fileLabel.textContent = 'Klik untuk memilih gambar resit';
-                        fileLabel.classList.remove('has-file');
-                    }
-                });
-            }
-
-            // Verification modal buttons
-            const continueToSuccessBtn = document.getElementById('continue-to-success');
-            if (continueToSuccessBtn) {
-                continueToSuccessBtn.addEventListener('click', function() {
-                    hideVerificationModal();
-                    window.location.href = 'payment-successful.html';
-                });
-            }
-
-            const contactAdminBtn = document.getElementById('contact-admin-whatsapp');
-            if (contactAdminBtn) {
-                contactAdminBtn.addEventListener('click', function() {
-                    hideVerificationModal();
-                    // Open WhatsApp with a pre-filled message
-                    const phoneNumber = '601127412402'; // Replace with actual admin WhatsApp number
-                    const message = encodeURIComponent(`Saya mempunyai masalah dengan pengesahan pembayaran. Nama: ${orderData.name}, Email: ${orderData.email}, No. Telefon: ${orderData.phone}`);
-                    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-                });
-            }
-
-            const tryAgainBtn = document.getElementById('try-again');
-            if (tryAgainBtn) {
-                tryAgainBtn.addEventListener('click', function() {
-                    hideVerificationModal();
-                    // Reset file input
-                    document.getElementById('proof-image').value = '';
-                    document.getElementById('file-label').textContent = 'Klik untuk memilih gambar resit';
-                    document.getElementById('file-label').classList.remove('has-file');
-                });
-            }
-
-            const submitPaymentBtn = document.getElementById('submit-payment');
-            if (submitPaymentBtn) {
-                submitPaymentBtn.addEventListener('click', async function() {
-                    const fileInput = document.getElementById('proof-image');
-                    
-                    if (!fileInput.files || !fileInput.files[0]) {
-                        showNotification('Sila pilih gambar resit pembayaran', 'error');
-                        return;
-                    }
-
-                    if (fileInput.files[0].size > 5 * 1024 * 1024) {
-                        showNotification('Saiz gambar terlalu besar. Sila pilih gambar kurang dari 5MB.', 'error');
-                        return;
-                    }
-
-                    // Verify receipt using OCR
-                    const verificationResult = await verifyReceipt(fileInput.files[0]);
-                    
-                    if (verificationResult.error) {
-                        showNotification('Ralat semasa mengesahkan resit. Sila cuba lagi.', 'error');
-                        return;
-                    }
-
-                    // Send to Discord regardless of verification result
-                    const formData = new FormData();
-                    formData.append("payload_json", JSON.stringify({
-                        username: "PROSTREAM Payment Bot",
-                        content: `💳 **Bukti Pembayaran QR Diterima!**\n**Nama:** ${orderData.name}\n**Email:** ${orderData.email}\n**No. Telefon:** ${orderData.phone}\n**Jumlah:** RM${orderData.amount}\n**Pengesahan Automatik:** ${verificationResult.verified ? '✅ Disahkan' : '❌ Gagal'}\n**Nama Dijumpai:** ${verificationResult.details?.nameFound ? '✅' : '❌'}\n**Status Dijumpai:** ${verificationResult.details?.statusFound ? '✅' : '❌'}\n**Jumlah Dijumpai:** ${verificationResult.details?.amountFound ? '✅' : '❌'}`
-                    }));
-                    formData.append("file", fileInput.files[0]);
-
-                    try {
-                        const res = await fetch(DISCORD_WEBHOOK_URL, { method: "POST", body: formData });
-                        
-                        // Check if response is successful (status 200-299)
-                        if (res.status >= 200 && res.status < 300) {
-                            // Show appropriate verification modal
-                            showVerificationModal(verificationResult.verified);
-                            
-                            // If verified, update Google Sheets and prepare for redirect
-                            if (verificationResult.verified) {
-                                // Update payment status in Google Sheets
-                                if (orderData.orderId) {
-                                    console.log('Updating payment status in Google Sheets...');
-                                    await updatePaymentStatusInGoogleSheets(orderData.orderId);
-                                }
-                                
-                                // Store order data for payment-successful.html to use
-                                const pendingOrder = {
-                                    billNo: orderData.orderId || `QR_${orderData.phone}_${Date.now()}`,
-                                    orderData: {
-                                        customerName: orderData.name,
-                                        customerEmail: orderData.email,
-                                        customerPhone: orderData.phone,
-                                        product: 'PROSTREAM 4 App Power Package',
-                                        total: parseFloat(orderData.amount)
-                                    },
-                                    totalAmount: parseFloat(orderData.amount),
-                                    timestamp: new Date().toISOString(),
-                                    orderId: orderData.orderId
-                                };
-                                
-                                localStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
-                                
-                                // Clear QR payment specific data
-                                localStorage.removeItem('prostreamQRPaymentData');
-                                localStorage.removeItem('prostreamQRPaymentStep');
-                            }
-                        } else {
-                            // Handle HTTP errors
-                            console.error('Discord API Error - Status:', res.status, 'Response:', res.statusText);
-                            showNotification(`Ralat semasa menghantar ke Discord (Status: ${res.status}). Sila cuba lagi.`, 'error');
-                        }
-                    } catch (err) {
-                        console.error('Fetch Error:', err);
-                        showNotification('Ralat sambungan. Sila cuba lagi.', 'error');
-                    }
-                });
-            }
-
-            window.addEventListener('beforeunload', function(e) {
-                if (currentStep < totalSteps) {
-                    e.preventDefault();
-                    e.returnValue = '';
-                    return '';
                 }
-            });
-
-            window.addEventListener('popstate', function(event) {
-                if (currentStep > 1) {
-                    showStep(currentStep - 1);
-                    window.history.pushState(null, null, window.location.pathname);
-                }
-            });
-
-            window.history.pushState(null, null, window.location.pathname);
-
-            document.querySelectorAll('.btn, .download-btn').forEach(button => {
-                button.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.8';
-                });
                 
-                button.addEventListener('touchend', function() {
-                    this.style.opacity = '1';
-                });
-            });
+                // Send Discord notification
+                console.log('📧 Sending Discord notification...');
+                await sendDiscordNotification(orderData.orderData);
+                
+                // Clear pending order from localStorage
+                localStorage.removeItem('pendingOrder');
+                console.log('✅ Cleared pendingOrder from localStorage');
+                
+            } catch (error) {
+                console.error('❌ Error in loadOrderDetails:', error);
+                showOrderDetailsError();
+            }
+        }
 
-            document.querySelectorAll('img').forEach(img => {
-                img.loading = 'lazy';
-            });
+        // Function to show error in order details
+        function showOrderDetailsError() {
+            const orderDetailsElement = document.getElementById('orderDetails');
+            
+            orderDetailsElement.innerHTML = `
+                <h3>Butiran Pesanan</h3>
+                <p style="text-align: center; color: var(--secondary-color);">Maaf, kami tidak dapat memuatkan butiran pesanan anda.</p>
+                <p style="text-align: center;">Sila hubungi sokongan pelanggan kami untuk bantuan.</p>
+            `;
+        }
 
-            window.addEventListener('orientationchange', function() {
-                setTimeout(function() {
-                    window.scrollTo(0, 0);
-                }, 200);
-            });
+        // Update WhatsApp button link
+        function updateWhatsAppButton(orderData) {
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            if (whatsappBtn && orderData.orderData) {
+                const message = encodeURIComponent(`Hai%2C%20saya%20baru%20sahaja%20membeli%20pakej%20PROSTREAM%20dan%20perlu%20bantuan.%20Nama%3A%20${orderData.orderData.customerName}%2C%20Email%3A%20${orderData.orderData.customerEmail}%2C%20No.%20Telefon%3A%20${orderData.orderData.customerPhone}`);
+                whatsappBtn.href = `https://wa.me/601127412402?text=${message}`;
+            }
+        }
 
-            restoreLastStep();
+        // Load order details when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadOrderDetails();
+            
+            // Update WhatsApp button after order details are loaded
+            setTimeout(() => {
+                const pendingOrder = localStorage.getItem('pendingOrder');
+                if (pendingOrder) {
+                    const orderData = JSON.parse(pendingOrder);
+                    updateWhatsAppButton(orderData);
+                }
+            }, 1000);
         });
     </script>
 </body>
