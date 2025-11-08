@@ -10,85 +10,186 @@ export default async function handler(req, res) {
     }
 
     try {
-        console.log('Payment callback received:', req.body);
+        // Log the entire raw body to see exactly what ToyyibPay sends
+        console.log('Payment callback received. Raw body:', JSON.stringify(req.body, null, 2));
         
-        // Proses data panggilan balik dari ToyyibPay
-        const { billcode, status, order_id, transaction_id, amount } = req.body;
+        // Use the correct parameter names from ToyyibPay
+        const { 
+            billcode, 
+            payment_status,      
+            billExternalReferenceNo, // This is your original Order ID
+            transaction_id, 
+            billamount           
+        } = req.body;
+
+        if (!billExternalReferenceNo) {
+            console.error('Callback received without billExternalReferenceNo. Ignoring.');
+            return res.status(400).send('Bad Request: Missing Order ID');
+        }
         
         // Periksa status pembayaran
-        if (status === '1') {
-            // Pembayaran berjaya
-            console.log(`Payment successful for bill code: ${billcode}`);
+        if (payment_status === '1') {
+            console.log(`Payment successful for bill code: ${billcode}, Order ID: ${billExternalReferenceNo}`);
             
-            // Send Purchase event to Facebook Conversions API
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
+            let orderData = null;
+
+            // --- STEP 1: Get current order details from Google Sheets ---
             try {
-                const pixelId = '2276519576162204';
-                const accessToken = 'EAAcJZCFldLZAYBP2Rt17ob7AJUEAPnCZCdiIOHZBereJjCRiofT1SottrBAL8EjPME1L6LANNoRN5I0yootHZCYioBgN2SUZBHPbUU93iRd54xOSeM7RbiHHIqemm6zM5p6GLIZAHNOezCVLROwIER8spOyZB3iC4wYTB1qZBADgHpWlZCpcZC0VA3Hi26sRJ85fwZDZD';
+                const formData = new URLSearchParams();
+                formData.append('action', 'getOrder');
+                formData.append('orderId', billExternalReferenceNo);
                 
-                // Note: We don't have customer details in the callback, so we'll send a basic event
-                const eventResponse = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+                const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        data: [{
-                            event_name: 'Purchase',
-                            event_time: Math.floor(Date.now() / 1000),
-                            action_source: 'website',
-                            event_source_url: 'https://prostreamfb.vercel.app/payment-successful.html',
-                            event_id: `purchase_${billcode}_${Date.now()}`,
-                            custom_data: {
-                                currency: 'MYR',
-                                value: amount ? (parseFloat(amount) * 100).toString() : undefined, // Convert to cents
-                                content_name: 'PROSTREAM 4 App Power Package',
-                                content_category: 'Streaming',
-                                content_ids: ['prostream_4app_package'],
-                                content_type: 'product'
-                            }
-                        }],
-                    })
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
                 });
                 
-                const eventResult = await eventResponse.json();
-                console.log('Facebook Purchase Event Response (from callback):', eventResult);
+                const result = await googleResponse.json();
+                if (result.status === 'success' && result.order) {
+                    orderData = result.order;
+                    console.log(`Retrieved order data for ${billExternalReferenceNo}. Current status: ${orderData.status}`);
+                } else {
+                    console.error(`Failed to get order data for ${billExternalReferenceNo}:`, result.message);
+                    return res.status(200).send('OK'); // Still respond OK to ToyyibPay
+                }
             } catch (error) {
-                console.error('Error sending Purchase event from callback:', error);
+                console.error('Error fetching order from Google Sheets:', error);
+                return res.status(200).send('OK'); // Still respond OK
             }
-            
-            // Di sini anda boleh:
-            // 1. Kemas kini status pesanan dalam pangkalan data
-            // 2. Hantar e-mel pengesahan
-            // 3. Cetuskan peristiwa lain
-            
-            // Contoh: Simpan maklumat pembayaran ke pangkalan data
-            // await savePaymentData({
-            //     billcode,
-            //     order_id,
-            //     transaction_id,
-            //     amount,
-            //     status: 'paid',
-            //     timestamp: new Date().toISOString()
-            // });
-            
-            return res.status(200).json({ 
-                success: true, 
-                message: 'Payment processed successfully' 
-            });
+
+            // --- STEP 2: If order is not already 'Paid', proceed with updates ---
+            if (orderData && orderData.status !== 'Paid') {
+                console.log(`Order ${billExternalReferenceNo} is not yet 'Paid'. Proceeding with update...`);
+
+                // --- STEP 2a: Update Google Sheets (this will also send the email) ---
+                try {
+                    const formData = new URLSearchParams();
+                    formData.append('action', 'updatePayment'); // Use the action from your script
+                    formData.append('orderId', billExternalReferenceNo);
+                    
+                    const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData
+                    });
+                    
+                    const updateResult = await googleResponse.json();
+                    if (updateResult.status === 'success') {
+                        console.log(`✅ Successfully updated order ${billExternalReferenceNo} to 'Paid' in Google Sheets.`);
+                    } else {
+                        console.error(`❌ Failed to update order ${billExternalReferenceNo}:`, updateResult.message);
+                    }
+                } catch (error) {
+                    console.error('❌ Error updating Google Sheets:', error);
+                }
+
+                // --- STEP 2b: Send Facebook Conversions API Event ---
+                if (orderData) {
+                    try {
+                        const pixelId = '2276519576162204';
+                        const accessToken = 'EAAcJZCFldLZAYBP2Rt17ob7AJUEAPnCZCdiIOHZBereJjCRiofT1SottrBAL8EjPME1L6LANNoRN5I0yootHZCYioBgN2SUZBHPbUU93iRd54xOSeM7RbiHHIqemm6zM5p6GLIZAHNOezCVLROwIER8spOyZB3iC4wYTB1qZBADgHpWlZCpcZC0VA3Hi26sRJ85fwZDZD';
+                        
+                        const eventResponse = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                data: [{
+                                    event_name: 'Purchase',
+                                    event_time: Math.floor(Date.now() / 1000),
+                                    action_source: 'website',
+                                    event_source_url: 'https://prostreamfb.vercel.app/payment-successful.html',
+                                    event_id: `purchase_callback_${billExternalReferenceNo}_${Date.now()}`,
+                                    user_data: {
+                                        em: Buffer.from(orderData.email).toString('base64'),
+                                        ph: Buffer.from(orderData.phone).toString('base64'),
+                                        fn: Buffer.from(orderData.name.split(' ')[0]).toString('base64'),
+                                        ln: Buffer.from(orderData.name.split(' ').slice(1).join(' ')).toString('base64'),
+                                    },
+                                    custom_data: {
+                                        currency: 'MYR',
+                                        value: (parseFloat(orderData.amount) * 100).toString(), // Convert to cents
+                                        content_name: orderData.package,
+                                        content_category: 'Streaming',
+                                        content_ids: [billExternalReferenceNo],
+                                        content_type: 'product'
+                                    }
+                                }],
+                            })
+                        });
+                        
+                        const eventResult = await eventResponse.json();
+                        console.log('Facebook Purchase Event Response (from callback):', eventResult);
+                    } catch (error) {
+                        console.error('Error sending Purchase event from callback:', error);
+                    }
+                }
+
+                // --- STEP 2c: Send Discord Notification ---
+                if (orderData) {
+                    console.log('📧 Sending Discord notification...');
+                    await sendDiscordNotification(orderData);
+                }
+
+            } else {
+                console.log(`⚠️ Order ${billExternalReferenceNo} is already marked as 'Paid'. No action taken.`);
+            }
+
+            // IMPORTANT: Always respond with 200 OK to ToyyibPay.
+            return res.status(200).send('OK'); 
         } else {
-            // Pembayaran gagal
-            console.log(`Payment failed for bill code: ${billcode}`);
-            
-            return res.status(200).json({ 
-                success: false, 
-                message: 'Payment failed' 
-            });
+            // Pembayaran gagal atau pending
+            console.log(`Payment not successful for bill code: ${billcode}. Status: ${payment_status}`);
+            return res.status(200).send('OK'); // Still respond with OK
         }
     } catch (error) {
         console.error('Error processing payment callback:', error);
-        return res.status(500).json({ 
-            success: false, 
-            error: 'An error occurred while processing the payment callback' 
+        return res.status(500).send('Internal Server Error');
+    }
+}
+
+
+// --- Helper function for Discord notification (copied from your HTML for consistency) ---
+async function sendDiscordNotification(orderData) {
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
+    try {
+        const embed = {
+            title: "✅ PEMBAYARAN BERJAYA - PROSTREAM-FB",
+            description: "Pelanggan telah berjaya membuat pembayaran!",
+            color: 0x43b581,
+            fields: [
+                { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
+                { name: "👤 Nama", value: orderData.name, inline: true },
+                { name: "📱 No Telefon", value: orderData.phone, inline: true },
+                { name: "📧 Email", value: orderData.email, inline: false },
+                { name: "📦 Produk", value: orderData.package, inline: true },
+                { name: "💰 Jumlah", value: `RM ${orderData.amount}`, inline: true },
+                { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+            ],
+            footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
+            timestamp: new Date().toISOString()
+        };
+
+        const payload = {
+            username: "PROSTREAM Bot",
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+            embeds: [embed]
+        };
+
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
+
+        if (response.ok) {
+            console.log('✅ Discord notification sent successfully');
+        } else {
+            const errorText = await response.text();
+            console.error('❌ Failed to send Discord notification:', errorText);
+        }
+    } catch (error) {
+        console.error('❌ Error sending Discord notification:', error);
     }
 }
