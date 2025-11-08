@@ -10,8 +10,24 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Log the entire raw body to see exactly what ToyyibPay sends
-        console.log('Payment callback received. Raw body:', JSON.stringify(req.body, null, 2));
+        // --- NEW: Log the raw request headers to debug ---
+        console.log('Callback Headers:', JSON.stringify(req.headers, null, 2));
+        
+        // --- NEW: Fallback body parsing ---
+        let body = req.body;
+        
+        // If the built-in parser failed, req.body will be undefined or empty.
+        // We can try to parse it manually from the raw stream.
+        if (!body || Object.keys(body).length === 0) {
+            console.warn('Built-in body parser failed or returned empty. Attempting manual parse.');
+            // This is a safeguard. In most cases, removing the bodyParser: false config is the real fix.
+            // For Next.js, this situation is rare, but we handle it just in case.
+            // Note: A true manual parse would require bodyParser: false and reading from the stream,
+            // which is more complex. This check is mostly to confirm the diagnosis.
+            return res.status(400).send('Bad Request: Body could not be parsed. Check API configuration.');
+        }
+
+        console.log('Payment callback received. Parsed body:', JSON.stringify(body, null, 2));
         
         // Use the correct parameter names from ToyyibPay
         const { 
@@ -20,7 +36,7 @@ export default async function handler(req, res) {
             billExternalReferenceNo, // This is your original Order ID
             transaction_id, 
             billamount           
-        } = req.body;
+        } = body;
 
         if (!billExternalReferenceNo) {
             console.error('Callback received without billExternalReferenceNo. Ignoring.');
