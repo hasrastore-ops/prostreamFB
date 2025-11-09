@@ -10,42 +10,26 @@ export default async function handler(req, res) {
     }
 
     try {
-        // --- NEW: Log the raw request headers to debug ---
-        console.log('Callback Headers:', JSON.stringify(req.headers, null, 2));
+        console.log('Payment callback received. Raw body:', JSON.stringify(req.body, null, 2));
         
-        // --- NEW: Fallback body parsing ---
-        let body = req.body;
-        
-        // If the built-in parser failed, req.body will be undefined or empty.
-        // We can try to parse it manually from the raw stream.
-        if (!body || Object.keys(body).length === 0) {
-            console.warn('Built-in body parser failed or returned empty. Attempting manual parse.');
-            // This is a safeguard. In most cases, removing the bodyParser: false config is the real fix.
-            // For Next.js, this situation is rare, but we handle it just in case.
-            // Note: A true manual parse would require bodyParser: false and reading from the stream,
-            // which is more complex. This check is mostly to confirm the diagnosis.
-            return res.status(400).send('Bad Request: Body could not be parsed. Check API configuration.');
-        }
-
-        console.log('Payment callback received. Parsed body:', JSON.stringify(body, null, 2));
-        
-        // Use the correct parameter names from ToyyibPay
+        // --- Use the CORRECT parameter names from the ToyyibPay documentation ---
         const { 
             billcode, 
-            payment_status,      
-            billExternalReferenceNo, // This is your original Order ID
-            transaction_id, 
-            billamount           
-        } = body;
+            status,                  // Corrected from 'payment_status'
+            order_id,                // Corrected from 'billExternalReferenceNo'
+            amount,                  // Corrected from 'billamount'
+            transaction_time,
+            reason
+        } = req.body;
 
-        if (!billExternalReferenceNo) {
-            console.error('Callback received without billExternalReferenceNo. Ignoring.');
+        if (!order_id) {
+            console.error('Callback received without order_id. Ignoring.');
             return res.status(400).send('Bad Request: Missing Order ID');
         }
         
-        // Periksa status pembayaran
-        if (payment_status === '1') {
-            console.log(`Payment successful for bill code: ${billcode}, Order ID: ${billExternalReferenceNo}`);
+        // --- Check for the SUCCESS status code from the documentation ---
+        if (status === '1') {
+            console.log(`Payment successful for bill code: ${billcode}, Order ID: ${order_id}`);
             
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
             let orderData = null;
@@ -54,7 +38,7 @@ export default async function handler(req, res) {
             try {
                 const formData = new URLSearchParams();
                 formData.append('action', 'getOrder');
-                formData.append('orderId', billExternalReferenceNo);
+                formData.append('orderId', order_id);
                 
                 const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -65,9 +49,9 @@ export default async function handler(req, res) {
                 const result = await googleResponse.json();
                 if (result.status === 'success' && result.order) {
                     orderData = result.order;
-                    console.log(`Retrieved order data for ${billExternalReferenceNo}. Current status: ${orderData.status}`);
+                    console.log(`Retrieved order data for ${order_id}. Current status: ${orderData.status}`);
                 } else {
-                    console.error(`Failed to get order data for ${billExternalReferenceNo}:`, result.message);
+                    console.error(`Failed to get order data for ${order_id}:`, result.message);
                     return res.status(200).send('OK'); // Still respond OK to ToyyibPay
                 }
             } catch (error) {
@@ -77,13 +61,13 @@ export default async function handler(req, res) {
 
             // --- STEP 2: If order is not already 'Paid', proceed with updates ---
             if (orderData && orderData.status !== 'Paid') {
-                console.log(`Order ${billExternalReferenceNo} is not yet 'Paid'. Proceeding with update...`);
+                console.log(`Order ${order_id} is not yet 'Paid'. Proceeding with update...`);
 
                 // --- STEP 2a: Update Google Sheets (this will also send the email) ---
                 try {
                     const formData = new URLSearchParams();
-                    formData.append('action', 'updatePayment'); // Use the action from your script
-                    formData.append('orderId', billExternalReferenceNo);
+                    formData.append('action', 'updatePayment'); 
+                    formData.append('orderId', order_id);
                     
                     const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
@@ -93,9 +77,9 @@ export default async function handler(req, res) {
                     
                     const updateResult = await googleResponse.json();
                     if (updateResult.status === 'success') {
-                        console.log(`✅ Successfully updated order ${billExternalReferenceNo} to 'Paid' in Google Sheets.`);
+                        console.log(`✅ Successfully updated order ${order_id} to 'Paid' in Google Sheets.`);
                     } else {
-                        console.error(`❌ Failed to update order ${billExternalReferenceNo}:`, updateResult.message);
+                        console.error(`❌ Failed to update order ${order_id}:`, updateResult.message);
                     }
                 } catch (error) {
                     console.error('❌ Error updating Google Sheets:', error);
@@ -116,7 +100,7 @@ export default async function handler(req, res) {
                                     event_time: Math.floor(Date.now() / 1000),
                                     action_source: 'website',
                                     event_source_url: 'https://prostreamfb.vercel.app/payment-successful.html',
-                                    event_id: `purchase_callback_${billExternalReferenceNo}_${Date.now()}`,
+                                    event_id: `purchase_callback_${order_id}_${Date.now()}`,
                                     user_data: {
                                         em: Buffer.from(orderData.email).toString('base64'),
                                         ph: Buffer.from(orderData.phone).toString('base64'),
@@ -125,10 +109,10 @@ export default async function handler(req, res) {
                                     },
                                     custom_data: {
                                         currency: 'MYR',
-                                        value: (parseFloat(orderData.amount) * 100).toString(), // Convert to cents
+                                        value: (parseFloat(orderData.amount) * 100).toString(),
                                         content_name: orderData.package,
                                         content_category: 'Streaming',
-                                        content_ids: [billExternalReferenceNo],
+                                        content_ids: [order_id],
                                         content_type: 'product'
                                     }
                                 }],
@@ -149,14 +133,14 @@ export default async function handler(req, res) {
                 }
 
             } else {
-                console.log(`⚠️ Order ${billExternalReferenceNo} is already marked as 'Paid'. No action taken.`);
+                console.log(`⚠️ Order ${order_id} is already marked as 'Paid'. No action taken.`);
             }
 
             // IMPORTANT: Always respond with 200 OK to ToyyibPay.
             return res.status(200).send('OK'); 
         } else {
             // Pembayaran gagal atau pending
-            console.log(`Payment not successful for bill code: ${billcode}. Status: ${payment_status}`);
+            console.log(`Payment not successful for bill code: ${billcode}. Status: ${status}. Reason: ${reason}`);
             return res.status(200).send('OK'); // Still respond with OK
         }
     } catch (error) {
@@ -166,7 +150,7 @@ export default async function handler(req, res) {
 }
 
 
-// --- Helper function for Discord notification (copied from your HTML for consistency) ---
+// --- Helper function for Discord notification ---
 async function sendDiscordNotification(orderData) {
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
     try {
