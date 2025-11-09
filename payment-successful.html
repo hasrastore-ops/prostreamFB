@@ -599,7 +599,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 displayOrderDetails(orderData);
                 
                 // NEW: Update payment status in Google Sheets if we have an orderId
-                let orderId = orderData.orderId;
+                let orderId = orderData.billExternalReferenceNo;
                 
                 // If no orderId, try to get it from billNo (for QR payments)
                 if (!orderId && orderData.billNo) {
@@ -688,5 +688,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     </script>
 </body>
 </html>
+
 
 
