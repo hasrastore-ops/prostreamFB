@@ -18,10 +18,6 @@ export default async function handler(req, res) {
         // Get current time for debugging
         const now = new Date();
         console.log('=== Payment Request Started ===');
-        console.log('Server Local Time:', now.toString());
-        console.log('Server UTC Time:', now.toUTCString());
-        console.log('Server ISO Time:', now.toISOString());
-        console.log('Malaysia Time (GMT+8):', new Date(now.getTime() + 8 * 60 * 60 * 1000).toString());
         console.log('Request Body:', JSON.stringify(req.body, null, 2));
 
         // Get data from the frontend request
@@ -35,7 +31,7 @@ export default async function handler(req, res) {
             });
         }
 
-        // === NEW: Register order in Google Sheets ===
+        // === Register order in Google Sheets (THIS IS NOW MANDATORY) ===
         let googleOrderId = orderId;
         
         // If no orderId provided, create one and register in Google Sheets
@@ -63,16 +59,26 @@ export default async function handler(req, res) {
                 
                 const googleResult = await googleResponse.json();
                 
-                if (googleResult.status === 'success') {
-                    googleOrderId = googleResult.orderId;
-                    console.log('Order registered in Google Sheets with ID:', googleOrderId);
-                } else {
-                    console.error('Failed to register order in Google Sheets:', googleResult.message);
-                    // Continue with payment process even if Google Sheets fails
+                // --- FIX 1: Be strict. If creating the order fails, STOP the process. ---
+                if (googleResult.status !== 'success' || !googleResult.orderId) {
+                    console.error('CRITICAL: Failed to register order in Google Sheets or did not receive a valid ID.', googleResult);
+                    return res.status(500).json({ 
+                        success: false, 
+                        error: 'Could not create order in our system. Please try again.',
+                        details: googleResult.message || 'No valid order ID received from Google Sheets.'
+                    });
                 }
+                
+                googleOrderId = googleResult.orderId;
+                console.log('Order registered in Google Sheets with ID:', googleOrderId);
+
             } catch (error) {
-                console.error('Error registering order in Google Sheets:', error);
-                // Continue with payment process even if Google Sheets fails
+                console.error('CRITICAL: Error registering order in Google Sheets:', error);
+                return res.status(500).json({ 
+                    success: false, 
+                    error: 'A critical error occurred while creating your order. Please contact support.',
+                    details: error.message
+                });
             }
         }
 
@@ -86,22 +92,8 @@ export default async function handler(req, res) {
         const billReturnUrl = 'https://prostreamfb.vercel.app/payment-successful.html';
         const billCallbackUrl = 'https://prostreamfb.vercel.app/api/payment-callback';
         
-        // Create bill reference number with timestamp (using UTC time)
-        // Use Google Order ID if available, otherwise create a new one
-        const billExternalReferenceNo = googleOrderId || `PS${now.getTime()}`;
-        
-        // Create expiry date in UTC to avoid timezone issues
-        // Format: dd-MM-yyyy HH:mm:ss (24-hour format)
-        const expiryDate = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // Add 3 days
-        const formattedExpiryDate = 
-            `${expiryDate.getUTCDate().toString().padStart(2, '0')}-` +
-            `${(expiryDate.getUTCMonth() + 1).toString().padStart(2, '0')}-` +
-            `${expiryDate.getUTCFullYear()} ` +
-            `${expiryDate.getUTCHours().toString().padStart(2, '0')}:` +
-            `${expiryDate.getUTCMinutes().toString().padStart(2, '0')}:` +
-            `${expiryDate.getUTCSeconds().toString().padStart(2, '0')}`;
-        
-        console.log('Expiry Date (UTC):', formattedExpiryDate);
+        // --- FIX 2: Use the confirmed ID from Google Sheets. No fallback. ---
+        const billExternalReferenceNo = googleOrderId;
         
         const billTo = name;
         const billEmail = email;
@@ -129,7 +121,10 @@ export default async function handler(req, res) {
         body.append('billSplitPaymentArgs', '');
         body.append('billPaymentChannel', billPaymentChannel);
         body.append('billChargeToCustomer', billChargeToCustomer);
-        body.append('billExpiryDate', formattedExpiryDate);
+        
+        // --- FIX 3: Set bill expiry to 1 day as per official documentation ---
+        body.append('billExpiryDays', '1');
+        
         body.append('billContentEmail', 'Terima kasih atas pembayaran anda. Kami berbesar hati untuk mengesahkan bahawa pesanan anda, Sila tekan link untuk melihat paduan pemasangan dan CODE DOWNLOAD BESERTA CODE LOGIN : https://tinyurl.com/PROSTREAMX ');
 
         // Log the data being sent (without the secret key)
@@ -179,16 +174,14 @@ export default async function handler(req, res) {
             console.log('Bill Code:', billCode);
             console.log('Bill URL:', billUrl);
 
-            // Send InitiateCheckout event to Facebook Conversions API
+            // Send InitiateCheckout event to Facebook Conversions API (fire-and-forget)
             try {
                 const pixelId = '2276519576162204';
                 const accessToken = 'EAAcJZCFldLZAYBP2Rt17ob7AJUEAPnCZCdiIOHZBereJjCRiofT1SottrBAL8EjPME1L6LANNoRN5I0yootHZCYioBgN2SUZBHPbUU93iRd54xOSeM7RbiHHIqemm6zM5p6GLIZAHNOezCVLROwIER8spOyZB3iC4wYTB1qZBADgHpWlZCpcZC0VA3Hi26sRJ85fwZDZD';
                 
-                const eventResponse = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+                fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         data: [{
                             event_name: 'InitiateCheckout',
@@ -214,12 +207,12 @@ export default async function handler(req, res) {
                             }
                         }],
                     })
-                });
-                
-                const eventResult = await eventResponse.json();
-                console.log('Facebook InitiateCheckout Event Response:', eventResult);
+                })
+                .then(() => console.log('Facebook InitiateCheckout event sent successfully.'))
+                .catch(error => console.error('Error sending InitiateCheckout event:', error));
+
             } catch (error) {
-                console.error('Error sending InitiateCheckout event:', error);
+                console.error('Error setting up Facebook event:', error);
             }
 
             // Send the successful response back to the frontend
