@@ -2916,7 +2916,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
                 phone: orderData.customerPhone,
                 amount: orderData.total,
                 billDescription: `Pembelian ${orderData.quantity} unit ${orderData.product}`,
-                orderId: orderData.orderId // Include the order ID from Google Sheets
+                orderId: sessionStorage.getItem('orderId') // Include the order ID from Google Sheets
             })
         });
         
@@ -3421,6 +3421,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
     </script>
 </body>
 </html>
+
 
 
 
