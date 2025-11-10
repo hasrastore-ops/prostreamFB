@@ -412,7 +412,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         { name: "📱 No Telefon", value: orderData.phone || 'N/A', inline: true },
                         { name: "📧 Email", value: orderData.email || 'N/A', inline: false },
                         { name: "📦 Produk", value: orderData.package || 'N/A', inline: true },
-                        { name: "💰 Jumlah", value: `RM ${orderData.amount || 'N/A'}`, inline: true },
+                        { name: "💰 Jumlah", value: `RM ${localStorage.getItem('totalX') || 'N/A'}`, inline: true },
                         { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
                     ],
                     footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
@@ -436,7 +436,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 <div class="detail-row"><span>ID Pesanan:</span><span>${orderData.order_id || 'N/A'}</span></div>
                 <div class="detail-row"><span>ID Transaksi:</span><span>${orderData.transaction_id || 'N/A'}</span></div>
                 <div class="detail-row"><span>Status Pembayaran:</span><span>${statusText}</span></div>
-                <div class="detail-row"><span>Jumlah:</span><span>RM ${(parseFloat(orderData.amount) || 0).toFixed(2)}</span></div>
+                <div class="detail-row"><span>Jumlah:</span><span>RM ${(parseFloat(localStorage.getItem('totalX') || 0).toFixed(2)}</span></div>
                 <div class="detail-row"><span>Tarikh:</span><span>${new Date().toLocaleString('ms-MY')}</span></div>
             `;
         }
@@ -543,3 +543,4 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     </script>
 </body>
 </html>
+
