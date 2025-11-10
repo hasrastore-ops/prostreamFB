@@ -12,14 +12,14 @@ export default async function handler(req, res) {
     try {
         console.log('Payment callback received. Raw body:', JSON.stringify(req.body, null, 2));
         
-        // --- Use the CORRECT parameter names from the ToyyibPay documentation ---
+        // CORRECTED: Use the proper parameter names from ToyyibPay documentation
         const { 
             billcode, 
-            status,                  // Corrected from 'payment_status'
-            order_id,                // Corrected from 'billExternalReferenceNo'
-            amount,                  // Corrected from 'billamount'
-            transaction_time,
-            reason
+            status_id,                // CORRECT: The payment status (1=success, 2=pending, 3=fail)
+            order_id,                
+            amount,                  
+            transaction_id,          // CORRECT: The transaction ID
+            msg                       // CORRECT: The message (e.g., "ok")
         } = req.body;
 
         if (!order_id) {
@@ -27,14 +27,14 @@ export default async function handler(req, res) {
             return res.status(400).send('Bad Request: Missing Order ID');
         }
         
-        // --- Check for the SUCCESS status code from the documentation ---
-        if (status === '1') {
-            console.log(`Payment successful for bill code: ${billcode}, Order ID: ${order_id}`);
+        // CORRECTED: Check for the SUCCESS status code from the documentation
+        if (status_id === '1') {
+            console.log(`✅ Payment successful for bill code: ${billcode}, Order ID: ${order_id}`);
             
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
             let orderData = null;
 
-            // --- STEP 1: Get current order details from Google Sheets ---
+            // --- STEP 1: Get current order details from Google Sheets to avoid duplicate updates ---
             try {
                 const formData = new URLSearchParams();
                 formData.append('action', 'getOrder');
@@ -102,15 +102,15 @@ export default async function handler(req, res) {
                                     event_source_url: 'https://prostreamfb.vercel.app/payment-successful.html',
                                     event_id: `purchase_callback_${order_id}_${Date.now()}`,
                                     user_data: {
-                                        em: Buffer.from(orderData.email).toString('base64'),
-                                        ph: Buffer.from(orderData.phone).toString('base64'),
-                                        fn: Buffer.from(orderData.name.split(' ')[0]).toString('base64'),
-                                        ln: Buffer.from(orderData.name.split(' ').slice(1).join(' ')).toString('base64'),
+                                        em: Buffer.from(orderData.email || '').toString('base64'),
+                                        ph: Buffer.from(orderData.phone || '').toString('base64'),
+                                        fn: Buffer.from((orderData.name || '').split(' ')[0]).toString('base64'),
+                                        ln: Buffer.from((orderData.name || '').split(' ').slice(1).join(' ')).toString('base64'),
                                     },
                                     custom_data: {
                                         currency: 'MYR',
-                                        value: (parseFloat(orderData.amount) * 100).toString(),
-                                        content_name: orderData.package,
+                                        value: (parseFloat(orderData.amount || 0) * 100).toString(),
+                                        content_name: orderData.package || 'PROSTREAM Package',
                                         content_category: 'Streaming',
                                         content_ids: [order_id],
                                         content_type: 'product'
@@ -136,11 +136,22 @@ export default async function handler(req, res) {
                 console.log(`⚠️ Order ${order_id} is already marked as 'Paid'. No action taken.`);
             }
 
-            // IMPORTANT: Always respond with 200 OK to ToyyibPay.
+            // IMPORTANT: Always respond with 200 OK to ToyyibPay to acknowledge receipt.
             return res.status(200).send('OK'); 
         } else {
             // Pembayaran gagal atau pending
-            console.log(`Payment not successful for bill code: ${billcode}. Status: ${status}. Reason: ${reason}`);
+            // CORRECTED: Using status_id for accurate logging
+            console.log(`❌ Payment not successful for bill code: ${billcode}. Status ID: ${status_id}. Message: ${msg}`);
+            
+            // Log different statuses for better debugging
+            if (status_id === '2') {
+                console.log('Payment is pending. Will not update Google Sheets.');
+            } else if (status_id === '3') {
+                console.log('Payment failed. Will not update Google Sheets.');
+            } else {
+                console.log(`Unknown payment status: ${status_id}. Will not update Google Sheets.`);
+            }
+            
             return res.status(200).send('OK'); // Still respond with OK
         }
     } catch (error) {
@@ -148,7 +159,6 @@ export default async function handler(req, res) {
         return res.status(500).send('Internal Server Error');
     }
 }
-
 
 // --- Helper function for Discord notification ---
 async function sendDiscordNotification(orderData) {
@@ -160,11 +170,11 @@ async function sendDiscordNotification(orderData) {
             color: 0x43b581,
             fields: [
                 { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
-                { name: "👤 Nama", value: orderData.name, inline: true },
-                { name: "📱 No Telefon", value: orderData.phone, inline: true },
-                { name: "📧 Email", value: orderData.email, inline: false },
-                { name: "📦 Produk", value: orderData.package, inline: true },
-                { name: "💰 Jumlah", value: `RM ${orderData.amount}`, inline: true },
+                { name: "👤 Nama", value: orderData.name || 'N/A', inline: true },
+                { name: "📱 No Telefon", value: orderData.phone || 'N/A', inline: true },
+                { name: "📧 Email", value: orderData.email || 'N/A', inline: false },
+                { name: "📦 Produk", value: orderData.package || 'N/A', inline: true },
+                { name: "💰 Jumlah", value: `RM ${orderData.amount || 'N/A'}`, inline: true },
                 { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
             ],
             footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
