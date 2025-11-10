@@ -38,6 +38,8 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             --text-muted: #a8a9ad;
             --font-family: 'Poppins', sans-serif;
             --success-color: #43b581;
+            --pending-color: #f9c74f;
+            --error-color: #f94144;
         }
 
         * {
@@ -71,11 +73,22 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             padding: 40px 0;
         }
 
-        .success-icon {
+        .status-icon {
             font-size: 80px;
-            color: var(--success-color);
             margin-bottom: 20px;
             animation: checkmark 0.5s ease-in-out;
+        }
+
+        .success-icon {
+            color: var(--success-color);
+        }
+
+        .pending-icon {
+            color: var(--pending-color);
+        }
+
+        .error-icon {
+            color: var(--error-color);
         }
 
         @keyframes checkmark {
@@ -88,7 +101,18 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 20px;
+        }
+
+        .success-title {
             color: var(--success-color);
+        }
+
+        .pending-title {
+            color: var(--pending-color);
+        }
+
+        .error-title {
+            color: var(--error-color);
         }
 
         h2 {
@@ -98,7 +122,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             color: var(--text-color);
         }
 
-        .success-card {
+        .status-card {
             background-color: var(--surface-color);
             border-radius: 15px;
             padding: 40px;
@@ -276,6 +300,11 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             color: white;
         }
 
+        .notification.pending {
+            background-color: var(--pending-color);
+            color: var(--bg-color);
+        }
+
         .notification-icon {
             font-size: 20px;
         }
@@ -283,7 +312,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             h2 { font-size: 1.5rem; }
-            .success-card { padding: 30px 20px; }
+            .status-card { padding: 30px 20px; }
             .detail-row { flex-direction: column; }
             .detail-row span:first-child { margin-bottom: 5px; }
             .action-buttons { flex-direction: column; }
@@ -293,22 +322,23 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
 <body>
     <div class="container">
         <header>
-            <div class="success-icon">✓</div>
-            <h1>Pembayaran Berjaya!</h1>
-            <h2>Terima kasih atas pembelian anda</h2>
+            <div id="statusIcon" class="status-icon"></div>
+            <h1 id="statusTitle"></h1>
+            <h2 id="statusSubtitle"></h2>
         </header>
 
         <main>
-            <div class="success-card">
-                <p>Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.</p>
+            <div class="status-card">
+                <p id="statusMessage"></p>
                 
-                <!-- NEW: Google Sheets Update Status Section -->
+                <!-- Order Details Section -->
                 <div class="order-details" id="orderDetails">
                     <div class="loading-spinner"></div>
                     <p style="text-align: center;">Memuatkan butiran pesanan...</p>
                 </div>
 
-                <div class="steps">
+                <!-- Steps Section (only for success) -->
+                <div id="stepsSection" class="steps" style="display: none;">
                     <h3>Langkah Seterusnya:</h3>
                     <div class="step">
                         <div class="step-number">1</div>
@@ -333,6 +363,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     </div>
                 </div>
 
+                <!-- Action Buttons -->
                 <div class="action-buttons">
                     <a href="https://prostreamfb.vercel.app/" class="btn">Kembali ke Laman Utama</a>
                     <a href="#" class="btn btn-whatsapp" id="whatsapp-btn">Hubungi WhatsApp</a>
@@ -353,7 +384,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         </footer>
     </div>
 
-    <!-- NEW: Notification element for Google Sheets status updates -->
+    <!-- Notification element for status updates -->
     <div id="notification" class="notification">
         <span class="notification-icon"></span>
         <span class="notification-text"></span>
@@ -427,6 +458,8 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             
             if (type === 'success') {
                 iconElement.textContent = '✓';
+            } else if (type === 'pending') {
+                iconElement.textContent = '⏳';
             } else {
                 iconElement.textContent = '✗';
             }
@@ -441,10 +474,8 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         // ====================================
         //      GOOGLE SHEETS INTEGRATION
         // ====================================
-        // NEW: Add Google Apps Script URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec'; // Replace with your actual URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
 
-        // NEW: Function to update payment status in Google Sheets
         async function updatePaymentStatus(orderId) {
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -515,7 +546,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             }
         }
 
-        // Function to display order details
         function displayOrderDetails(orderData) {
             const orderDetailsElement = document.getElementById('orderDetails');
             
@@ -523,7 +553,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 <h3>Butiran Pesanan</h3>
                 <div class="detail-row">
                     <span>No. Pesanan:</span>
-                    <span>${orderData.billNo || 'N/A'}</span>
+                    <span>${orderData.billNo || orderData.billExternalReferenceNo || 'N/A'}</span>
                 </div>
                 <div class="detail-row">
                     <span>Nama:</span>
@@ -554,105 +584,51 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             `;
         }
 
-        // MODIFIED: loadOrderDetails function to include Google Sheets update
-        async function loadOrderDetails() {
-            console.log('🔄 Loading order details...');
+        function displayPaymentStatus(statusId, billCode, orderId, msg, transactionId) {
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusSubtitle = document.getElementById('statusSubtitle');
+            const statusMessage = document.getElementById('statusMessage');
+            const stepsSection = document.getElementById('stepsSection');
             
-            try {
-                // Try to get data from localStorage first
-                let pendingOrder = localStorage.getItem('pendingOrder');
-                
-                // If not available, try to get from URL parameters
-                if (!pendingOrder) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const billCode = urlParams.get('billcode');
-                    const order_id = urlParams.get('order_id');
-                    
-                    if (billCode) {
-                        // Create a basic order object from URL parameters
-                        pendingOrder = JSON.stringify({
-                            billNo: billCode,
-                            orderData: {
-                                customerName: 'Pelanggan',
-                                customerEmail: 'email@example.com',
-                                customerPhone: '0123456789',
-                                product: 'PROSTREAM 4 App Power Package',
-                                total: 29.90
-                            },
-                            totalAmount: 29.90,
-                            timestamp: new Date().toISOString(),
-                            orderId: order_id
-                        });
-                    }
-                }
-                
-                if (!pendingOrder) {
-                    console.error('❌ No pending order found in localStorage or URL');
-                    showOrderDetailsError();
-                    return;
-                }
-                
-                const orderData = JSON.parse(pendingOrder);
-                console.log('✅ Parsed order data:', orderData);
-                
-                // Display order details immediately
-                displayOrderDetails(orderData);
-                
-                // NEW: Update payment status in Google Sheets if we have an orderId
-                let orderId = orderData.billExternalReferenceNo;
-                
-                // If no orderId, try to get it from billNo (for QR payments)
-                if (!orderId && orderData.billNo) {
-                    orderId = orderData.billNo;
-                }
-                
-                if (orderId) {
-                    console.log('🔄 Updating payment status in Google Sheets for order:', orderId);
-                    await updatePaymentStatus(orderId);
-                } else {
-                    console.log('⚠️ No order ID found, skipping Google Sheets update');
-                }
-                
-                // Try to send conversion event via Conversions API
-                console.log('🎯 Sending conversion via Conversions API...');
-                const conversionSent = await sendConversionEvent(orderData);
-                
-                if (conversionSent) {
-                    console.log('✅ Conversion event sent successfully via Conversions API');
-                } else {
-                    console.log('⚠️ Conversions API failed, trying client-side pixel tracking');
-                    
-                    // Fallback to client-side pixel tracking
-                    try {
-                        fbq('track', 'Purchase', {
-                            content_name: 'PROSTREAM 4 App Power Package',
-                            content_category: 'Streaming',
-                            content_ids: ['prostream_4app_package'],
-                            content_type: 'product',
-                            value: orderData.totalAmount || orderData.orderData?.total || 0,
-                            currency: 'MYR'
-                        });
-                        console.log('✅ Meta Purchase event fired successfully via client-side pixel');
-                    } catch (error) {
-                        console.error('❌ Client-side pixel tracking also failed:', error);
-                    }
-                }
-                
-                // Send Discord notification
-                console.log('📧 Sending Discord notification...');
-                await sendDiscordNotification(orderData.orderData);
-                
-                // Clear pending order from localStorage
-                localStorage.removeItem('pendingOrder');
-                console.log('✅ Cleared pendingOrder from localStorage');
-                
-            } catch (error) {
-                console.error('❌ Error in loadOrderDetails:', error);
-                showOrderDetailsError();
+            statusIcon.className = 'status-icon';
+            statusTitle.className = '';
+            
+            if (statusId === '1') {
+                statusIcon.innerHTML = '✓';
+                statusIcon.classList.add('success-icon');
+                statusTitle.textContent = 'Pembayaran Berjaya!';
+                statusTitle.classList.add('success-title');
+                statusSubtitle.textContent = 'Terima kasih atas pembelian anda';
+                statusMessage.textContent = 'Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.';
+                stepsSection.style.display = 'block';
+                return true;
+            } else if (statusId === '2') {
+                statusIcon.innerHTML = '⏳';
+                statusIcon.classList.add('pending-icon');
+                statusTitle.textContent = 'Pembayaran Dalam Proses';
+                statusTitle.classList.add('pending-title');
+                statusSubtitle.textContent = 'Pembayaran anda sedang diproses';
+                statusMessage.textContent = 'Pembayaran anda sedang diproses oleh bank. Kami akan menghantar pengesahan sebaik sahaja pembayaran selesai diproses. Sila semak emel anda dalam masa 30 minit.';
+                stepsSection.style.display = 'none';
+                return false;
+            } else if (statusId === '3') {
+                statusIcon.innerHTML = '✗';
+                statusIcon.classList.add('error-icon');
+                statusTitle.textContent = 'Pembayaran Gagal';
+                statusTitle.classList.add('error-title');
+                statusSubtitle.textContent = 'Maaf, pembayaran anda tidak berjaya';
+                statusMessage.textContent = `Pembayaran anda telah ditolak. Sila cuba lagi atau hubungi kami untuk bantuan. Kod rujukan: ${transactionId || billCode}`;
+                stepsSection.style.display = 'none';
+                return false;
+            } else {
+                // This case now handles both unknown ToyyibPay status and the fallback for QR payments
+                // We will set the content from the calling function for more control
+                stepsSection.style.display = 'none';
+                return false; 
             }
         }
 
-        // Function to show error in order details
         function showOrderDetailsError() {
             const orderDetailsElement = document.getElementById('orderDetails');
             
@@ -663,7 +639,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             `;
         }
 
-        // Update WhatsApp button link
         function updateWhatsAppButton(orderData) {
             const whatsappBtn = document.getElementById('whatsapp-btn');
             if (whatsappBtn && orderData.orderData) {
@@ -672,21 +647,129 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             }
         }
 
+        // ====================================
+        //      CORRECTED: loadOrderDetails function
+        // ====================================
+        async function loadOrderDetails() {
+            console.log('🔄 Loading order details...');
+            
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const statusId = urlParams.get('status_id');
+                const billCode = urlParams.get('billcode');
+                const orderId = urlParams.get('order_id');
+                const msg = urlParams.get('msg');
+                const transactionId = urlParams.get('transaction_id');
+                
+                // --- FLOW 1: TOYYIBPAY REDIRECT ---
+                // If status_id exists, we assume it's a ToyyibPay redirect and process it.
+                if (statusId) {
+                    console.log('🔍 ToyyibPay redirect detected. Processing status...');
+                    
+                    const isPaymentSuccessful = displayPaymentStatus(statusId, billCode, orderId, msg, transactionId);
+                    
+                    if (!isPaymentSuccessful) {
+                        // Handle failed/pending payment display
+                        const orderDetailsElement = document.getElementById('orderDetails');
+                        orderDetailsElement.innerHTML = `
+                            <h3>Butiran Pesanan</h3>
+                            <div class="detail-row"><span>No. Pesanan:</span><span>${billCode || 'N/A'}</span></div>
+                            <div class="detail-row"><span>ID Transaksi:</span><span>${transactionId || 'N/A'}</span></div>
+                            <div class="detail-row"><span>Status:</span><span>${statusId === '1' ? 'Berjaya' : statusId === '2' ? 'Dalam Proses' : statusId === '3' ? 'Gagal' : 'Tidak Diketahui'}</span></div>
+                            <div class="detail-row"><span>Mesej:</span><span>${msg || 'N/A'}</span></div>
+                        `;
+                        const whatsappBtn = document.getElementById('whatsapp-btn');
+                        if (whatsappBtn) {
+                            const message = encodeURIComponent(`Hai%2C%20saya%20mempunyai%20masalah%20dengan%20pembayaran%20saya.%20No.%20Pesanan%3A%20${billCode || 'N/A'}%2C%20ID%20Transaksi%3A%20${transactionId || 'N/A'}`);
+                            whatsappBtn.href = `https://wa.me/601127412402?text=${message}`;
+                        }
+                        return; // Exit early for non-successful payments
+                    }
+
+                    // If payment is successful, proceed with success flow
+                    let orderData = {
+                        billNo: billCode,
+                        billExternalReferenceNo: orderId,
+                        transactionId: transactionId,
+                        orderData: {
+                            customerName: 'Pelanggan',
+                            customerEmail: 'email@example.com',
+                            customerPhone: '0123456789',
+                            product: 'PROSTREAM 4 App Power Package',
+                            total: 29.90
+                        },
+                        totalAmount: 29.90,
+                        timestamp: new Date().toISOString(),
+                    };
+                    
+                    // Try to enrich data from localStorage if available
+                    const pendingOrder = localStorage.getItem('pendingOrder');
+                    if (pendingOrder) {
+                        const lsOrderData = JSON.parse(pendingOrder);
+                        orderData.orderData = lsOrderData.orderData || orderData.orderData;
+                        orderData.totalAmount = lsOrderData.totalAmount || orderData.totalAmount;
+                    }
+                    
+                    displayOrderDetails(orderData);
+                    updateWhatsAppButton(orderData);
+                    
+                    // Proceed with backend tasks
+                    let updateOrderId = orderData.billExternalReferenceNo || orderData.billNo;
+                    if (updateOrderId) await updatePaymentStatus(updateOrderId);
+                    await sendConversionEvent(orderData);
+                    await sendDiscordNotification(orderData.orderData);
+                    
+                    localStorage.removeItem('pendingOrder');
+                    console.log('✅ Cleared pendingOrder from localStorage');
+                    return; // Done processing ToyyibPay
+                }
+
+                // --- FLOW 2: QR PAYMENT / LOCALSTORAGE ---
+                // If not a ToyyibPay redirect, fall back to the original QR/localStorage logic.
+                console.log('🔍 No ToyyibPay status_id found. Falling back to localStorage/QR logic.');
+                
+                let pendingOrder = localStorage.getItem('pendingOrder');
+                
+                if (!pendingOrder) {
+                    console.error('❌ No pending order found in localStorage and no URL parameters.');
+                    showOrderDetailsError();
+                    // Manually set the error status since we have no info
+                    document.getElementById('statusIcon').innerHTML = '✗';
+                    document.getElementById('statusIcon').className = 'status-icon error-icon';
+                    document.getElementById('statusTitle').textContent = 'Status Pembayaran Tidak Diketahui';
+                    document.getElementById('statusTitle').className = 'error-title';
+                    document.getElementById('statusSubtitle').textContent = 'Tidak dapat mengesahkan status pembayaran';
+                    document.getElementById('statusMessage').textContent = 'Kami tidak dapat mengesahkan status pembayaran anda. Sila hubungi sokongan pelanggan.';
+                    return;
+                }
+                
+                const orderData = JSON.parse(pendingOrder);
+                console.log('✅ Parsed order data from localStorage:', orderData);
+                
+                // For QR/localStorage flow, we assume success and display the success page
+                displayPaymentStatus('1', orderData.billNo, orderData.orderId, 'ok', orderData.transactionId);
+                displayOrderDetails(orderData);
+                updateWhatsAppButton(orderData);
+                
+                // Proceed with backend tasks for QR flow
+                let updateOrderId = orderData.billExternalReferenceNo || orderData.billNo;
+                if (updateOrderId) await updatePaymentStatus(updateOrderId);
+                await sendConversionEvent(orderData);
+                await sendDiscordNotification(orderData.orderData);
+
+                localStorage.removeItem('pendingOrder');
+                console.log('✅ Cleared pendingOrder from localStorage');
+                
+            } catch (error) {
+                console.error('❌ Error in loadOrderDetails:', error);
+                showOrderDetailsError();
+            }
+        }
+
         // Load order details when page loads
         document.addEventListener('DOMContentLoaded', async function() {
             await loadOrderDetails();
-            
-            // Update WhatsApp button after order details are loaded
-            setTimeout(() => {
-                const pendingOrder = localStorage.getItem('pendingOrder');
-                if (pendingOrder) {
-                    const orderData = JSON.parse(pendingOrder);
-                    updateWhatsAppButton(orderData);
-                }
-            }, 1000);
         });
     </script>
 </body>
 </html>
-
-
