@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Pembayaran - PROSTREAM</title>
+    <title>Pembayaran Berjaya - PROSTREAM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -38,8 +38,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             --text-muted: #a8a9ad;
             --font-family: 'Poppins', sans-serif;
             --success-color: #43b581;
-            --pending-color: #f9c74f;
-            --fail-color: #f94144;
         }
 
         * {
@@ -73,31 +71,25 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             padding: 40px 0;
         }
 
-        .status-icon {
+        .success-icon {
             font-size: 80px;
+            color: var(--success-color);
             margin-bottom: 20px;
-            animation: pop-in 0.5s ease-in-out;
+            animation: checkmark 0.5s ease-in-out;
         }
-        
-        .status-icon.success { color: var(--success-color); }
-        .status-icon.pending { color: var(--pending-color); }
-        .status-icon.fail { color: var(--fail-color); }
 
-        @keyframes pop-in {
-            0% { transform: scale(0); opacity: 0; }
+        @keyframes checkmark {
+            0% { transform: scale(0); }
             50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1); }
         }
 
         h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 20px;
+            color: var(--success-color);
         }
-        
-        h1.success { color: var(--success-color); }
-        h1.pending { color: var(--pending-color); }
-        h1.fail { color: var(--fail-color); }
 
         h2 {
             font-size: 1.8rem;
@@ -262,7 +254,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             padding: 15px 20px;
             border-radius: 8px;
             font-weight: 600;
-            z-index: 9999;
+            z-index: 1001;
             transform: translateX(400px);
             transition: transform 0.3s ease-out;
             display: flex;
@@ -274,9 +266,15 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             transform: translateX(0);
         }
 
-        .notification.success { background-color: var(--success-color); color: white; }
-        .notification.error { background-color: var(--secondary-color); color: white; }
-        .notification.pending { background-color: var(--pending-color); color: var(--bg-color); }
+        .notification.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .notification.error {
+            background-color: var(--secondary-color);
+            color: white;
+        }
 
         .notification-icon {
             font-size: 20px;
@@ -295,27 +293,28 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
 <body>
     <div class="container">
         <header>
-            <div id="statusIcon" class="status-icon">⟳</div>
-            <h1 id="mainTitle">Memuatkan Status...</h1>
-            <h2 id="subTitle">Sila tunggu sebentar</h2>
+            <div class="success-icon">✓</div>
+            <h1>Pembayaran Berjaya!</h1>
+            <h2>Terima kasih atas pembelian anda</h2>
         </header>
 
         <main>
             <div class="success-card">
-                <p id="mainMessage">Kami sedang mengesahkan status pembayaran anda.</p>
+                <p>Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.</p>
                 
+                <!-- NEW: Google Sheets Update Status Section -->
                 <div class="order-details" id="orderDetails">
-                    <h3>Butiran Pesanan</h3>
+                    <div class="loading-spinner"></div>
                     <p style="text-align: center;">Memuatkan butiran pesanan...</p>
                 </div>
 
-                <div id="nextSteps" class="steps" style="display: none;">
+                <div class="steps">
                     <h3>Langkah Seterusnya:</h3>
                     <div class="step">
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Semak Emel & WhatsApp</h4>
-                            <p>Anda akan menerima pautan muat turun dan panduan pemasangan dalam masa 15 minit. CHECK FOLDER SPAM atau SEARCH "prostream" atau "toyyibpay"</p>
+                            <p>Anda akan menerima pautan muat turun dan panduan pemasangan dalam masa 15 minit.CHECK FOLDER SPAM atau SEARCH "prostream" atau "toyyibpay" </p>
                         </div>
                     </div>
                     <div class="step">
@@ -354,43 +353,120 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         </footer>
     </div>
 
+    <!-- NEW: Notification element for Google Sheets status updates -->
     <div id="notification" class="notification">
         <span class="notification-icon"></span>
         <span class="notification-text"></span>
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec';
+        // ====================================
+        //      DISCORD NOTIFICATION
+        // ====================================
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1426639056716038247/fByGT9VoydmqwdJNV0W9knEQxatRfJpTVJr2UrgtUTIwxRNY9LpeFmzlkplI9OZWIDue';
 
-        function showNotification(message, type = 'success') {
+        // Function to send Discord notification
+        async function sendDiscordNotification(orderData) {
+            console.log('Attempting to send Discord notification for:', orderData);
+            try {
+                const timestamp = new Date().toISOString();
+                
+                const embed = {
+                    title: "✅ PEMBAYARAN BERJAYA - PROSTREAM-FB",
+                    description: "Pelanggan telah berjaya membuat pembayaran!",
+                    color: 0x43b581,
+                    fields: [
+                        { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
+                        { name: "👤 Nama", value: orderData.customerName, inline: true },
+                        { name: "📱 No Telefon", value: orderData.customerPhone, inline: true },
+                        { name: "📧 Email", value: orderData.customerEmail, inline: false },
+                        { name: "📦 Produk", value: orderData.product, inline: true },
+                        { name: "💰 Jumlah", value: `RM ${orderData.total.toFixed(2)}`, inline: true },
+                        { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+                    ],
+                    footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
+                    timestamp: timestamp
+                };
+
+                const payload = {
+                    username: "PROSTREAM Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+                    embeds: [embed]
+                };
+
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Discord notification sent successfully');
+                    return true;
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ Failed to send Discord notification:', errorText);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Error sending Discord notification:', error);
+                return false;
+            }
+        }
+
+        // Function to show notification
+        function showNotification(message, type) {
             const notification = document.getElementById('notification');
             const iconElement = notification.querySelector('.notification-icon');
             const textElement = notification.querySelector('.notification-text');
             
             notification.className = `notification ${type}`;
             textElement.textContent = message;
-            iconElement.textContent = type === 'success' ? '✓' : type === 'error' ? '✗' : '⏳';
+            
+            if (type === 'success') {
+                iconElement.textContent = '✓';
+            } else {
+                iconElement.textContent = '✗';
+            }
             
             notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 5000);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
+        // ====================================
+        //      GOOGLE SHEETS INTEGRATION
+        // ====================================
+        // NEW: Add Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1WosPV1fkCP80MJx7ShA26OS4QwCf0xVsN7x5dtdWD6F7Bk8w2nMVfo/exec'; // Replace with your actual URL
+
+        // NEW: Function to update payment status in Google Sheets
         async function updatePaymentStatus(orderId) {
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ action: 'updatePayment', orderId: orderId })
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'updatePayment',
+                        orderId: orderId
+                    })
                 });
+                
                 const result = await response.json();
+                
                 if (result.status === 'success') {
                     console.log('✅ Payment status updated in Google Sheets');
-                    showNotification('Status pembayaran dikemaskini. Emel pengesahan telah dihantar.', 'success');
+                    showNotification('Status pembayaran telah dikemaskini. Emel pengesahan telah dihantar.', 'success');
                     return true;
                 } else {
                     console.error('❌ Failed to update payment status:', result.message);
-                    showNotification('Ralat mengemaskini status: ' + result.message, 'error');
+                    showNotification('Ralat mengemaskini status pembayaran: ' + result.message, 'error');
                     return false;
                 }
             } catch (error) {
@@ -399,148 +475,218 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 return false;
             }
         }
-        
-        async function sendDiscordNotification(orderData) {
+
+        // Function to send conversion event via Conversions API
+        async function sendConversionEvent(orderData) {
             try {
-                const embed = {
-                    title: "✅ PEMBAYARAN BERJAYA - PROSTREAM-FB",
-                    description: "Pelanggan telah berjaya membuat pembayaran!",
-                    color: 0x43b581,
-                    fields: [
-                        { name: "📋 Status Pembayaran", value: "Berjaya", inline: true },
-                        { name: "👤 Nama", value: orderData.name || 'N/A', inline: true },
-                        { name: "📱 No Telefon", value: orderData.phone || 'N/A', inline: true },
-                        { name: "📧 Email", value: orderData.email || 'N/A', inline: false },
-                        { name: "📦 Produk", value: orderData.package || 'N/A', inline: true },
-                        { name: "💰 Jumlah", value: `RM ${localStorage.getItem('totalX') || 'N/A'}`, inline: true },
-                        { name: "🕐 Tarikh & Masa", value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
-                    ],
-                    footer: { text: "PROSTREAM - Streaming Apps Package", icon_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
-                    timestamp: new Date().toISOString()
-                };
-                const payload = { username: "PROSTREAM Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png", embeds: [embed] };
-                const response = await fetch(DISCORD_WEBHOOK_URL, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                const response = await fetch('/api/conversion-api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        eventName: 'Purchase',
+                        eventId: `purchase_${orderData.billNo}_${Date.now()}`,
+                        value: orderData.totalAmount || orderData.orderData.total,
+                        currency: 'MYR',
+                        customerData: {
+                            email: orderData.orderData.customerEmail,
+                            phone: orderData.orderData.customerPhone,
+                            firstName: orderData.orderData.customerName.split(' ')[0],
+                            lastName: orderData.orderData.customerName.split(' ').slice(1).join(' ')
+                        },
+                        contentData: {
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product'
+                        }
+                    })
                 });
-                if (response.ok) console.log('✅ Discord notification sent');
-                else console.error('❌ Failed to send Discord notification');
-            } catch (error) { console.error('❌ Error sending Discord notification:', error); }
+                
+                const result = await response.json();
+                if (!result.success) {
+                    console.error('Failed to send conversion event:', result.error);
+                }
+                return result.success;
+            } catch (error) {
+                console.error('Error sending conversion event:', error);
+                return false;
+            }
         }
 
+        // Function to display order details
         function displayOrderDetails(orderData) {
             const orderDetailsElement = document.getElementById('orderDetails');
-            const statusText = orderData.status_id === '1' ? 'Berjaya' : orderData.status_id === '2' ? 'Dalam Proses' : orderData.status_id === '3' ? 'Gagal' : 'Tidak Diketahui';
+            
             orderDetailsElement.innerHTML = `
                 <h3>Butiran Pesanan</h3>
-                <div class="detail-row"><span>No. Bil:</span><span>${orderData.billcode || 'N/A'}</span></div>
-                <div class="detail-row"><span>ID Pesanan:</span><span>${orderData.order_id || 'N/A'}</span></div>
-                <div class="detail-row"><span>ID Transaksi:</span><span>${orderData.transaction_id || 'N/A'}</span></div>
-                <div class="detail-row"><span>Status Pembayaran:</span><span>${statusText}</span></div>
-                <div class="detail-row"><span>Jumlah:</span><span>RM ${(parseFloat(localStorage.getItem('totalX') || 0).toFixed(2)}</span></div>
-                <div class="detail-row"><span>Tarikh:</span><span>${new Date().toLocaleString('ms-MY')}</span></div>
+                <div class="detail-row">
+                    <span>No. Pesanan:</span>
+                    <span>${orderData.billNo || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Nama:</span>
+                    <span>${orderData.orderData?.customerName || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Emel:</span>
+                    <span>${orderData.orderData?.customerEmail || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>No. Telefon:</span>
+                    <span>${orderData.orderData?.customerPhone || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Produk:</span>
+                    <span>${orderData.orderData?.product || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Jumlah:</span>
+                    <span>RM ${(orderData.totalAmount || orderData.orderData?.total || 0).toFixed(2)}</span>
+                </div>
+                ${orderData.timestamp ? `
+                <div class="detail-row">
+                    <span>Tarikh:</span>
+                    <span>${new Date(orderData.timestamp).toLocaleString('ms-MY')}</span>
+                </div>
+                ` : ''}
             `;
         }
 
-        function updateUI(status) {
-            const icon = document.getElementById('statusIcon');
-            const mainTitle = document.getElementById('mainTitle');
-            const subTitle = document.getElementById('subTitle');
-            const mainMessage = document.getElementById('mainMessage');
-            const nextSteps = document.getElementById('nextSteps');
-
-            if (status === '1') { // Success
-                icon.textContent = '✓'; icon.className = 'status-icon success';
-                mainTitle.textContent = 'Pembayaran Berjaya!'; mainTitle.className = 'success';
-                subTitle.textContent = 'Terima kasih atas pembelian anda';
-                mainMessage.textContent = 'Pembayaran anda telah berjaya diproses. Kami sedang menyediakan akaun anda dan akan menghantar maklumat lengkap melalui emel dan WhatsApp dalam masa terdekat.';
-                nextSteps.style.display = 'block';
-            } else if (status === '2') { // Pending
-                icon.textContent = '⏳'; icon.className = 'status-icon pending';
-                mainTitle.textContent = 'Pembayaran Dalam Proses'; mainTitle.className = 'pending';
-                subTitle.textContent = 'Pembayaran anda sedang disemak';
-                mainMessage.textContent = 'Pembayaran anda sedang diproses oleh bank. Kami akan mengemaskini status anda sebaik sahaja pembayaran disahkan. Ini mungkin mengambil beberapa masa.';
-                nextSteps.style.display = 'none';
-            } else { // Failed (3) or Unknown
-                icon.textContent = '✗'; icon.className = 'status-icon fail';
-                mainTitle.textContent = 'Pembayaran Gagal'; mainTitle.className = 'fail';
-                subTitle.textContent = 'Maaf, pembayaran anda tidak berjaya';
-                mainMessage.textContent = 'Terdapat masalah semasa memproses pembayaran anda. Sila cuba lagi atau hubungi kami untuk bantuan.';
-                nextSteps.style.display = 'none';
-            }
-        }
-
+        // MODIFIED: loadOrderDetails function to include Google Sheets update
         async function loadOrderDetails() {
+            console.log('🔄 Loading order details...');
+            
             try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const billCode = urlParams.get('billcode');
-                const order_id = urlParams.get('order_id');
-                const status_id = urlParams.get('status_id');
-                const transaction_id = urlParams.get('transaction_id');
-                const amount = urlParams.get('amount');
-                const msg = urlParams.get('msg');
-
-                if (!billCode || !status_id) {
-                    console.error('❌ Missing required URL parameters (billcode or status_id)');
-                    updateUI('3'); // Treat as failed
-                    showNotification('Butiran pesanan tidak lengkap.', 'error');
+                // Try to get data from localStorage first
+                let pendingOrder = localStorage.getItem('pendingOrder');
+                
+                // If not available, try to get from URL parameters
+                if (!pendingOrder) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const billCode = urlParams.get('billcode');
+                    const order_id = urlParams.get('order_id');
+                    
+                    if (billCode) {
+                        // Create a basic order object from URL parameters
+                        pendingOrder = JSON.stringify({
+                            billNo: billCode,
+                            orderData: {
+                                customerName: 'Pelanggan',
+                                customerEmail: 'email@example.com',
+                                customerPhone: '0123456789',
+                                product: 'PROSTREAM 4 App Power Package',
+                                total: 29.90
+                            },
+                            totalAmount: 29.90,
+                            timestamp: new Date().toISOString(),
+                            orderId: order_id
+                        });
+                    }
+                }
+                
+                if (!pendingOrder) {
+                    console.error('❌ No pending order found in localStorage or URL');
+                    showOrderDetailsError();
                     return;
                 }
-
-                const orderData = { billcode: billCode, order_id, status_id, transaction_id, amount, msg };
+                
+                const orderData = JSON.parse(pendingOrder);
                 console.log('✅ Parsed order data:', orderData);
                 
+                // Display order details immediately
                 displayOrderDetails(orderData);
-                updateUI(status_id);
-
-                // ONLY proceed with success actions if status_id is '1'
-                if (status_id === '1') {
-                    console.log('✅ Payment verified as successful. Proceeding with updates...');
-                    await updatePaymentStatus(order_id);
+                
+                // NEW: Update payment status in Google Sheets if we have an orderId
+                let orderId = orderData.billExternalReferenceNo;
+                
+                // If no orderId, try to get it from billNo (for QR payments)
+                if (!orderId && orderData.billNo) {
+                    orderId = orderData.billNo;
+                }
+                
+                if (orderId) {
+                    console.log('🔄 Updating payment status in Google Sheets for order:', orderId);
+                    await updatePaymentStatus(orderId);
+                } else {
+                    console.log('⚠️ No order ID found, skipping Google Sheets update');
+                }
+                
+                // Try to send conversion event via Conversions API
+                console.log('🎯 Sending conversion via Conversions API...');
+                const conversionSent = await sendConversionEvent(orderData);
+                
+                if (conversionSent) {
+                    console.log('✅ Conversion event sent successfully via Conversions API');
+                } else {
+                    console.log('⚠️ Conversions API failed, trying client-side pixel tracking');
                     
-                    // Fire Meta Pixel
+                    // Fallback to client-side pixel tracking
                     try {
                         fbq('track', 'Purchase', {
-                            content_name: 'PROSTREAM 4 App Power Package', content_category: 'Streaming',
-                            content_ids: [order_id], content_type: 'product',
-                            value: parseFloat(amount) || 0, currency: 'MYR'
+                            content_name: 'PROSTREAM 4 App Power Package',
+                            content_category: 'Streaming',
+                            content_ids: ['prostream_4app_package'],
+                            content_type: 'product',
+                            value: orderData.totalAmount || orderData.orderData?.total || 0,
+                            currency: 'MYR'
                         });
-                        console.log('✅ Meta Purchase event fired');
-                    } catch (error) { console.error('❌ Meta Pixel tracking failed:', error); }
-
-                    // Send Discord notification (using data from callback if available, otherwise from URL)
-                    let discordData = orderData;
-                    try {
-                        const formData = new URLSearchParams({ action: 'getOrder', orderId: order_id });
-                        const googleResponse = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: formData });
-                        const result = await googleResponse.json();
-                        if (result.status === 'success' && result.order) discordData = result.order;
-                    } catch(e){ console.error("Could not fetch full order data for discord", e); }
-                    await sendDiscordNotification(discordData);
-                } else {
-                    console.log(`⚠️ Payment not successful. Status ID: ${status_id}. No updates sent.`);
-                    showNotification(`Status pembayaran: ${status_id === '2' ? 'Dalam Proses' : 'Gagal'}.`, status_id === '2' ? 'pending' : 'error');
+                        console.log('✅ Meta Purchase event fired successfully via client-side pixel');
+                    } catch (error) {
+                        console.error('❌ Client-side pixel tracking also failed:', error);
+                    }
                 }
+                
+                // Send Discord notification
+                console.log('📧 Sending Discord notification...');
+                await sendDiscordNotification(orderData.orderData);
+                
+                // Clear pending order from localStorage
+                localStorage.removeItem('pendingOrder');
+                console.log('✅ Cleared pendingOrder from localStorage');
+                
             } catch (error) {
                 console.error('❌ Error in loadOrderDetails:', error);
-                updateUI('3');
-                showNotification('Ralat memuatkan halaman. Sila segarkan.', 'error');
+                showOrderDetailsError();
             }
         }
-        
-        function updateWhatsAppButton() {
-            const whatsappBtn = document.getElementById('whatsapp-btn');
-            const urlParams = new URLSearchParams(window.location.search);
-            const order_id = urlParams.get('order_id');
-            const billcode = urlParams.get('billcode');
-            const message = encodeURIComponent(`Hai, saya memerlukan bantuan dengan pesanan saya. ID Pesanan: ${order_id}, No. Bil: ${billcode}.`);
-            whatsappBtn.href = `https://wa.me/601127412402?text=${message}`;
+
+        // Function to show error in order details
+        function showOrderDetailsError() {
+            const orderDetailsElement = document.getElementById('orderDetails');
+            
+            orderDetailsElement.innerHTML = `
+                <h3>Butiran Pesanan</h3>
+                <p style="text-align: center; color: var(--secondary-color);">Maaf, kami tidak dapat memuatkan butiran pesanan anda.</p>
+                <p style="text-align: center;">Sila hubungi sokongan pelanggan kami untuk bantuan.</p>
+            `;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadOrderDetails();
-            updateWhatsAppButton();
+        // Update WhatsApp button link
+        function updateWhatsAppButton(orderData) {
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            if (whatsappBtn && orderData.orderData) {
+                const message = encodeURIComponent(`Hai%2C%20saya%20baru%20sahaja%20membeli%20pakej%20PROSTREAM%20dan%20perlu%20bantuan.%20Nama%3A%20${orderData.orderData.customerName}%2C%20Email%3A%20${orderData.orderData.customerEmail}%2C%20No.%20Telefon%3A%20${orderData.orderData.customerPhone}`);
+                whatsappBtn.href = `https://wa.me/601127412402?text=${message}`;
+            }
+        }
+
+        // Load order details when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadOrderDetails();
+            
+            // Update WhatsApp button after order details are loaded
+            setTimeout(() => {
+                const pendingOrder = localStorage.getItem('pendingOrder');
+                if (pendingOrder) {
+                    const orderData = JSON.parse(pendingOrder);
+                    updateWhatsAppButton(orderData);
+                }
+            }, 1000);
         });
     </script>
 </body>
 </html>
+
 
