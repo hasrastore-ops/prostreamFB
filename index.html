@@ -3046,8 +3046,10 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
         quantity: 1,
         total: parseFloat(selectedPackage),
         package: selectedPackage,
-        paymentMethod: selectedPaymentMethod
+        paymentMethod: selectedPaymentMethod,
+        localStorage: setItem('totalX',total)
     };
+            
     
     // Show enhanced loading modal
     showPaymentLoadingWithSteps();
@@ -3435,6 +3437,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
     </script>
 </body>
 </html>
+
 
 
 
