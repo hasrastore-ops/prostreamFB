@@ -546,6 +546,29 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             }
         }
 
+        // NEW: Function to send Meta Pixel conversion event
+        function sendMetaPixelConversion(orderData) {
+            try {
+                const purchaseValue = orderData.totalAmount || orderData.orderData?.total || 0;
+                
+                // Send Purchase event to Meta Pixel
+                fbq('track', 'Purchase', {
+                    content_name: 'PROSTREAM 4 App Power Package',
+                    content_category: 'Streaming',
+                    content_ids: ['prostream_4app_package'],
+                    content_type: 'product',
+                    value: purchaseValue,
+                    currency: 'MYR'
+                });
+                
+                console.log('✅ Meta Pixel Purchase event fired successfully');
+                return true;
+            } catch (error) {
+                console.error('❌ Error sending Meta Pixel conversion:', error);
+                return false;
+            }
+        }
+
         function displayOrderDetails(orderData) {
             const orderDetailsElement = document.getElementById('orderDetails');
             
@@ -648,7 +671,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         }
 
         // ====================================
-        //      CORRECTED: loadOrderDetails function
+        //      loadOrderDetails function
         // ====================================
         async function loadOrderDetails() {
             console.log('🔄 Loading order details...');
@@ -717,7 +740,14 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     let updateOrderId = orderData.billExternalReferenceNo || orderData.billNo;
                     if (updateOrderId) await updatePaymentStatus(updateOrderId);
                     await sendConversionEvent(orderData);
+                    
+                    // Send Discord notification
+                    console.log('📧 Sending Discord notification...');
                     await sendDiscordNotification(orderData.orderData);
+                    
+                    // NEW: Send Meta Pixel conversion after Discord notification
+                    console.log('🎯 Sending Meta Pixel conversion...');
+                    sendMetaPixelConversion(orderData);
                     
                     localStorage.removeItem('pendingOrder');
                     console.log('✅ Cleared pendingOrder from localStorage');
@@ -755,7 +785,14 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 let updateOrderId = orderData.billExternalReferenceNo || orderData.billNo;
                 if (updateOrderId) await updatePaymentStatus(updateOrderId);
                 await sendConversionEvent(orderData);
+
+                // Send Discord notification
+                console.log('📧 Sending Discord notification...');
                 await sendDiscordNotification(orderData.orderData);
+                
+                // NEW: Send Meta Pixel conversion after Discord notification
+                console.log('🎯 Sending Meta Pixel conversion...');
+                sendMetaPixelConversion(orderData);
 
                 localStorage.removeItem('pendingOrder');
                 console.log('✅ Cleared pendingOrder from localStorage');
