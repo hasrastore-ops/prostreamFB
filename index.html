@@ -421,45 +421,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     }
 }
 
-        /* App Preview Section */
-        .app-preview { text-align: center; background-color: var(--surface-color); }
-        .app-preview h2 { margin-bottom: 2rem; }
-        .preview-container { max-width: 800px; margin: 0 auto; }
-        .main-image-container { margin-bottom: 15px; }
-        .main-image-container img {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            border-radius: 15px;
-            cursor: zoom-in;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .thumbnail-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding: 10px 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-color) var(--surface-color);
-        }
-        .thumbnail-container::-webkit-scrollbar { height: 8px; }
-        .thumbnail-container::-webkit-scrollbar-track { background: var(--surface-color); }
-        .thumbnail-container::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 10px; }
-        .thumbnail {
-            flex: 0 0 auto;
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            opacity: 0.6;
-            border: 2px solid transparent;
-            transition: opacity 0.3s, border 0.3s;
-        }
-        .thumbnail.active, .thumbnail:hover {
-            opacity: 1;
-            border-color: var(--primary-color);
-        }
         
         /* Fullscreen Modal */
         .fullscreen-modal {
@@ -949,6 +910,198 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             font-size: 1.5rem;
             margin: 0 auto 1rem auto;
         }
+
+        /* FAQ Modal Styles */
+.faq-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.faq-modal.active {
+    display: flex;
+}
+
+.faq-modal-content {
+    background-color: var(--surface-color);
+    border-radius: 15px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.faq-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+.faq-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.faq-modal-close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--bg-color);
+}
+
+.faq-modal-body {
+    padding: 20px;
+}
+
+.faq-highlights {
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.faq-highlight-item {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background-color: rgba(249, 199, 79, 0.1);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 5px;
+}
+
+.faq-highlight-item strong {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.faq-highlight-item span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.faq-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 15px;
+}
+
+.faq-modal-footer button {
+    flex: 1;
+}
+
+.faq-modal-footer button:disabled {
+    background-color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* FAQ Section Highlight when scrolled to */
+#faq.highlighted {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(249, 199, 79, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(249, 199, 79, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(249, 199, 79, 0.6); }
+    100% { box-shadow: 0 0 20px rgba(249, 199, 79, 0.3); }
+}
+
+/* WhatsApp Button State */
+.whatsapp-button-left.visited-faq {
+    background-color: #25D366;
+    animation: none;
+}
+
+.whatsapp-button-left.visited-faq::after {
+    content: '✓';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--secondary-color);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* Add these styles to your CSS */
+.faq-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: none;
+}
+
+.faq-progress.visible {
+    display: block;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.faq-progress.visible .progress-text {
+    opacity: 1;
+}
 
         /* FAQ - Collapsible */
         .faq { background-color: var(--surface-color); }
@@ -1811,19 +1964,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         }
     </style>
 </head>
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69118f8b9f4f5e195c7eefd0/1j9m9heoc';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
     
 <body>
     <!-- Floating Order Button -->
@@ -1889,6 +2029,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </tbody>
                 </table>
                 <p class="final-thought">Gila tak? Lebih dari 2 ribu setahun!</p>
+                <a href="#package-selection" class="btn" id="pricing-cta">Order Sekarang Bawah RM30 Sekali bayar</a>
             </div>
         </section>
 
@@ -1932,34 +2073,6 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </section>
 
-        <!-- APP PREVIEW SECTION -->
-        <section id="app-preview" class="app-preview">
-            <div class="container">
-                <h2>Preview Aplikasi Power Anda</h2>
-                <div class="preview-container">
-                    <div class="main-image-container">
-                        <img id="main-preview-image" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="App Screenshot"loading="lazy">
-                    </div>
-                    <div class="thumbnail-container">
-                        <img class="thumbnail active" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=1" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="Screenshot 1">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=2" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=App+Screen+2" alt="Screenshot 2" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=3" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=App+Screen+3" alt="Screenshot 3" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=4" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=App+Screen+4" alt="Screenshot 4" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=5" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=App+Screen+5" alt="Screenshot 5" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=6" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=App+Screen+6" alt="Screenshot 6" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=7" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=App+Screen+7" alt="Screenshot 7" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=8" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=App+Screen+8" alt="Screenshot 8" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=9" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=App+Screen+9" alt="Screenshot 9" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=10" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=App+Screen+10" alt="Screenshot 10" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=11" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=App+Screen+11" alt="Screenshot 11" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=12" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=App+Screen+12" alt="Screenshot 12" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=13" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=App+Screen+13" alt="Screenshot 13" loading="lazy">
-                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=14" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=App+Screen+14" alt="Screenshot 14" loading="lazy">
-                    </div>
-                    <p>*Sila slide ke kanan untuk tengok semua gambar dan tekan untuk zoom</p>
-                </div>
-            </div>
-        </section>
 
         <!-- EXCLUSIVE GALLERY SECTION -->
         <section id="exclusive-gallery" class="exclusive-gallery">
@@ -2229,7 +2342,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <div class="overall-rating">
                         <div class="rating-number">4.9</div>
                         <div class="rating-stars">★★★★★</div>
-                        <div class="rating-text">Berdasarkan 327 reviews</div>
+                        <div class="rating-text">Berdasarkan 654 reviews</div>
                     </div>
                 </div>
 
@@ -2304,34 +2417,6 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                     </div>
 
-                    <!-- Review 3: The Specific User (Anime Fan) -->
-                    <div class="review-card" data-rating="5" data-date="2024-10-20" data-helpful="35">
-                        <div class="review-header">
-                            <div>
-                                <span class="reviewer-name">Hafizdhul </span>
-                                <span class="verified-badge">✅ Pengguna Disahkan</span>
-                            </div>
-                            <span class="review-date">12 Oktober 2025</span>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                        <h4 class="review-title">Untuk Kaki Anime, App Ni 10/10!</h4>
-                        <p class="review-text">Aku cari app streaming yang ada anime cepat tak buffering . Memang puas hati! Episod baru cepat. Subtitle pun bagus. App lain lambat, kena tengok iklan. Yang ni semua clear. Dah boleh delete app lain.</p>
-                        <div class="review-details">
-                            <div class="detail-item"><span class="detail-label">Nilai Wang:</span> <span class="detail-rating">★★★★★</span></div>
-                            <div class="detail-item"><span class="detail-label">Kandungan:</span> <span class="detail-rating">★★★★★</span></div>
-                            <div class="detail-item"><span class="detail-label">Mudah Diguna:</span> <span class="detail-rating">★★★★★</span></div>
-                        </div>
-                        <div class="helpful-vote">
-                            <span>Adakah review ini membantu?</span>
-                            <button class="vote-btn" data-review="3" data-vote="yes">Ya</button>
-                            <button class="vote-btn" data-review="3" data-vote="no">Tidak</button>
-                            <span class="vote-count">(35) orang jumpa ni membantu</span>
-                        </div>
-                        <div class="company-response">
-                            <strong>Jawapan dari PROSTREAM:</strong>
-                            <p>Hi Hafiz! Kami gembira sekali anda suka app anime kami. Kami sentiasa berusaha untuk membawa kandungan terkini secepat mungkin. Terima kasih kerana menjadi pengguna setia!</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -2443,6 +2528,13 @@ s0.parentNode.insertBefore(s1,s0);
     </div>
 </section>
 
+<!-- Add this right after the opening body tag -->
+<div id="faq-progress" class="faq-progress">
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+</div>
+
         <!-- FAQ SECTION -->
         <section id="faq" class="faq">
             <div class="container">
@@ -2454,9 +2546,15 @@ s0.parentNode.insertBefore(s1,s0);
                     </div>
                 </div>
                 <div class="faq-item">
+                    <button class="faq-question">Q: Macam mana nak order?</button>
+                    <div class="faq-answer">
+                        <p>A: Scroll dekat atas ni, pilih pakej yang ada, isikan nama,no tel dan email dengan betul. Pilih cara pembayaram dan bayar. Untuk QR pastikan upload gambar resit (Screenshot) di website tau. nanti tak dapat ID </p>
+                    </div>
+                </div>
+                <div class="faq-item">
                     <button class="faq-question">Q: Boleh pakai dekat Android Phone atau TV sahaja?</button>
                     <div class="faq-answer">
-                        <p>A: Untuk pakej ni, hanya untuk android TV yang support 4 apps, Pastikan TV ada playstore baru boleh guna. <n> Untuk Phone : Hanya support apps no 2 (Cloud Movie) dan apps no 4 (Live TV) Free </n>
+                        <p>A: Untuk pakej ni, hanya untuk android TV/BOX/STICK yang fully support, Pastikan TV ada playstore baru boleh guna. <n> Untuk Phone : Section Movie dan Anime Perlukan remote untuk control jadi hanya section CLOUD MOVIE+DRAMA+ANIME, dan LIVE TV+ ASTRO boleh guna dengan smooth </n>
                         </p>
                     </div>
                 </div>
@@ -2493,7 +2591,37 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="faq-item">
                     <button class="faq-question">Q: Untuk channel TV LIVE, Channel apa je yang ada</button>
                     <div class="faq-answer">
-                        <p>A: App 4 yang kita bagi percuma ada full chanel tv basic+ astro pilihan, tapi untuk kaki bola jangan risau live stream bola ada dalam tu.</p>
+                        <p>A: Live TV+Astro kami bagi percuma ada full chanel tv basic+ astro pilihan, tapi untuk kaki bola jangan risau live stream bola ada dalam tu.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Cara install macam mana? dan Guna Apps apa?</button>
+                    <div class="faq-answer">
+                        <p>A: Untuk cara install, Kami akan berikan video tutorial dari install sampai lah boleh tengok. Jangan risau sangat senang. jika tak berjaya boleh contact team support, link whatsapp ada sekali. UNTUK APPS, KAMI GUNAKAN APP "PROSTREAM" </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Kalau dah Login, Boleh Logout balik tak?</button>
+                    <div class="faq-answer">
+                        <p>A: Maaf tak boleh, kalau dah login, tidak boleh logout balik dan ID untuk device dah disimpan dalam code login anda. jadi perlu tambah code login jika lebih dari 2 device </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Ada team support tak lepas beli?</button>
+                    <div class="faq-answer">
+                        <p>A: Jangan risau, anda akan dapat link whatsapp untuk direct contact dengan team kami. Fast response sebab guna whatsapps </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Boleh guna lama ke? nanti beli kejap dah tak boleh tengok?</button>
+                    <div class="faq-answer">
+                        <p>A: First user kami tiga tahun lepas, masih guna sampai sekarang. Pun masih tak bayar bulan. sangat jimat . Kalau dapat harga promosi bawah RM98.90. Grab terus jangan Tunggu. Harga naik lagi </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Q: Macam mana nak contact admin sebelum beli? Saya ada soalan lain</button>
+                    <div class="faq-answer">
+                        <p>A: Boleh, tekan je icon whatsapp sekali lagi untuk contact admin. tapi pastikan dah baca semua Q&A ni tau.  </p>
                     </div>
                 </div>
                 
@@ -2585,18 +2713,49 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </div>
 
-    <!-- WhatsApp Button -->
-    <a 
-      href="https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20" 
-      class="whatsapp-button-left" 
-      target="_blank" 
-      rel="noopener noreferrer">
-      
-      <!-- WhatsApp Icon (SVG) -->
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <!-- Modified WhatsApp Button -->
+<a id="whatsapp-trigger" class="whatsapp-button-left" onclick="showFAQModal(event)">
+    <!-- WhatsApp Icon (SVG) -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.149-.67.149-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.123-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-      </svg>
-    </a>
+    </svg>
+</a>
+
+<!-- FAQ First Modal -->
+<div id="faq-modal" class="faq-modal">
+    <div class="faq-modal-content">
+        <div class="faq-modal-header">
+            <h3>🤔 Ada Soalan?</h3>
+            <span class="faq-modal-close" onclick="closeFAQModal()">&times;</span>
+        </div>
+        <div class="faq-modal-body">
+            <p>Kebanyakan soalan anda sudah dijawab di bahagian Q&A di bawah! Pastikan Tengok VIDEO Preview dahulu</p>
+            <div class="faq-highlights">
+                <div class="faq-highlight-item">
+                    <strong>Q: Bayar bulan ke?</strong>
+                    <span>A: Sekali je, seumur hidup!</span>
+                </div>
+                <div class="faq-highlight-item">
+                    <strong>Q: Macam mana nak order?</strong>
+                    <span>A: Tekan order sekarang(atas kiri), Atau Scroll sampai pilihan pakej</span>
+                </div>
+                <div class="faq-highlight-item">
+                    <strong>Q: Smart TV Boleh?</strong>
+                    <span>A: Maaf Takboleh, Untuk Andoroid Sahaja</span>
+                </div>
+                <div class="faq-highlight-item">
+                    <strong>Q: Berapa device?</strong>
+                    <span>A: Untuk 1 ID boleh 2 device serentak</span>
+                </div>
+            </div>
+            <p>Sila baca Q&A terlebih dahulu untuk maklumat lengkap.</p>
+        </div>
+        <div class="faq-modal-footer">
+            <button class="btn btn-secondary" onclick="scrollToFAQ()">Baca Q&A Dulu</button>
+            <button class="btn" id="proceed-whatsapp" disabled>Saya Dah Baca FAQ</button>
+        </div>
+    </div>
+</div>
 
     <script>
         // ====================================
@@ -2774,18 +2933,41 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
 
         // Function to scroll to checkout section
         function scrollToCheckout() {
-            // Track button click with Meta Pixel
-            fbq('track', 'Lead', {
-                content_name: 'Floating Order Button Click',
-                content_category: 'Button Click'
-            });
+    // Track button click with Meta Pixel
+    fbq('track', 'Lead', {
+        content_name: 'Floating Order Button Click',
+        content_category: 'Button Click'
+    });
+    
+    // Add a small delay for better UX
+    setTimeout(() => {
+        const checkoutSection = document.getElementById('checkout');
+        
+        // Method 1: Try scrollIntoView with center positioning
+        checkoutSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center', // Use 'center' to ensure it's visible
+            inline: 'nearest'
+        });
+        
+        // Method 2: Fallback - Manual scroll calculation
+        setTimeout(() => {
+            // Check if checkout is visible enough
+            const rect = checkoutSection.getBoundingClientRect();
+            if (rect.top < 0 || rect.top > window.innerHeight * 0.3) {
+                // If not properly visible, scroll manually
+                const checkoutPosition = checkoutSection.offsetTop;
+                const offsetPosition = checkoutPosition - 120; // 120px offset to account for fixed elements
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
             
-            // Smooth scroll to checkout section
-            document.getElementById('checkout').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+        }, 500); // Wait for scrollIntoView to complete
+    }, 100); // Small delay
+}
 
         // Enhanced payment loading with steps
         function showPaymentLoadingWithSteps() {
@@ -3355,6 +3537,287 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
             });
         });
 
+        // Add this to your JavaScript
+// Show progress indicator when WhatsApp button is clicked
+function showFAQModal(event) {
+    event.preventDefault();
+    
+    // If user has already visited FAQ, proceed to WhatsApp
+    if (hasVisitedFAQ) {
+        window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+        return;
+    }
+    
+    // Show progress indicator
+    document.getElementById('faq-progress').classList.add('visible');
+    
+    // Otherwise show the modal
+    document.getElementById('faq-modal').classList.add('active');
+    
+    // Track modal view with Meta Pixel
+    fbq('track', 'ViewContent', {
+        content_name: 'FAQ Modal',
+        content_category: 'User Engagement'
+    });
+}
+
+// Update progress when user scrolls
+window.addEventListener('scroll', function() {
+    if (!hasVisitedFAQ) {
+        const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.querySelector('.progress-fill').style.width = scrollPercentage + '%';
+        
+        // Show progress indicator if user has clicked WhatsApp but not visited FAQ
+        if (document.getElementById('faq-modal').classList.contains('active')) {
+            document.getElementById('faq-progress').classList.add('visible');
+        }
+    }
+});
+
+// Hide progress indicator when FAQ is visited
+function updateWhatsAppButton() {
+    const whatsappButton = document.getElementById('whatsapp-trigger');
+    const proceedButton = document.getElementById('proceed-whatsapp');
+    const progressIndicator = document.getElementById('faq-progress');
+    
+    if (hasVisitedFAQ) {
+        whatsappButton.classList.add('visited-faq');
+        proceedButton.disabled = false;
+        proceedButton.textContent = 'Teruskan ke WhatsApp';
+        proceedButton.onclick = function() {
+            window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+            closeFAQModal();
+        };
+        
+        // Hide progress indicator
+        progressIndicator.classList.remove('visible');
+    }
+}
+
+
+        // Track if user has visited FAQ (resets on every page load)
+let hasVisitedFAQ = false;
+
+// Initialize WhatsApp button state on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateWhatsAppButton();
+});
+
+// Function to show FAQ modal
+function showFAQModal(event) {
+    event.preventDefault();
+    
+    // If user has already visited FAQ, proceed to WhatsApp
+    if (hasVisitedFAQ) {
+        window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+        return;
+    }
+    
+    // Otherwise show the modal
+    document.getElementById('faq-modal').classList.add('active');
+    
+    // Track modal view with Meta Pixel
+    fbq('track', 'ViewContent', {
+        content_name: 'FAQ Modal',
+        content_category: 'User Engagement'
+    });
+}
+
+// Function to close FAQ modal
+function closeFAQModal() {
+    document.getElementById('faq-modal').classList.remove('active');
+}
+
+// Function to scroll to FAQ section
+function scrollToFAQ() {
+    closeFAQModal();
+    
+    // Add a delay to ensure modal is fully closed
+    setTimeout(() => {
+        const faqSection = document.getElementById('faq');
+        
+        // Method 1: Try scrollIntoView with different options
+        faqSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center', // Try 'center' instead of 'start'
+            inline: 'nearest'
+        });
+        
+        // Method 2: Fallback - Manual scroll calculation
+        setTimeout(() => {
+            // Check if FAQ is visible enough
+            const rect = faqSection.getBoundingClientRect();
+            if (rect.top < 0 || rect.top > window.innerHeight * 0.3) {
+                // If not properly visible, scroll manually
+                const faqPosition = faqSection.offsetTop;
+                const offsetPosition = faqPosition - 100; // 100px offset
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Add highlight effect
+            faqSection.classList.add('highlighted');
+            
+            // Remove highlight after 3 seconds
+            setTimeout(() => {
+                faqSection.classList.remove('highlighted');
+            }, 3000);
+        }, 500); // Wait for scrollIntoView to complete
+        
+        // Track FAQ section view with Meta Pixel
+        fbq('track', 'ViewContent', {
+            content_name: 'FAQ Section',
+            content_category: 'User Engagement'
+        });
+    }, 300);
+}
+
+// Function to update WhatsApp button state
+function updateWhatsAppButton() {
+    const whatsappButton = document.getElementById('whatsapp-trigger');
+    const proceedButton = document.getElementById('proceed-whatsapp');
+    
+    if (hasVisitedFAQ) {
+        whatsappButton.classList.add('visited-faq');
+        proceedButton.disabled = false;
+        proceedButton.textContent = 'Teruskan ke WhatsApp';
+        proceedButton.onclick = function() {
+            window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+            closeFAQModal();
+        };
+    } else {
+        whatsappButton.classList.remove('visited-faq');
+        proceedButton.disabled = true;
+        proceedButton.textContent = 'Sila Baca FAQ Dulu';
+        proceedButton.onclick = null;
+    }
+}
+
+// Track when user scrolls to FAQ section
+window.addEventListener('scroll', function() {
+    const faqSection = document.getElementById('faq');
+    const rect = faqSection.getBoundingClientRect();
+    
+    // Check if FAQ section is in viewport
+    if (rect.top <= window.innerHeight && rect.bottom >= 0 && !hasVisitedFAQ) {
+        // Mark FAQ as visited
+        hasVisitedFAQ = true;
+        
+        // Update WhatsApp button state
+        updateWhatsAppButton();
+        
+        // Show notification
+        showFAQNotification();
+    }
+});
+
+// Function to show notification when FAQ is visited
+function showFAQNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'faq-visited-notification';
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>✅ Terima kasih! Anda sekarang boleh terus ke WhatsApp jika ada soalan lain.</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Show notification
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    // Hide notification after 5 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 5000);
+}
+
+// FAQ interaction tracking
+document.addEventListener('DOMContentLoaded', function() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            // Mark FAQ as visited if user interacts with it
+            if (!hasVisitedFAQ) {
+                hasVisitedFAQ = true;
+                updateWhatsAppButton();
+                showFAQNotification();
+            }
+        });
+    });
+});
+
+// Progress indicator functions (optional)
+function showFAQModal(event) {
+    event.preventDefault();
+    
+    // If user has already visited FAQ, proceed to WhatsApp
+    if (hasVisitedFAQ) {
+        window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+        return;
+    }
+    
+    // Show progress indicator
+    document.getElementById('faq-progress').classList.add('visible');
+    
+    // Otherwise show the modal
+    document.getElementById('faq-modal').classList.add('active');
+    
+    // Track modal view with Meta Pixel
+    fbq('track', 'ViewContent', {
+        content_name: 'FAQ Modal',
+        content_category: 'User Engagement'
+    });
+}
+
+// Update progress when user scrolls
+window.addEventListener('scroll', function() {
+    if (!hasVisitedFAQ) {
+        const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.querySelector('.progress-fill').style.width = scrollPercentage + '%';
+        
+        // Show progress indicator if user has clicked WhatsApp but not visited FAQ
+        if (document.getElementById('faq-modal').classList.contains('active')) {
+            document.getElementById('faq-progress').classList.add('visible');
+        }
+    }
+});
+
+// Hide progress indicator when FAQ is visited
+function updateWhatsAppButton() {
+    const whatsappButton = document.getElementById('whatsapp-trigger');
+    const proceedButton = document.getElementById('proceed-whatsapp');
+    const progressIndicator = document.getElementById('faq-progress');
+    
+    if (hasVisitedFAQ) {
+        whatsappButton.classList.add('visited-faq');
+        proceedButton.disabled = false;
+        proceedButton.textContent = 'Teruskan ke WhatsApp';
+        proceedButton.onclick = function() {
+            window.open('https://wa.me/601127412402?text=Hi%2C%20saya%20nak%20order%20pakej%20prostream%20ni.%20tapi%20ada%20soalan%2C%3A%20', '_blank');
+            closeFAQModal();
+        };
+        
+        // Hide progress indicator
+        progressIndicator.classList.remove('visible');
+    } else {
+        whatsappButton.classList.remove('visited-faq');
+        proceedButton.disabled = true;
+        proceedButton.textContent = 'Baca Q&A,Utk Ws';
+        proceedButton.onclick = null;
+    }
+}
+        
+
         // ====================================
         //      REVIEWS SECTION FUNCTIONALITY
         // ====================================
@@ -3437,13 +3900,3 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
