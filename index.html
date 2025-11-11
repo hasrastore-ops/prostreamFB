@@ -421,6 +421,45 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
     }
 }
 
+        /* App Preview Section */
+        .app-preview { text-align: center; background-color: var(--surface-color); }
+        .app-preview h2 { margin-bottom: 2rem; }
+        .preview-container { max-width: 800px; margin: 0 auto; }
+        .main-image-container { margin-bottom: 15px; }
+        .main-image-container img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 15px;
+            cursor: zoom-in;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .thumbnail-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--surface-color);
+        }
+        .thumbnail-container::-webkit-scrollbar { height: 8px; }
+        .thumbnail-container::-webkit-scrollbar-track { background: var(--surface-color); }
+        .thumbnail-container::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 10px; }
+        .thumbnail {
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0.6;
+            border: 2px solid transparent;
+            transition: opacity 0.3s, border 0.3s;
+        }
+        .thumbnail.active, .thumbnail:hover {
+            opacity: 1;
+            border-color: var(--primary-color);
+        }
         
         /* Fullscreen Modal */
         .fullscreen-modal {
@@ -2073,6 +2112,34 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             </div>
         </section>
 
+        <!-- APP PREVIEW SECTION -->
+        <section id="app-preview" class="app-preview">
+            <div class="container">
+                <h2>Preview Aplikasi Power Anda</h2>
+                <div class="preview-container">
+                    <div class="main-image-container">
+                        <img id="main-preview-image" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="App Screenshot"loading="lazy">
+                    </div>
+                    <div class="thumbnail-container">
+                        <img class="thumbnail active" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=1" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps1.webp?text=App+Screen+1" alt="Screenshot 1">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=2" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps2.webp?text=App+Screen+2" alt="Screenshot 2" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=3" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps3.webp?text=App+Screen+3" alt="Screenshot 3" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=4" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps4.webp?text=App+Screen+4" alt="Screenshot 4" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=5" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps5.webp?text=App+Screen+5" alt="Screenshot 5" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=6" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps6.webp?text=App+Screen+6" alt="Screenshot 6" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=7" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps7.webp?text=App+Screen+7" alt="Screenshot 7" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=8" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps8.webp?text=App+Screen+8" alt="Screenshot 8" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=9" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps9.webp?text=App+Screen+9" alt="Screenshot 9" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=10" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps10.webp?text=App+Screen+10" alt="Screenshot 10" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=11" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps11.webp?text=App+Screen+11" alt="Screenshot 11" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=12" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps12.webp?text=App+Screen+12" alt="Screenshot 12" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=13" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps13.webp?text=App+Screen+13" alt="Screenshot 13" loading="lazy">
+                        <img class="thumbnail" src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=14" data-src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.0/ps14.webp?text=App+Screen+14" alt="Screenshot 14" loading="lazy">
+                    </div>
+                    <p>*Sila slide ke kanan untuk tengok semua gambar dan tekan untuk zoom</p>
+                </div>
+            </div>
+        </section>
 
         <!-- EXCLUSIVE GALLERY SECTION -->
         <section id="exclusive-gallery" class="exclusive-gallery">
@@ -2342,7 +2409,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     <div class="overall-rating">
                         <div class="rating-number">4.9</div>
                         <div class="rating-stars">★★★★★</div>
-                        <div class="rating-text">Berdasarkan 654 reviews</div>
+                        <div class="rating-text">Berdasarkan 327 reviews</div>
                     </div>
                 </div>
 
@@ -2370,7 +2437,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         </div>
                         <div class="review-rating">★★★★★</div>
                         <h4 class="review-title">Berbaloi! Dah Delete Netflix</h4>
-                        <p class="review-text">Saya pun was-was dulu, tapi lepas try, memang power! Kualiti video HD, semua filem terkini ada. Dulu bayar lebih RM180 sebulan, sekarang sekali bayar je. Best sangat app anime tu, update ikut Jepun. Memang puas hati!</p>
+                        <p class="review-text">Saya pun was-was dulu, tapi lepas try, memang power! Kualiti video HD, semua filem terkini ada. Dulu bayar lebih RM180 sebulan, sekarang sekali bayar je. Memang puas hati!</p>
                         <div class="review-details">
                             <div class="detail-item"><span class="detail-label">Nilai Wang:</span> <span class="detail-rating">★★★★★</span></div>
                             <div class="detail-item"><span class="detail-label">Kandungan:</span> <span class="detail-rating">★★★★★</span></div>
@@ -2416,7 +2483,6 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                             <p>Terima kasih Siti atas feedback yang jujur. Kami ambil maklum tentang panduan install dan akan usahakan untuk jadikannya lebih mudah lagi. Jika ada apa-apa masalah, jangan teragak-agak WhatsApp kami ya!</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -2729,7 +2795,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
             <span class="faq-modal-close" onclick="closeFAQModal()">&times;</span>
         </div>
         <div class="faq-modal-body">
-            <p>Kebanyakan soalan anda sudah dijawab di bahagian Q&A di bawah! Pastikan Tengok VIDEO Preview dahulu</p>
+            <p>Kebanyakan soalan anda sudah dijawab di bahagian Q&A di bawah! Pastikan Tengok Preview dahulu</p>
             <div class="faq-highlights">
                 <div class="faq-highlight-item">
                     <strong>Q: Bayar bulan ke?</strong>
@@ -3812,7 +3878,7 @@ function updateWhatsAppButton() {
     } else {
         whatsappButton.classList.remove('visited-faq');
         proceedButton.disabled = true;
-        proceedButton.textContent = 'Baca Q&A,Utk Ws';
+        proceedButton.textContent = 'Baca Q&A,Utk WS';
         proceedButton.onclick = null;
     }
 }
