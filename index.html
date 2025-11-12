@@ -3205,7 +3205,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
             hidePaymentLoading();
             
             // Check if this is an FPX maintenance error
-            if (result.error === 'FPX_MAINTENANCE' || result.error === 'Invalid response from payment provider') {
+            if (result.error === 'FPX_MAINTENANCE' || result.error === 'Invalid response from payment provider.') {
                 handleFPXMaintenanceError();
                 return false;
             }
@@ -4021,5 +4021,6 @@ function updateWhatsAppButton() {
     </script>
 </body>
 </html>
+
 
 
