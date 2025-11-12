@@ -158,6 +158,16 @@ export default async function handler(req, res) {
         } catch (e) {
             console.error("Failed to parse ToyyibPay response:", e);
             console.error("Raw response that failed to parse:", textResult);
+            
+            // Check if the response contains FPX maintenance message
+            if (textResult.includes('FPX') && (textResult.includes('maintenance') || textResult.includes('maintainance'))) {
+                return res.status(503).json({ 
+                    success: false, 
+                    error: 'FPX_MAINTENANCE',
+                    message: 'Online Transfer FPX Sedang maintainance, Sila gunakan QR untuk Pembayaran. Terima kasih'
+                });
+            }
+            
             return res.status(500).json({ 
                 success: false, 
                 error: 'Invalid response from payment provider.',
@@ -225,6 +235,19 @@ export default async function handler(req, res) {
             });
         } else {
             console.error("ToyyibPay API Error:", result);
+            
+            // Check if the error is related to FPX maintenance
+            if (result && typeof result === 'object' && 
+                (JSON.stringify(result).toLowerCase().includes('fpx') && 
+                (JSON.stringify(result).toLowerCase().includes('maintenance') || 
+                 JSON.stringify(result).toLowerCase().includes('maintainance')))) {
+                return res.status(503).json({ 
+                    success: false, 
+                    error: 'FPX_MAINTENANCE',
+                    message: 'Online Transfer FPX Sedang maintainance, Sila gunakan QR untuk Pembayaran. Terima kasih'
+                });
+            }
+            
             return res.status(400).json({ 
                 success: false, 
                 error: 'Failed to create payment bill.',
