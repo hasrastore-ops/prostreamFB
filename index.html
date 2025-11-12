@@ -3203,6 +3203,13 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
             return true;
         } else {
             hidePaymentLoading();
+            
+            // Check if this is an FPX maintenance error
+            if (result.error === 'FPX_MAINTENANCE') {
+                handleFPXMaintenanceError();
+                return false;
+            }
+            
             const errorMessage = result.error || 'Ralat: Tidak dapat menjana bil pembayaran. Sila cuba lagi.';
             showMessage(errorMessage, 'error');
             return false;
@@ -3213,6 +3220,58 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
         showMessage('Sedang Maintainance,Sila Guna QR', 'error');
         return false;
     }
+}
+
+// Add this function to handle FPX maintenance error
+function handleFPXMaintenanceError() {
+    // Create modal element
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'fpx-maintenance-modal';
+    modal.style.display = 'flex';
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    
+    // Add modal header
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'modal-header';
+    modalHeader.innerHTML = '<h3>Pemberitahuan Penting</h3>';
+    
+    // Add modal body
+    const modalBody = document.createElement('div');
+    modalBody.className = 'modal-body';
+    modalBody.innerHTML = '<p>Online Transfer FPX Sedang maintainance, Sila gunakan QR untuk Pembayaran. Terima kasih</p>';
+    
+    // Add modal footer with OK button
+    const modalFooter = document.createElement('div');
+    modalFooter.className = 'modal-footer';
+    
+    const okButton = document.createElement('button');
+    okButton.className = 'btn';
+    okButton.textContent = 'OK';
+    okButton.onclick = function() {
+        document.getElementById('fpx-maintenance-modal').remove();
+    };
+    
+    modalFooter.appendChild(okButton);
+    
+    // Assemble modal
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modal.appendChild(modalContent);
+    
+    // Add to document body
+    document.body.appendChild(modal);
+    
+    // Close modal when clicking outside
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            modal.remove();
+        }
+    };
 }
 
         // QR Payment Handler
@@ -3962,5 +4021,4 @@ function updateWhatsAppButton() {
     </script>
 </body>
 </html>
-
 
