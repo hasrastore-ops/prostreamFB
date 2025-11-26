@@ -125,7 +125,7 @@ export default async function handler(req, res) {
         // --- FIX 3: Set bill expiry to 1 day as per official documentation ---
         body.append('billExpiryDays', '1');
         
-        body.append('billContentEmail', 'Terima kasih atas pembayaran anda. Kami berbesar hati untuk mengesahkan bahawa pesanan anda, Sila tekan link untuk melihat paduan pemasangan dan CODE DOWNLOAD BESERTA CODE LOGIN : https://tinyurl.com/PROSTREAMX ');
+        body.append('billContentEmail', 'Terima kasih atas pembayaran anda. Kami berbesar hati untuk mengesahkan bahawa pesanan anda, Sila tekan link untuk melihat paduan pemasangan dan CODE DOWNLOAD BESERTA CODE LOGIN : https://tinyurl.com/ProstreamTutorial-code1 ');
 
         // Log the data being sent (without the secret key)
         const logData = {};
