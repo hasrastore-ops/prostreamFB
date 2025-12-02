@@ -2007,7 +2007,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
 <body>
     <!-- Floating Order Button -->
     <button class="floating-order-btn" onclick="scrollToCheckout()">
-        Beli sekarang- 29.90 Lifetime Access
+        Beli sekarang- 34.90 Lifetime Access
     </button>
 
     <!-- HERO SECTION -->
@@ -2068,7 +2068,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                     </tbody>
                 </table>
                 <p class="final-thought">Gila tak? Lebih dari 2 ribu setahun!</p>
-                <a href="#package-selection" class="btn" id="pricing-cta">Order Sekarang Bawah RM30 Sekali bayar</a>
+                <a href="#package-selection" class="btn" id="pricing-cta">Order Sekarang Bawah RM40! Sekali bayar</a>
             </div>
         </section>
 
@@ -2494,9 +2494,9 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                 <p>Jangan terkejut dengan harga sebenar...</p>
                 <p class="price-comparison">Harga Asal: <span>RM 98.90</span></p>
 <p class="price-comparison">Harga Promosi: <span>RM 55.90</span></p>
-<div class="final-price">RM 29.90</div>
+<div class="final-price">RM 34.90</div>
 <p class="urgency">⚠️ Harga ni akan naik bila-bila masa sahaja, Ramai dah berpuas hati. Jangan lepaskan peluang keemasan ni!</p>
-                <a href="#package-selection" class="btn" id="pricing-cta">🚀 YES! SAYA NAK SEMUANYA DENGAN RM 29.90! 🚀</a>
+                <a href="#package-selection" class="btn" id="pricing-cta">🚀 YES! SAYA NAK SEMUANYA DENGAN RM 34.90! 🚀</a>
                 <p style="margin-top: 1rem;">🔒 Pembayaran Anda 100% Selamat & Dienkripsi</p>
             </div>
         </section>
@@ -2542,10 +2542,15 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
                         <strong>RM 19.90</strong> - Pakej Terawal
                         <span class="stock-info">(SOLD OUT - 30 orang terawal dah habis!)</span>
                     </label>
+                    <label class="package-option disabled">
+                        <input type="radio" name="package" value="29.90" disabled>
+                        <strong>RM 29.90</strong> - Pakej PROMO
+                        <span class="stock-info">(SOLD OUT - 100 orang terawal dah habis!)</span>
+                    </label>
                     <label class="package-option selected">
-                        <input type="radio" name="package" value="29.90" checked>
-                        <strong>RM 29.90</strong> - Harga Promo
-                        <span class="stock-info">(Pakej untuk 50 orang sahaja- tinggal 12 lagi !)</span>
+                        <input type="radio" name="package" value="34.90" checked>
+                        <strong>RM 34.90</strong> - Harga Promo
+                        <span class="stock-info">(Pakej untuk 50 orang sahaja- tinggal 11 lagi !)</span>
                     </label>
                     <label class="package-option disabled">
                         <input type="radio" name="package" value="98.90" disabled>
@@ -3107,7 +3112,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
             });
         });
 
-        // Add event listener to the "YES! SAYA NAK SEMUANYA DENGAN RM 29.90!" button
+        // Add event listener to the "YES! SAYA NAK SEMUANYA DENGAN RM 34.90!" button
         document.getElementById('pricing-cta').addEventListener('click', function(e) {
             e.preventDefault();
             // Track AddToCart with Meta Pixel
@@ -3116,7 +3121,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpO0maKCB0x1
                 content_category: 'Streaming',
                 content_ids: ['prostream_4app_package'],
                 content_type: 'product',
-                value: 29.90,
+                value: 34.90,
                 currency: 'MYR'
             });
             
@@ -4098,9 +4103,3 @@ function updateWhatsAppButton() {
     </script>
 </body>
 </html>
-
-
-
-
-
-
