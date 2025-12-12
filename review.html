@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulasan Pelanggan - PROSTREAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #f9c74f;
+            --secondary-color: #f94144;
+            --bg-color: #0a0e27;
+            --surface-color: #151932;
+            --text-color: #e0e1dd;
+            --text-muted: #a8a9ad;
+            --font-family: 'Poppins', sans-serif;
+            --success-color: #43b581;
+            --pending-color: #f9c74f;
+            --error-color: #f94144;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .status-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-muted);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .review-card {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
+        .review-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 50px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            min-width: 150px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+
+        .contact-info {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #2a2f4a;
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            margin: 0 8px;
+            color: var(--primary-color);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .notification.error {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        /* Lightbox styles - no animations */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Star Explosion Animation */
+        .star-explosion-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+            display: none;
+        }
+
+        .star-explosion-container.active {
+            display: block;
+        }
+
+        .star {
+            position: absolute;
+            color: var(--primary-color);
+            font-size: 30px;
+            text-shadow: 0 0 10px rgba(249, 199, 79, 0.8);
+            animation: explode 2s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .reviews-grid { 
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            h1 { font-size: 1.8rem; }
+            .status-icon { font-size: 50px; }
+            .subtitle { font-size: 1rem; }
+            
+            .reviews-grid { 
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 10px;
+            }
+            
+            .action-buttons { 
+                flex-direction: column; 
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .reviews-grid { 
+                grid-template-columns: 1fr; /* Changed to single column for phones */
+                gap: 12px;
+            }
+            
+            .status-icon { font-size: 40px; }
+            h1 { font-size: 1.5rem; }
+            .subtitle { font-size: 0.9rem; }
+            
+            header { padding: 20px 0; }
+            
+            .lightbox-overlay {
+                padding: 10px;
+            }
+            
+            .contact-info p {
+                font-size: 0.9rem;
+            }
+            
+            .star {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Star Explosion Container -->
+    <div id="starExplosion" class="star-explosion-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="status-icon">⭐⭐⭐⭐⭐</div>
+            <h1>Ulasan Pelanggan</h1>
+            <p class="subtitle">Jom lihat apa kata pelanggan kami tentang PROSTREAM!</p>
+        </header>
+
+        <main>
+            <div class="reviews-grid">
+                <!-- Review 1 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv1.webp" alt="Ulasan Pelanggan 1" class="review-image">
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv2.webp" alt="Ulasan Pelanggan 2" class="review-image">
+                </div>
+
+                <!-- Review 3 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv3.webp" alt="Ulasan Pelanggan 3" class="review-image">
+                </div>
+
+                <!-- Review 4 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv4.webp" alt="Ulasan Pelanggan 4" class="review-image">
+                </div>
+
+                <!-- Review 5 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv5.webp" alt="Ulasan Pelanggan 5" class="review-image">
+                </div>
+
+                <!-- Review 6 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv6.webp" alt="Ulasan Pelanggan 6" class="review-image">
+                </div>
+
+                <!-- Review 7 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv7.webp" alt="Ulasan Pelanggan 7" class="review-image">
+                </div>
+
+                <!-- Review 8 -->
+                <div class="review-card">
+                    <img src="https://cdn.jsdelivr.net/gh/hasrastore-ops/prostreammedia@v1.2/rv8.webp" alt="Ulasan Pelanggan 8" class="review-image">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="https://prostreamfb.vercel.app/#checkout" class="btn">Langgan Sekarang</a>
+                <a href="#" class="btn btn-whatsapp" id="whatsapp-btn">Hubungi WhatsApp</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 PROSTREAM. Hak Cipta Terpelihara.</p>
+            <a href="#">Dasar Privasi</a> | <a href="#">Terma & Syarat</a> | <a href="#">Hubungi Kami</a>
+        </footer>
+    </div>
+
+    <!-- Notification element for status updates -->
+    <div id="notification" class="notification">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
+    </div>
+
+    <!-- Lightbox element (initially hidden) -->
+    <div id="lightbox" class="lightbox-overlay">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Ulasan Pelanggan" class="lightbox-image">
+    </div>
+
+    <script>
+        // Function to show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const iconElement = notification.querySelector('.notification-icon');
+            const textElement = notification.querySelector('.notification-text');
+            
+            notification.className = `notification ${type}`;
+            textElement.textContent = message;
+            
+            if (type === 'success') {
+                iconElement.textContent = '✓';
+            } else if (type === 'pending') {
+                iconElement.textContent = '⏳';
+            } else {
+                iconElement.textContent = '✗';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Star Explosion Animation Function
+        function createStarExplosion() {
+            const container = document.getElementById('starExplosion');
+            const starCount = 20; // Number of stars to create
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            // Clear any existing stars
+            container.innerHTML = '';
+            
+            // Create stars
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '⭐';
+                
+                // Calculate random explosion direction and distance
+                const angle = (Math.PI * 2 * i) / starCount + Math.random() * 0.5;
+                const distance = 200 + Math.random() * 300;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                // Set CSS variables for animation
+                star.style.setProperty('--tx', `${tx}px`);
+                star.style.setProperty('--ty', `${ty}px`);
+                star.style.left = `${centerX}px`;
+                star.style.top = `${centerY}px`;
+                
+                // Add random delay for staggered effect
+                star.style.animationDelay = `${Math.random() * 0.3}s`;
+                
+                container.appendChild(star);
+            }
+            
+            // Show container
+            container.classList.add('active');
+            
+            // Remove stars after animation completes
+            setTimeout(() => {
+                container.classList.remove('active');
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 500);
+            }, 2500);
+        }
+
+        // Update WhatsApp button
+        document.addEventListener('DOMContentLoaded', function() {
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            if (whatsappBtn) {
+                const message = encodeURIComponent('Hai%2C%20saya%20berminat%20untuk%20order%20PROSTREAM.');
+                whatsappBtn.href = `https://wa.me/60172703949?text=${message}`;
+            }
+
+            // Always show star explosion on page load
+            setTimeout(() => {
+                createStarExplosion();
+            }, 500);
+
+            // Track page view
+            fbq('track', 'ViewContent', {
+                content_name: 'Customer Reviews Page',
+                content_category: 'Reviews'
+            });
+
+            // Add click tracking for buttons
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const buttonText = this.textContent.trim();
+                    fbq('track', 'Lead', {
+                        content_name: buttonText,
+                        content_category: 'Reviews Page'
+                    });
+                });
+            });
+
+            // Simple lightbox functionality - no animations
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = lightbox.querySelector('.lightbox-image');
+            const lightboxClose = lightbox.querySelector('.lightbox-close');
+            
+            // Open lightbox when clicking on a review card
+            document.querySelectorAll('.review-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const img = this.querySelector('.review-image');
+                    if (img) {
+                        lightboxImage.src = img.src;
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+            
+            // Close lightbox when clicking on the close button or overlay
+            const closeLightbox = function() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+            
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+            
+            // Close lightbox with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
+            });
+
+            // Handle image errors
+            document.querySelectorAll('.review-image').forEach(img => {
+                img.onerror = function() {
+                    this.src = 'https://picsum.photos/seed/fallback/300/500.jpg';
+                    this.alt = 'Image not available';
+                };
+            });
+        });
+    </script>
+</body>
+</html>
