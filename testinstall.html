@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji TV Support - PROSTREAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #f9c74f;
+            --bg-color: #0a0e27;
+            --surface-color: #151932;
+            --text-color: #e0e1dd;
+            --success-color: #43b581;
+            --error-color: #f94144;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            color: #a8a9ad;
+            font-size: 0.95rem;
+        }
+
+        /* Compatibility Box */
+        .compatibility-box {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .compat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .compat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .compat-item span {
+            margin-left: 12px;
+        }
+
+        .check-mark {
+            color: var(--success-color);
+            font-size: 1.4rem;
+            font-weight: bold;
+            min-width: 24px;
+        }
+
+        .cross-mark {
+            color: var(--error-color);
+            font-size: 1.4rem;
+            font-weight: bold;
+            min-width: 24px;
+        }
+
+        /* Steps Section */
+        .steps-section {
+            margin-bottom: 30px;
+        }
+
+        .step-card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .step-content p {
+            font-size: 0.9rem;
+            color: #a8a9ad;
+        }
+
+        /* Code Highlight */
+        .code-box {
+            background-color: #000;
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .code-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* App Logo Visual */
+        .app-logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background-color: #FF9900;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Result Section */
+        .result-box {
+            background-color: rgba(67, 181, 129, 0.1);
+            border: 1px solid var(--success-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-box h3 {
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+
+        .result-box p {
+            font-size: 0.95rem;
+        }
+
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(249, 199, 79, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 199, 79, 0.5);
+        }
+
+        .video-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .code-number { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>TEST INSTALL</h1>
+            <p class="subtitle">Test Install Prostream Di TV atau Devices Anda</p>
+        </header>
+
+        <!-- Requirement Checklist -->
+        <div class="compatibility-box">
+            <div class="compat-item">
+                <div class="cross-mark">✖</div>
+                <span>Smart TV Biasa (Tidak ada Play Store)</span>
+            </div>
+            <div class="compat-item">
+                <div class="check-mark">✔</div>
+                <span><strong>Android Devices & TV / Google TV</strong> (Ada Play Store)</span>
+            </div>
+        </div>
+
+        <!-- Installation Steps -->
+        <div class="steps-section">
+            
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Buka Play Store</h3>
+                    <p>Pastikan TV anda disambungkan ke internet dan buka aplikasi Play Store di TV.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Install "Downloader"</h3>
+                    <div class="app-logo-placeholder">D</div>
+                    <p>Cari aplikasi <strong>"Downloader by AFTVnews"</strong> (Logo D berwarna oren) dan install.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Masukkan Kod</h3>
+                    <p>Buka aplikasi Downloader. Di ruang URL, masukkan kod di bawah:</p>
+                    <div class="code-box">
+                        <div class="code-number" id="installCode">2196022</div>
+                        <button class="copy-btn" onclick="copyCode()">Copy</button>
+                    </div>
+                    <p style="margin-top: 5px;">Tekan butang <strong>GO</strong>.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Install & Permission</h3>
+                    <p>Tunggu download siap, tekan <strong>Install</strong>. Kemudian tekan <strong>DONE</strong>. allow permission jika diminta.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Buka Aplikasi</h3>
+                    <p>Cari dan buka <strong>Prostream</strong> dari menu Home TV anda.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Indicator -->
+        <div class="result-box">
+            <h3>✅ Jika masuk Login Page...</h3>
+            <p>Tahniah! TV anda adalah <strong>TV SUPPORT</strong>. Anda boleh terus beli ID.</p>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-container">
+            <a href="https://prostreamfb.vercel.app/" class="btn">Dapatkan ID Sekarang 👉</a>
+        </div>
+
+        <div class="video-note">
+            📹 Semua steps ni sebenarnya akan diberikan dalam bentuk video. jadi jangan risau. 👍
+        </div>
+
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeText = document.getElementById('installCode').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.style.backgroundColor = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
