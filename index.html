@@ -2884,6 +2884,7 @@ src="https://www.facebook.com/tr?id=2276519576162204&ev=PageView&noscript=1"
         <div style="display: flex; gap: 10px; justify-content: center;">
             
             <button class="btn" onclick="openreview()" style="padding: 10px 20px;">Lihat Feedback/Review</button>
+            <button class="btn" onclick="testinstall()" style="padding: 10px 20px;">Test Install</button>
         </div>
     </div>
 </div>
@@ -3919,6 +3920,13 @@ function openreview() {
     window.open('https://prostreamfb.vercel.app/review.html');
 }
 
+// Function to actually open testinstall after accepting warnings
+function testinstall() {
+    closeFinalWarning();
+    // Open WhatsApp
+    window.open('https://prostreamfb.vercel.app/testinstall.html');
+}
+
 // Function to close FAQ Modal
 function closeFAQModal() {
     document.getElementById('faq-modal').classList.remove('active');
@@ -4089,4 +4097,5 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
